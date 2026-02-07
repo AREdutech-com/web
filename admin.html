@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Command Center | AR Edutech</title>
+    <link rel="icon" href="photos/logo/favicon.ico" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* --- 1. PREMIUM LIQUID THEME --- */
+        :root {
+            --ar-gold: #C8A45E;
+            --glass-bg: rgba(20, 20, 20, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --input-bg: rgba(255, 255, 255, 0.03);
+            --text-white: #ffffff;
+            --text-muted: #888;
+            --status-hidden: rgba(255, 255, 255, 0.1);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background-color: #050505; color: var(--text-white); font-family: 'Segoe UI', sans-serif;
+            min-height: 100vh; padding: 40px;
+            background-image: 
+                radial-gradient(circle at 0% 0%, rgba(200, 164, 94, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 100% 100%, rgba(0, 103, 184, 0.08) 0%, transparent 50%);
+            background-attachment: fixed;
+        }
+
+        .admin-layout {
+            max-width: 1600px; margin: 0 auto;
+            display: grid; grid-template-columns: 400px 1fr; 
+            gap: 40px; align-items: start;
+        }
+
+        /* --- SIDEBAR FORM --- */
+        .form-sidebar {
+            background: var(--glass-bg); backdrop-filter: blur(30px);
+            border: 1px solid var(--glass-border); border-radius: 24px;
+            padding: 30px; position: sticky; top: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            max-height: 90vh; overflow-y: auto; /* Scroll if form too long */
+        }
+        .form-sidebar::-webkit-scrollbar { width: 5px; }
+        .form-sidebar::-webkit-scrollbar-thumb { background: var(--ar-gold); border-radius: 10px; }
+
+        .brand-header {
+            display: flex; align-items: center; gap: 15px; margin-bottom: 25px;
+            padding-bottom: 20px; border-bottom: 1px solid var(--glass-border);
+        }
+        .brand-header h2 { font-size: 18px; font-weight: 700; letter-spacing: 1px; color: var(--text-white); }
+
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 8px; font-size: 11px; font-weight: 700; color: var(--ar-gold); text-transform: uppercase; letter-spacing: 1px; }
+        
+        input, select {
+            width: 100%; padding: 12px 15px; 
+            background: var(--input-bg); border: 1px solid var(--glass-border);
+            border-radius: 12px; color: white; font-size: 14px; outline: none; transition: 0.3s;
+        }
+        input:focus, select:focus { border-color: var(--ar-gold); background: rgba(200, 164, 94, 0.05); }
+        select option { background: #111; color: white; }
+
+        /* Conditional Section (Installment) */
+        .installment-options {
+            display: none; padding: 15px; background: rgba(0, 103, 184, 0.1);
+            border-radius: 12px; border: 1px dashed rgba(0, 103, 184, 0.3); margin-bottom: 15px;
+            animation: slideDown 0.3s ease;
+        }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+
+        #preview { 
+            width: 100%; height: 180px; object-fit: contain; margin-bottom: 20px; 
+            background: rgba(0,0,0,0.3); border-radius: 12px; border: 1px dashed var(--glass-border); display: none; 
+        }
+
+        .btn-action {
+            width: 100%; padding: 14px; background: var(--ar-gold); color: #000;
+            border: none; border-radius: 12px; font-weight: 700; cursor: pointer;
+            margin-top: 10px; transition: 0.3s; text-transform: uppercase; letter-spacing: 1px;
+        }
+        .btn-action:hover { background: #fff; transform: translateY(-2px); }
+        .btn-cancel { background: rgba(255, 77, 77, 0.1); color: #ff4d4d; margin-top: 10px; display: none; }
+        .btn-cancel:hover { background: rgba(255, 77, 77, 0.2); color: #fff; }
+
+        /* --- GALLERY GRID --- */
+        .gallery-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+        .item-count { font-size: 14px; color: var(--text-muted); background: var(--input-bg); padding: 5px 12px; border-radius: 20px; }
+
+        .promo-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 25px;
+        }
+
+        .promo-card {
+            background: var(--glass-bg); backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border); border-radius: 16px;
+            overflow: hidden; transition: 0.3s; position: relative;
+            display: flex; flex-direction: column;
+            cursor: grab; /* Cursor tunjuk boleh drag */
+        }
+        .promo-card:active { cursor: grabbing; transform: scale(1.02); z-index: 10; border-color: var(--ar-gold); }
+
+        /* Hidden State Styling */
+        .promo-card.hidden-item {
+            opacity: 0.5; filter: grayscale(100%); border: 1px dashed #555;
+        }
+        .promo-card.hidden-item:hover { opacity: 1; filter: grayscale(0%); }
+
+        /* Drag Handle Icon */
+        .drag-handle {
+            position: absolute; top: 10px; right: 10px; z-index: 5;
+            background: rgba(0,0,0,0.5); padding: 5px 8px; border-radius: 6px; cursor: grab;
+        }
+
+        .card-img-wrap {
+            height: 160px; width: 100%; background: #fff; display: flex; align-items: center; justify-content: center; padding: 15px; position: relative;
+        }
+        .card-img { max-width: 100%; max-height: 100%; object-fit: contain; }
+        
+        .card-badge-overlay {
+            position: absolute; top: 10px; left: 10px;
+            font-size: 9px; font-weight: bold; padding: 4px 8px; border-radius: 4px; text-transform: uppercase;
+        }
+        .badge-promo { background: #000; color: var(--ar-gold); }
+        .badge-installment { background: #0067b8; color: #fff; }
+
+        .card-body { padding: 15px; flex-grow: 1; display: flex; flex-direction: column; }
+        .card-title { font-size: 15px; font-weight: 700; margin-bottom: 5px; color: #fff; }
+        .card-type { font-size: 10px; text-transform: uppercase; color: #aaa; margin-bottom: 5px; letter-spacing: 1px; }
+        
+        .price-row { display: flex; align-items: center; gap: 8px; margin-top: auto; padding-top: 10px; border-top: 1px solid var(--glass-border); }
+        .new-price { font-size: 14px; font-weight: 700; color: var(--ar-gold); }
+
+        .card-actions { display: grid; grid-template-columns: 1fr 1fr 1fr; }
+        .action-btn {
+            border: none; padding: 12px; cursor: pointer; font-size: 14px; transition: 0.2s;
+            background: rgba(255,255,255,0.02); border-top: 1px solid var(--glass-border); border-right: 1px solid var(--glass-border); color: #aaa;
+        }
+        .action-btn:last-child { border-right: none; }
+        .action-btn:hover { background: rgba(255,255,255,0.1); color: white; }
+        
+        /* Specific Button Colors on Hover */
+        .btn-hide:hover { color: #f1c40f; } /* Yellow for Hide */
+        .btn-edit:hover { color: #3498db; } /* Blue for Edit */
+        .btn-delete:hover { color: #e74c3c; background: rgba(231, 76, 60, 0.1); } /* Red for Delete */
+
+        @media(max-width: 900px) { .admin-layout { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+    <div class="admin-layout">
+        
+        <aside class="form-sidebar">
+            <div class="brand-header">
+                <i class="fas fa-sliders-h"></i>
+                <h2>Control Center</h2>
+            </div>
+
+            <input type="hidden" id="editDocId">
+            <input type="hidden" id="existingImageUrl">
+            
+            <div class="form-group">
+                <label>Post Type</label>
+                <select id="postType" onchange="toggleFormFields()">
+                    <option value="promo">Promo / Discount</option>
+                    <option value="installment">Installment Plan</option>
+                </select>
+            </div>
+
+            <img id="preview" src="" alt="Preview">
+
+            <div class="form-group">
+                <label>Product Image (Max 10MB)</label>
+                <input type="file" id="fileButton" accept="image/*" onchange="previewImage(event)">
+            </div>
+
+            <div class="form-group">
+                <label>Badge Label</label>
+                <input type="text" id="badge" placeholder="e.g. HOT DEAL">
+            </div>
+
+            <div class="form-group">
+                <label>Product Title</label>
+                <input type="text" id="title" placeholder="e.g. Surface Pro 9">
+            </div>
+
+            <div id="installmentSection" class="installment-options">
+                <div class="form-group">
+                    <label>Installment Duration</label>
+                    <input type="text" id="duration" placeholder="e.g. 12 Months / 24 Months">
+                </div>
+                <div class="form-group">
+                    <label>Monthly Price (RM)</label>
+                    <input type="text" id="monthlyPrice" placeholder="e.g. RM 250/month">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Specs / Details</label>
+                <input type="text" id="specs" placeholder="e.g. i7 | 16GB RAM">
+            </div>
+
+            <div class="form-group">
+                <label>Old Price (Full)</label>
+                <input type="text" id="old_price" placeholder="e.g. RM 6,299">
+            </div>
+
+            <div class="form-group">
+                <label>New Price (Full)</label>
+                <input type="text" id="new_price" placeholder="e.g. RM 5,888">
+            </div>
+
+            <button onclick="handleFormSubmit()" id="submitBtn" class="btn-action">Publish Item</button>
+            <button onclick="resetForm()" id="cancelBtn" class="btn-action btn-cancel">Cancel</button>
+            <p id="status" style="text-align: center; margin-top: 15px; font-size: 12px; color: #00ff88;"></p>
+        </aside>
+
+        <main class="gallery-content">
+            <div class="gallery-header">
+                <h3>Inventory Management</h3>
+                <span id="itemCount" class="item-count">0 Items</span>
+            </div>
+            
+            <p style="font-size: 12px; color: #666; margin-bottom: 20px;">
+                <i class="fas fa-info-circle"></i> Drag cards to reorder. Eye icon hides item from public view.
+            </p>
+
+            <div id="promo-list" class="promo-grid">
+                </div>
+        </main>
+
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getDatabase, ref, push, set, onValue, remove, update } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+        // CONFIG FIREBASE
+        const firebaseConfig = {
+            apiKey: "AIzaSyCh9hW_Agf108VvIx3qNJJdVEWvaqX04IU",
+            authDomain: "aredutech2026.firebaseapp.com",
+            projectId: "aredutech2026",
+            storageBucket: "aredutech2026.appspot.com", 
+            messagingSenderId: "689281434647",
+            appId: "1:689281434647:web:7ec74211067abaf5b2c852",
+            databaseURL: "https://aredutech2026-default-rtdb.asia-southeast1.firebasedatabase.app"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        // --- 1. TOGGLE FORM FIELDS ---
+        window.toggleFormFields = () => {
+            const type = document.getElementById('postType').value;
+            const instSection = document.getElementById('installmentSection');
+            if(type === 'installment') {
+                instSection.style.display = 'block';
+            } else {
+                instSection.style.display = 'none';
+            }
+        }
+
+        // --- 2. READ & RENDER (WITH SORTING) ---
+        const promoList = document.getElementById('promo-list');
+        const itemCount = document.getElementById('itemCount');
+        let currentData = []; // Store local data for drag sorting
+
+        onValue(ref(db, 'promotions'), (snapshot) => {
+            const data = snapshot.val();
+            promoList.innerHTML = ""; 
+            
+            if (data) {
+                // Convert Object to Array for Sorting
+                currentData = Object.keys(data).map(key => ({ id: key, ...data[key] }));
+                
+                // Sort by 'order' index (if exists), else by timestamp
+                currentData.sort((a, b) => (a.order || 0) - (b.order || 0));
+
+                itemCount.innerText = currentData.length + " Items";
+
+                currentData.forEach((item, index) => {
+                    // Logic Badge & Hidden Class
+                    const isInstallment = item.type === 'installment';
+                    const badgeClass = isInstallment ? 'badge-installment' : 'badge-promo';
+                    const hiddenClass = item.is_hidden ? 'hidden-item' : '';
+                    const eyeIcon = item.is_hidden ? 'fa-eye-slash' : 'fa-eye';
+                    
+                    // Card HTML
+                    const cardHTML = `
+                        <div class="promo-card ${hiddenClass}" draggable="true" data-id="${item.id}" ondragstart="drag(event)" ondrop="drop(event)" ondragover="allowDrop(event)">
+                            <div class="drag-handle"><i class="fas fa-grip-vertical"></i></div>
+                            <div class="card-img-wrap">
+                                <span class="card-badge-overlay ${badgeClass}">${item.badge}</span>
+                                <img src="${item.image_url}" class="card-img" alt="${item.title}">
+                            </div>
+                            <div class="card-body">
+                                <div class="card-type">${isInstallment ? 'Installment Plan' : 'Standard Promo'}</div>
+                                <div class="card-title">${item.title}</div>
+                                <div class="card-specs">${item.specs}</div>
+                                <div class="price-row">
+                                    <span class="new-price">${item.new_price}</span>
+                                    ${isInstallment ? `<span class="old-price" style="font-size:10px; margin-left:auto;">${item.duration}</span>` : `<span class="old-price">${item.old_price}</span>`}
+                                </div>
+                            </div>
+                            <div class="card-actions">
+                                <button class="action-btn btn-hide" title="Hide/Unhide" onclick="window.toggleHide('${item.id}', ${item.is_hidden})">
+                                    <i class="fas ${eyeIcon}"></i>
+                                </button>
+                                <button class="action-btn btn-edit" title="Edit" onclick="window.editPromo('${item.id}')">
+                                    <i class="fas fa-pen"></i>
+                                </button>
+                                <button class="action-btn btn-delete" title="Delete" onclick="window.deletePromo('${item.id}')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>`;
+                    promoList.innerHTML += cardHTML;
+                });
+            } else {
+                promoList.innerHTML = "<p style='color:#666'>No data found.</p>";
+            }
+        });
+
+        // --- 3. UPLOAD / UPDATE LOGIC ---
+        window.handleFormSubmit = function() {
+            const btn = document.getElementById('submitBtn');
+            const status = document.getElementById('status');
+            const fileInput = document.getElementById('fileButton');
+            const editId = document.getElementById('editDocId').value;
+            
+            // Gather Basic Inputs
+            const type = document.getElementById('postType').value;
+            const title = document.getElementById('title').value;
+            const badge = document.getElementById('badge').value;
+            const specs = document.getElementById('specs').value;
+            const old_price = document.getElementById('old_price').value;
+            const new_price = document.getElementById('new_price').value;
+            
+            // Gather Installment Inputs
+            const duration = document.getElementById('duration').value;
+            const monthlyPrice = document.getElementById('monthlyPrice').value;
+
+            if (!title) { alert("Title is required!"); return; }
+
+            // Check Size
+            if (fileInput.files.length > 0) {
+                const fileSize = fileInput.files[0].size / 1024 / 1024; 
+                if (fileSize > 10) { alert("File > 10MB! Please reduce."); return; }
+            }
+
+            btn.disabled = true;
+            status.innerText = "Processing...";
+
+            const saveToDB = async (imageUrl) => {
+                const promoData = { 
+                    type, title, badge, specs, old_price, new_price, image_url: imageUrl,
+                    duration: type === 'installment' ? duration : "",
+                    monthlyPrice: type === 'installment' ? monthlyPrice : "",
+                    order: Date.now(), // Default order timestamp
+                    is_hidden: false   // Default visible
+                };
+
+                // Keep existing fields if editing (like is_hidden, order)
+                if(editId) {
+                    const existingItem = currentData.find(i => i.id === editId);
+                    if(existingItem) {
+                        promoData.order = existingItem.order;
+                        promoData.is_hidden = existingItem.is_hidden;
+                    }
+                }
+
+                try {
+                    if (editId) {
+                        await update(ref(db, 'promotions/' + editId), promoData);
+                        status.innerText = "Updated Successfully!";
+                    } else {
+                        await set(push(ref(db, 'promotions')), promoData);
+                        status.innerText = "Uploaded Successfully!";
+                    }
+                    resetForm();
+                } catch (e) {
+                    alert("Error: " + e.message);
+                } finally {
+                    btn.disabled = false;
+                }
+            };
+
+            // Image Logic
+            if (fileInput.files.length > 0) {
+                const reader = new FileReader();
+                reader.onload = function(e) { saveToDB(e.target.result); };
+                reader.readAsDataURL(fileInput.files[0]);
+            } else {
+                const oldUrl = document.getElementById('existingImageUrl').value;
+                if (oldUrl) { saveToDB(oldUrl); } 
+                else { alert("Select Image!"); btn.disabled = false; status.innerText=""; }
+            }
+        };
+
+        // --- 4. TOGGLE HIDE / ARCHIVE ---
+        window.toggleHide = async (id, currentStatus) => {
+            try {
+                await update(ref(db, 'promotions/' + id), { is_hidden: !currentStatus });
+            } catch(e) { alert("Error: " + e.message); }
+        };
+
+        // --- 5. EDIT & DELETE ---
+        window.deletePromo = async (id) => {
+            if(confirm("Permanently delete this item?")) {
+                await remove(ref(db, 'promotions/' + id));
+            }
+        };
+
+        window.editPromo = (id) => {
+            const item = currentData.find(i => i.id === id);
+            if(!item) return;
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            
+            // Fill Form
+            document.getElementById('editDocId').value = id;
+            document.getElementById('postType').value = item.type || 'promo';
+            toggleFormFields(); // Update UI based on type
+
+            document.getElementById('title').value = item.title;
+            document.getElementById('badge').value = item.badge;
+            document.getElementById('specs').value = item.specs;
+            document.getElementById('old_price').value = item.old_price;
+            document.getElementById('new_price').value = item.new_price;
+            document.getElementById('existingImageUrl').value = item.image_url;
+            
+            // Installment Data
+            document.getElementById('duration').value = item.duration || "";
+            document.getElementById('monthlyPrice').value = item.monthlyPrice || "";
+
+            document.getElementById('preview').src = item.image_url;
+            document.getElementById('preview').style.display = 'block';
+            
+            document.getElementById('submitBtn').innerText = "Update Item";
+            document.getElementById('cancelBtn').style.display = 'inline-block';
+        };
+
+        window.resetForm = () => {
+            document.querySelectorAll('input').forEach(i => i.value = '');
+            document.getElementById('preview').style.display = 'none';
+            document.getElementById('submitBtn').innerText = "Publish Item";
+            document.getElementById('cancelBtn').style.display = 'none';
+            document.getElementById('status').innerText = "";
+        };
+
+        window.previewImage = (event) => {
+            const reader = new FileReader();
+            reader.onload = function(){
+                const output = document.getElementById('preview');
+                output.src = reader.result;
+                output.style.display = 'block';
+            };
+            reader.readAsDataURL(event.target.files[0]);
+        };
+
+        // --- 6. DRAG AND DROP LOGIC (Native HTML5) ---
+        let draggedId = null;
+
+        window.allowDrop = (ev) => { ev.preventDefault(); }
+
+        window.drag = (ev) => {
+            draggedId = ev.target.getAttribute('data-id');
+            ev.dataTransfer.effectAllowed = "move";
+        }
+
+        window.drop = async (ev) => {
+            ev.preventDefault();
+            // Get target card (handle nested elements)
+            const targetCard = ev.target.closest('.promo-card');
+            if(!targetCard) return;
+            
+            const targetId = targetCard.getAttribute('data-id');
+            if (draggedId === targetId) return;
+
+            // Reorder Local Array
+            const fromIndex = currentData.findIndex(i => i.id === draggedId);
+            const toIndex = currentData.findIndex(i => i.id === targetId);
+            
+            // Move item in array
+            const item = currentData.splice(fromIndex, 1)[0];
+            currentData.splice(toIndex, 0, item);
+
+            // Update All Orders in DB (Batch Update for smoothness)
+            const updates = {};
+            currentData.forEach((item, index) => {
+                updates['promotions/' + item.id + '/order'] = index;
+            });
+
+            await update(ref(db), updates);
+        }
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home | AR Edutech</title>
+    <link rel="icon" href="photos/favicon.ico" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* --- 1. CORE VARIABLES & RESET --- */
+        :root {
+            --ar-gold: #C8A45E;
+            --ar-gold-glow: rgba(200, 164, 94, 0.6);
+            --bg-deep: #050505;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --text-white: #ffffff;
+            --text-gray: #b3b3b3;
+            --sale-red: #ff4d4d;
+            --sale-glow: rgba(255, 77, 77, 0.6);
+            --inst-blue: #0067b8;
+            --whatsapp-green: #25D366;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        html { scroll-behavior: smooth; }
+        
+        body {
+            background-color: var(--bg-deep);
+            color: var(--text-white);
+            line-height: 1.6;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(200, 164, 94, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at 90% 60%, rgba(0, 103, 184, 0.1) 0%, transparent 40%);
+            background-attachment: fixed;
+        }
+
+        a { text-decoration: none; color: inherit; transition: 0.3s; }
+        ul { list-style: none; }
+
+        /* --- 2. NAVBAR --- */
+        nav {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0 5%; height: 75px;
+            background: rgba(5, 5, 5, 0.85); 
+            backdrop-filter: blur(20px); border-bottom: 1px solid var(--glass-border);
+            position: sticky; top: 0; z-index: 1000;
+        }
+        .nav-left { display: flex; align-items: center; gap: 40px; }
+        .logo img { height: 45px; width: auto; filter: brightness(1.2); }
+        .nav-links { display: flex; gap: 30px; }
+        
+        .nav-item {
+            position: relative; font-size: 14px; font-weight: 500;
+            cursor: pointer; color: var(--text-gray); padding: 25px 0; letter-spacing: 0.5px;
+        }
+        .nav-item:hover { color: var(--text-white); text-shadow: 0 0 15px var(--ar-gold-glow); }
+
+        /* Dropdown */
+        .dropdown-content {
+            visibility: hidden; opacity: 0; position: absolute;
+            top: 100%; left: -20px;
+            background: rgba(15, 15, 15, 0.95); backdrop-filter: blur(25px);
+            border: 1px solid var(--glass-border); border-radius: 16px;
+            min-width: 240px; padding: 10px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            z-index: 10; transform: translateY(20px); transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+        .nav-item:hover .dropdown-content { visibility: visible; opacity: 1; transform: translateY(0); }
+        .dropdown-content a { color: var(--text-gray); padding: 12px 16px; display: block; border-radius: 8px; font-size: 13px; }
+        .dropdown-content a:hover { background: rgba(255, 255, 255, 0.05); color: var(--ar-gold); padding-left: 20px; }
+
+        /* Nested Dropdown */
+        .dropdown-submenu { position: relative; width: 100%; }
+        .arrow-right { float: right; font-size: 10px; margin-top: 4px; opacity: 0.5; }
+        .dropdown-sub-content {
+            visibility: hidden; opacity: 0; position: absolute;
+            top: -5px; left: 100%; margin-left: 15px;
+            background: rgba(15, 15, 15, 0.95); backdrop-filter: blur(25px);
+            border: 1px solid var(--glass-border); border-radius: 16px;
+            min-width: 260px; padding: 10px; box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            transform: translateX(-10px); transition: all 0.3s ease;
+        }
+        .dropdown-submenu:hover .dropdown-sub-content { visibility: visible; opacity: 1; transform: translateX(0); }
+        .dropdown-sub-content a { font-size: 12px !important; white-space: normal; line-height: 1.4; }
+
+        .nav-right a {
+            font-size: 13px; color: var(--text-white); border: 1px solid var(--glass-border);
+            padding: 10px 20px; border-radius: 30px; background: rgba(255,255,255,0.05);
+        }
+        .nav-right a:hover { background: var(--text-white); color: #000; box-shadow: 0 0 15px rgba(255,255,255,0.3); }
+        .hamburger { display: none; cursor: pointer; flex-direction: column; gap: 5px; }
+        .hamburger div { width: 25px; height: 3px; background-color: var(--ar-gold); transition: 0.3s; }
+
+        /* --- 3. HERO SECTION (Compact Style) --- */
+        .main-hero {
+            height: 85vh; min-height: 600px;
+            display: flex; align-items: center; justify-content: center;
+            padding: 0 5%; position: relative; overflow: hidden;
+        }
+        .main-hero::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: url('photos/bg/surfacelaptop.avif') no-repeat center center/cover;
+            filter: brightness(0.4) contrast(1.1); z-index: -1;
+        }
+        
+        .hero-text-container {
+            max-width: 800px; z-index: 1; text-align: center;
+            background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1); padding: 60px 40px; border-radius: 40px;
+            box-shadow: 0 40px 80px rgba(0,0,0,0.5); animation: fadeInUp 1s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+        .hero-text-container h1 {
+            font-size: 56px; line-height: 1.1; margin-bottom: 25px; font-weight: 800;
+            background: linear-gradient(135deg, #fff 0%, #aaa 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            letter-spacing: -1px; text-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .hero-text-container p { font-size: 18px; color: #ccc; margin-bottom: 40px; font-weight: 400; max-width: 600px; margin-left: auto; margin-right: auto; }
+        
+        .btn-primary {
+            background: var(--ar-gold); color: #000; padding: 16px 45px; border-radius: 50px; font-weight: 700; display: inline-block; font-size: 15px;
+            box-shadow: 0 0 30px var(--ar-gold-glow); border: none; transition: 0.4s; text-transform: uppercase; letter-spacing: 1px;
+        }
+        .btn-primary:hover { background: #fff; color: #000; box-shadow: 0 0 50px rgba(255,255,255,0.4); transform: translateY(-5px); }
+        @keyframes fadeInUp { from {opacity:0; transform:translateY(40px) scale(0.95);} to {opacity:1; transform:translateY(0) scale(1);} }
+
+        /* --- 4. ABOUT SECTION (Compact & Refined) --- */
+        .about-section { padding: 60px 5%; display: flex; justify-content: center; }
+        .glass-panel-large {
+            background: var(--glass-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border); border-radius: 24px; padding: 40px 60px;
+            display: flex; align-items: center; gap: 60px; box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            max-width: 1000px; width: 100%;
+        }
+        .about-image { flex: 0 0 35%; display: flex; justify-content: center; align-items: center; }
+        .about-image img { width: 100%; max-width: 250px; height: auto; transition: 0.5s; display: block; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5)); }
+        .about-image:hover img { transform: scale(1.05) rotate(-2deg); }
+        .about-text { flex: 1; }
+        .section-badge { color: var(--ar-gold); text-transform: uppercase; letter-spacing: 2px; font-size: 11px; font-weight: 800; margin-bottom: 15px; display: block; opacity: 0.9; }
+        .section-title { font-size: 32px; color: #fff; margin-bottom: 20px; line-height: 1.2; font-weight: 700; }
+        .about-text p { margin-bottom: 15px; color: #bbb; font-size: 14px; line-height: 1.6; text-align: justify; }
+
+        /* --- 5. DEALS SECTION --- */
+        .deals-section { padding: 80px 5% 120px 5%; text-align: center; } 
+        .deals-header { margin-bottom: 80px; }
+        .deals-header h2 { font-size: 48px; margin-bottom: 15px; color: #fff; font-weight: 700; letter-spacing: -1px; }
+        .deals-header p { color: #888; font-size: 16px; }
+        
+        .deals-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 40px; min-height: 200px; max-width: 1400px; margin: 0 auto; }
+
+        .deal-card {
+            width: 320px; flex: 0 0 auto;
+            background: linear-gradient(160deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%);
+            backdrop-filter: blur(15px); border: 1px solid var(--glass-border);
+            border-radius: 24px; padding: 25px; position: relative;
+            transition: 0.4s cubic-bezier(0.19, 1, 0.22, 1); text-align: left; overflow: hidden;
+            display: flex; flex-direction: column; animation: fadeIn 0.5s ease;
+        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .deal-card:hover { transform: translateY(-15px); border-color: var(--ar-gold); box-shadow: 0 30px 60px rgba(0,0,0,0.5); }
+        
+        /* Badges */
+        .sale-badge {
+            position: absolute; top: 20px; right: 20px; z-index: 10;
+            padding: 6px 14px; border-radius: 30px; font-size: 10px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.2);
+        }
+        .badge-red { background: linear-gradient(135deg, #ff4d4d, #b30000); color: white; box-shadow: 0 0 20px rgba(255, 77, 77, 0.4); }
+        .badge-gold { background: linear-gradient(135deg, #C8A45E, #a0834b); color: #000; box-shadow: 0 0 20px rgba(200, 164, 94, 0.4); }
+        .badge-blue { background: linear-gradient(135deg, #0067b8, #003366); color: white; box-shadow: 0 0 20px rgba(0, 103, 184, 0.4); }
+
+        .deal-img-container {
+            height: 220px; display: flex; align-items: center; justify-content: center;
+            margin-bottom: 30px; position: relative; z-index: 2; cursor: pointer;
+            background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%); border-radius: 15px;
+        }
+        .deal-img-container img { max-width: 90%; max-height: 90%; object-fit: contain; filter: drop-shadow(0 20px 30px rgba(0,0,0,0.4)); transition: 0.5s; }
+        .deal-card:hover .deal-img-container img { transform: scale(1.15) translateY(-5px); }
+        
+        .deal-info { position: relative; z-index: 2; flex-grow: 1; display: flex; flex-direction: column; }
+        .deal-title { font-size: 20px; font-weight: 700; margin-bottom: 8px; color: #fff; line-height: 1.3; height: 52px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+        .deal-specs { font-size: 13px; color: #888; margin-bottom: 25px; display: block; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 20px; }
+        
+        .price-box { margin-top: auto; display: flex; align-items: flex-end; gap: 12px; }
+        .old-price { text-decoration: line-through; color: #666; font-size: 14px; margin-bottom: 4px; }
+        .new-price { color: var(--ar-gold); font-size: 26px; font-weight: 700; line-height: 1; text-shadow: 0 0 20px rgba(200,164,94,0.3); }
+        .price-installment { font-size: 20px; color: #4dabf7; font-weight: 700; }
+        .duration-label { font-size: 11px; color: #aaa; margin-bottom: 3px; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* --- LIGHTBOX --- */
+        .lightbox {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.95); z-index: 2000;
+            display: none; justify-content: center; align-items: center;
+            opacity: 0; transition: opacity 0.3s ease; backdrop-filter: blur(10px);
+        }
+        .lightbox.active { display: flex; opacity: 1; }
+        .lightbox-img { max-width: 85%; max-height: 85vh; border-radius: 12px; box-shadow: 0 0 80px rgba(200,164,94,0.15); transform: scale(0.9); transition: transform 0.4s; }
+        .lightbox.active .lightbox-img { transform: scale(1); }
+        .lightbox-close { position: absolute; top: 40px; right: 40px; color: white; font-size: 50px; cursor: pointer; transition: 0.3s; }
+        .lightbox-close:hover { color: var(--ar-gold); transform: rotate(90deg); }
+
+        /* --- 6. SUPPORT --- */
+        .support-section { padding: 100px 5%; position: relative; background: linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%); }
+        .support-header { text-align: center; margin-bottom: 60px; }
+        .support-header h2 { font-size: 42px; color: #fff; margin-bottom: 15px; font-weight: 700; }
+        .support-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 40px; }
+        .agent-card {
+            width: 380px; flex: 0 0 auto;
+            background: rgba(255, 255, 255, 0.02); border: 1px solid var(--glass-border); border-radius: 24px;
+            padding: 35px; display: flex; align-items: center; gap: 25px; transition: 0.3s; position: relative; overflow: hidden;
+        }
+        .agent-card:hover { background: rgba(255, 255, 255, 0.04); border-color: var(--ar-gold); transform: translateY(-8px); box-shadow: 0 20px 50px rgba(0,0,0,0.4); }
+        .agent-avatar { width: 90px; height: 90px; border-radius: 50%; border: 2px solid var(--ar-gold); padding: 4px; position: relative; }
+        .agent-avatar img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+        .status-dot { width: 16px; height: 16px; background: var(--whatsapp-green); border: 3px solid #000; border-radius: 50%; position: absolute; bottom: 5px; right: 0; box-shadow: 0 0 10px var(--whatsapp-green); animation: pulse 2s infinite; }
+        .agent-info h3 { font-size: 20px; color: #fff; margin-bottom: 5px; font-weight: 700; }
+        .agent-role { font-size: 11px; color: var(--ar-gold); text-transform: uppercase; letter-spacing: 2px; display: block; margin-bottom: 20px; }
+        .contact-btn { padding: 10px 20px; border-radius: 30px; font-size: 13px; font-weight: 600; text-decoration: none; display: flex; align-items: center; gap: 8px; transition: 0.3s; }
+
+        footer { padding: 60px 5%; text-align: center; border-top: 1px solid var(--glass-border); background: #000; color: #555; font-size: 14px; }
+
+        /* --- MOBILE RESPONSIVE --- */
+        @media screen and (max-width: 768px) {
+            nav { padding: 0 20px; height: 70px; }
+            .hamburger { display: flex; }
+            .nav-right { display: none; }
+            .nav-links {
+                position: absolute; right: 0; top: 70px; background: rgba(10, 10, 10, 0.98); backdrop-filter: blur(25px);
+                flex-direction: column; align-items: flex-start; width: 100%; gap: 0; border-bottom: 1px solid var(--glass-border);
+                transform: translateY(-150%); transition: transform 0.4s ease; padding: 0; z-index: 999;
+            }
+            .nav-links.active { transform: translateY(0); }
+            .nav-item { width: 100%; padding: 20px 30px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+            
+            .dropdown-content, .dropdown-sub-content {
+                position: static; visibility: visible; opacity: 1; transform: none; background: transparent; border: none; box-shadow: none; padding-left: 20px; display: none; min-width: 100%;
+            }
+            .nav-item:hover .dropdown-content { display: block; }
+            .dropdown-submenu:hover .dropdown-sub-content { display: block; transform: none; }
+            
+            .main-hero { padding: 0 5%; min-height: 500px; height: auto; padding-top: 100px; padding-bottom: 60px; }
+            .hero-text-container { padding: 30px 20px; border-radius: 25px; }
+            .hero-text-container h1 { font-size: 36px; }
+            .hero-text-container p { font-size: 16px; }
+            .about-section { flex-direction: column; padding: 60px 5%; gap: 40px; }
+            .glass-panel-large { flex-direction: column; padding: 30px; text-align: center; gap: 30px; }
+            .section-title { font-size: 32px; }
+            .deals-section { padding: 60px 5%; }
+            .deals-header h2 { font-size: 32px; }
+            .deal-card { width: 100%; max-width: 350px; }
+            .support-section { padding: 50px 5%; }
+            .agent-card { width: 100%; max-width: 350px; flex-direction: column; text-align: center; }
+            .contact-actions { justify-content: center; }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav id="top">
+        <div class="nav-left">
+            <a href="/" class="logo">
+                <img src="photos/logo/logoaredutech2.png" alt="AR Edutech Logo">
+            </a>
+            <div class="hamburger" onclick="toggleMenu()"><div></div><div></div><div></div></div>
+            <ul class="nav-links">
+                <li class="nav-item">Surface
+                    <div class="dropdown-content">
+                        <a href="surface">Surface Pro 8</a>
+                        <a href="surface">Surface Pro 9</a>
+                        <a href="surface">Surface Go 4</a>
+                        <a href="surface">Surface Pro 10</a>
+                        <a href="surface">Surface Pro 11</a>
+                        <a href="surface">Surface Pro 12</a>
+                    </div>
+                </li>
+                <li class="nav-item">Products
+                    <div class="dropdown-content">
+                        <a href="products">Samview Interactive Board</a>
+                        <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.1); margin: 5px 0;">
+                        <div class="dropdown-submenu">
+                            <a href="products">Projector <span class="arrow-right">›</span></a>
+                            <div class="dropdown-sub-content">
+                                <a href="products">Epson CO-FH02</a>
+                                <a href="products">Epson EB-X52</a>
+                                <a href="products">SAMVIEW UFO</a>
+                                <a href="products">Epson EB-E1</a>
+                                <a href="products">(Slim Wireless) Epson EB-1785W</a>
+                            </div>
+                        </div>
+                        <div class="dropdown-submenu">
+                            <a href="products">Printer <span class="arrow-right">›</span></a>
+                            <div class="dropdown-sub-content">
+                                <a href="products">Epson L3250</a>
+                                <a href="products">Pixma Canon E470</a>
+                                <a href="products">Wireless Printer Canon G3010</a>
+                            </div>
+                        </div>
+                        <div class="dropdown-submenu">
+                            <a href="products">Nugens <span class="arrow-right">›</span></a>
+                            <div class="dropdown-sub-content">
+                                <a href="products">Type-C to HDMI Wireless Transmitter (WDA)</a>
+                                <a href="products">HDMI Wireless Transmitter Set</a>
+                                <a href="products">HDMI Wireless Transmitter Receive ADD-ON</a>
+                                <a href="products">V-600 Visualizer Slim</a>
+                                <a href="products">Stylus For iPad</a>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li class="nav-item">Education</li>
+                <li class="nav-item">Contact Us</li>
+            </ul>
+        </div>
+        
+        <div class="nav-right" style="display: flex; align-items: center; gap: 25px;">
+            <div style="display: flex; align-items: center; gap: 10px; padding-right: 25px; border-right: 1px solid rgba(255,255,255,0.1);">
+                <img src="https://img.icons8.com/color/48/microsoft.png" alt="Microsoft" style="height: 28px; filter: drop-shadow(0 0 10px rgba(255,255,255,0.1));">
+                <div style="display: flex; flex-direction: column; justify-content: center;">
+                    <span style="font-size: 10px; color: #aaa; letter-spacing: 1px; line-height: 1;">MICROSOFT</span>
+                    <span style="font-size: 11px; font-weight: 700; color: #fff; letter-spacing: 0.5px;">Gold Partner</span>
+                </div>
+            </div>
+            <a href="#">About Us</a>
+        </div>
+    </nav>
+
+    <header class="main-hero">
+        <div class="hero-text-container">
+            <h1>Empowering Education <br>with Future Tech</h1>
+            <p>Your trusted Microsoft Gold Partner. We provide cutting-edge technology solutions for schools, universities, and modern workplaces.</p>
+            <a href="surface" class="btn-primary">View Surface Range</a>
+        </div>
+    </header>
+
+    <section class="about-section">
+        <div class="glass-panel-large">
+            <div class="about-image">
+                <img src="photos/logo/logoaredutech2.png" alt="AR Edutech Team">
+            </div>
+            <div class="about-text">
+                <span class="section-badge">About AR Edutech</span>
+                <h2 class="section-title">Who We Are</h2>
+                <p><strong>AR Edutech</strong> we aspire to prepare learners and educators in facing IR 4.0 by promoting the tools and training needed to move with the latest trend in technological development in education. </p> 
+                <p> Technology solutions provider in Malaysia, specializing in digital transformation for the education sector. As a <strong>Microsoft Gold Sponsor</strong>, we are committed to delivering authentic, high-performance devices.</p>
+                <p>From interactive smartboards to the latest Surface ecosystem, we help you teach smarter and work faster.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="deals-section">
+        <div class="deals-header">
+            <h2>Limited Time Offers</h2>
+            <p style="color: #888;">Exclusive deals on our best-selling devices. Grab them before they're gone.</p>
+        </div>
+
+        <div class="deals-grid" id="deals-container">
+            <p style="color:white;">Loading latest offers...</p>
+        </div>
+    </section>
+
+    <section class="support-section">
+        <div class="support-header">
+            <h2>Need Expert Advice?</h2>
+            <p>Our Microsoft-certified consultants are ready to assist you in finding the perfect solution.</p>
+        </div>
+
+        <div class="support-grid">
+            <div class="agent-card">
+                <div class="agent-avatar">
+                    <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Agent Sarah">
+                    <div class="status-dot"></div>
+                </div>
+                <div class="agent-info">
+                    <h3>Sarah Azman</h3>
+                    <span class="agent-role">Education Specialist</span>
+                    <div class="contact-actions">
+                        <a href="#" class="contact-btn btn-whatsapp"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+                        <a href="#" class="contact-btn btn-call"><i class="fas fa-phone"></i> Call</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="agent-card">
+                <div class="agent-avatar">
+                    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Agent David">
+                    <div class="status-dot"></div>
+                </div>
+                <div class="agent-info">
+                    <h3>David Lee</h3>
+                    <span class="agent-role">Corporate Solutions</span>
+                    <div class="contact-actions">
+                        <a href="#" class="contact-btn btn-whatsapp"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+                        <a href="#" class="contact-btn btn-call"><i class="fas fa-phone"></i> Call</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 AR Edutech Sdn Bhd. All rights reserved. | Microsoft Gold Partner</p>
+    </footer>
+
+    <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+        <span class="lightbox-close">&times;</span>
+        <img class="lightbox-img" id="lightbox-img">
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+        // CONFIG
+        const firebaseConfig = {
+            apiKey: "AIzaSyCh9hW_Agf108VvIx3qNJJdVEWvaqX04IU",
+            authDomain: "aredutech2026.firebaseapp.com",
+            projectId: "aredutech2026",
+            storageBucket: "aredutech2026.appspot.com",
+            messagingSenderId: "689281434647",
+            appId: "1:689281434647:web:7ec74211067abaf5b2c852",
+            databaseURL: "https://aredutech2026-default-rtdb.asia-southeast1.firebasedatabase.app/" 
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        const dealsContainer = document.getElementById('deals-container');
+        const promoRef = ref(db, 'promotions');
+
+        onValue(promoRef, (snapshot) => {
+            const data = snapshot.val();
+            dealsContainer.innerHTML = "";
+
+            if (data) {
+                let items = Object.keys(data).map(key => ({ id: key, ...data[key] }));
+                
+                // Filter hidden & sort by order
+                items = items.filter(item => !item.is_hidden);
+                items.sort((a, b) => (a.order || 0) - (b.order || 0));
+
+                items.forEach(item => {
+                    // Logic Badge
+                    const isInstallment = item.type === 'installment';
+                    let badgeClass = 'badge-red';
+                    if (isInstallment) badgeClass = 'badge-blue';
+                    else if (item.badge.toLowerCase().includes('hot') || item.badge.toLowerCase().includes('deal')) badgeClass = 'badge-gold';
+
+                    // Logic Price
+                    let priceHtml = '';
+                    if (isInstallment) {
+                        priceHtml = `
+                            <div style="text-align:right;">
+                                <div class="duration-label">${item.duration}</div>
+                                <span class="price-installment">${item.monthlyPrice}</span>
+                            </div>
+                        `;
+                    } else {
+                        priceHtml = `
+                            <span class="old-price">${item.old_price}</span>
+                            <span class="new-price">${item.new_price}</span>
+                        `;
+                    }
+
+                    const cardHTML = `
+                        <div class="deal-card">
+                            <div class="sale-badge ${badgeClass}">${item.badge}</div>
+                            <div class="deal-img-container" onclick="openLightbox('${item.image_url}')">
+                                <img src="${item.image_url}" alt="${item.title}">
+                            </div>
+                            <div class="deal-info">
+                                <div class="deal-title">${item.title}</div>
+                                <span class="deal-specs">${item.specs}</span>
+                                <div class="price-box" style="${isInstallment ? 'justify-content: flex-end;' : ''}">
+                                    ${priceHtml}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    dealsContainer.innerHTML += cardHTML;
+                });
+            } else {
+                dealsContainer.innerHTML = "<p style='color:#888; width:100%;'>No active promotions currently.</p>";
+            }
+        });
+
+        window.toggleMenu = function() {
+            const navLinks = document.querySelector('.nav-links');
+            navLinks.classList.toggle('active');
+        }
+
+        window.openLightbox = function(src) {
+            const lb = document.getElementById('lightbox');
+            const lbImg = document.getElementById('lightbox-img');
+            lbImg.src = src;
+            lb.classList.add('active');
+        }
+
+        window.closeLightbox = function() {
+            document.getElementById('lightbox').classList.remove('active');
+        }
+    </script>
+
+</body>
+</html>
