@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Surface Collection | AR Edutech</title>
-    <link rel="icon" href="photos/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="photos/logo/favicon.ico" type="image/x-icon">
     <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -31,7 +31,6 @@
             color: var(--text-white);
             line-height: 1.6;
             overflow-x: hidden;
-            /* LIQUID BACKGROUND */
             background-image: 
                 radial-gradient(circle at 10% 20%, rgba(200, 164, 94, 0.12) 0%, transparent 40%),
                 radial-gradient(circle at 90% 60%, rgba(0, 103, 184, 0.12) 0%, transparent 40%);
@@ -52,7 +51,7 @@
         }
         .nav-left { display: flex; align-items: center; gap: 40px; }
         .logo img { height: 45px; width: auto; filter: brightness(1.2); }
-        .nav-links { display: flex; gap: 30px; }
+        .nav-links { display: flex; gap: 30px; position: absolute; left: 50%; transform: translateX(-50%); }
         
         .nav-item {
             position: relative; font-size: 14px; font-weight: 500;
@@ -128,11 +127,12 @@
         }
         .hero p { font-size: 18px; color: #ccc; margin-bottom: 35px; font-weight: 300; }
 
-        /* --- 4. CATALOG SECTION (PROFESSIONAL SHOWCASE) --- */
+        /* --- 4. CATALOG SECTION --- */
         .catalog-section {
             padding: 80px 5%;
             max-width: 1400px; margin: 0 auto;
             position: relative; z-index: 2;
+            scroll-margin-top: 80px; /* Supaya scroll tak tertutup dengan navbar */
         }
 
         .section-header { text-align: center; margin-bottom: 60px; }
@@ -164,7 +164,7 @@
             box-shadow: 0 20px 50px rgba(200, 164, 94, 0.15);
         }
 
-        /* Tag Label (e.g., NEW, BESTSELLER) */
+        /* Tags/Badges */
         .card-tag {
             position: absolute; top: 15px; left: 15px;
             font-size: 10px; font-weight: 800; letter-spacing: 1px; color: #000;
@@ -172,10 +172,12 @@
             z-index: 3; text-transform: uppercase;
         }
         .tag-gold { background: var(--ar-gold); }
+        .tag-blue { background: var(--ms-blue); color: #fff; }
+        .tag-red { background: var(--sale-red); color: #fff; }
 
         .img-wrapper {
             height: 250px;
-            background: linear-gradient(to bottom, #e0e0e0, #ffffff); /* Clean white background for product pop */
+            background: linear-gradient(to bottom, #e0e0e0, #ffffff); 
             display: flex; align-items: center; justify-content: center;
             position: relative; overflow: hidden;
         }
@@ -191,25 +193,26 @@
         .card-content {
             padding: 25px;
             display: flex; flex-direction: column; flex-grow: 1;
-            /* Glass effect behind text */
             background: rgba(10, 10, 10, 0.4);
             backdrop-filter: blur(10px);
         }
 
         .model-name {
-            font-size: 22px; font-weight: 700; color: #fff; margin-bottom: 5px;
+            font-size: 22px; font-weight: 700; color: #fff; margin-bottom: 15px;
         }
         
-        .model-desc {
-            font-size: 13px; color: #aaa; margin-bottom: 20px; flex-grow: 1;
-        }
-
+        /* SPECS TAGS (UPDATED STYLE) */
         .specs-row {
-            display: flex; gap: 10px; margin-bottom: 20px;
+            display: flex; gap: 8px; margin-bottom: 25px; flex-wrap: wrap;
         }
         .spec-badge {
-            font-size: 11px; color: #ddd; background: rgba(255,255,255,0.1); 
-            padding: 4px 8px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.1);
+            font-size: 10px; color: #ddd; background: rgba(255,255,255,0.08); 
+            padding: 5px 10px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1);
+            text-transform: uppercase; letter-spacing: 0.5px;
+            transition: 0.3s; cursor: default;
+        }
+        .spec-badge:hover {
+            border-color: var(--ar-gold); color: var(--ar-gold); background: rgba(200, 164, 94, 0.1);
         }
 
         .card-footer {
@@ -228,7 +231,7 @@
         }
         .view-btn:hover { color: var(--ar-gold); gap: 8px; }
 
-        /* --- 5. SPECIFICATION & COMPARE MODAL (APPLE STYLE) --- */
+        /* --- MODAL --- */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(10px);
@@ -250,7 +253,6 @@
 
         .modal-active .compare-modal { transform: scale(1); }
 
-        /* Modal Header */
         .modal-header {
             padding: 20px 30px; border-bottom: 1px solid rgba(255,255,255,0.1);
             display: flex; justify-content: space-between; align-items: center;
@@ -264,13 +266,11 @@
         }
         .close-modal:hover { color: var(--sale-red); transform: rotate(90deg); }
 
-        /* Comparison Grid */
         .compare-body {
             flex: 1; overflow-y: auto; padding: 30px;
             display: grid; grid-template-columns: 1fr 1fr; gap: 40px;
         }
 
-        /* Column Style */
         .device-col { display: flex; flex-direction: column; gap: 20px; }
 
         .device-header { text-align: center; margin-bottom: 20px; }
@@ -283,7 +283,6 @@
         }
         .device-select option { background: #000; }
 
-        /* Specs Rows */
         .spec-row {
             padding: 15px 0; border-bottom: 1px solid rgba(255,255,255,0.05);
             display: flex; flex-direction: column; gap: 5px;
@@ -291,7 +290,6 @@
         .spec-label { font-size: 11px; text-transform: uppercase; color: var(--ar-gold); font-weight: 700; letter-spacing: 1px; }
         .spec-value { font-size: 14px; color: #ddd; line-height: 1.5; }
 
-        /* Scrollbar for Modal */
         .compare-body::-webkit-scrollbar { width: 8px; }
         .compare-body::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 4px; }
 
@@ -328,7 +326,6 @@
         .adv-card-subtitle { font-size: 12px; color: var(--ar-gold); font-weight: 700; margin-bottom: 5px; display: block; letter-spacing: 1px; }
         .adv-card-title { font-size: 22px; font-weight: 700; color: #fff; line-height: 1.3; }
 
-        /* Back To Top */
         .back-to-top {
             position: fixed; bottom: 30px; right: 30px; background: rgba(255,255,255,0.1); color: #fff;
             padding: 12px 25px; border-radius: 30px; font-size: 14px; font-weight: 600;
@@ -337,39 +334,48 @@
         }
         .back-to-top:hover { opacity: 1; transform: translateY(-5px); background: var(--ar-gold); color: #000; }
 
+        footer { 
+            padding: 60px 5%; text-align: center; 
+            border-top: 1px solid var(--glass-border); 
+            background: #000; color: #555; font-size: 14px;
+        }
+
         /* --- MOBILE RESPONSIVE --- */
         @media screen and (max-width: 768px) {
-            nav { padding: 0 20px; }
-            .hamburger { display: flex; }
-            .nav-right { display: none; }
-            
+            nav { padding: 0 20px; height: 70px; justify-content: space-between; }
+            .nav-left { gap: 0; }
+            .logo img { height: 35px; } 
+            .nav-right { display: none !important; } 
+
+            .hamburger { display: flex; z-index: 1001; }
+
             .nav-links {
-                position: absolute; right: 0; top: 70px;
-                background: rgba(10, 10, 10, 0.98); backdrop-filter: blur(25px);
+                position: fixed; 
+                right: 0; top: 0; left: auto;
+                background: rgba(5, 5, 5, 0.98); backdrop-filter: blur(25px);
                 flex-direction: column; align-items: flex-start;
-                width: 100%; gap: 0; border-bottom: 1px solid var(--glass-border);
-                transform: translateY(-150%); transition: transform 0.4s ease; padding: 0; z-index: 999;
+                width: 70%; height: 100vh;
+                gap: 0; border-left: 1px solid var(--glass-border);
+                transform: translateX(100%); transition: transform 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+                padding-top: 80px; z-index: 999;
+                box-shadow: -10px 0 30px rgba(0,0,0,0.5);
             }
-            .nav-links.active { transform: translateY(0); }
+            .nav-links.active { transform: translateX(0); }
             .nav-item { width: 100%; padding: 20px 30px; border-bottom: 1px solid rgba(255,255,255,0.05); }
             
             .dropdown-content, .dropdown-sub-content {
                 position: static; visibility: visible; opacity: 1; transform: none;
-                background: transparent; border: none; box-shadow: none; padding-left: 20px;
-                display: none; min-width: 100%;
+                background: transparent; border: none; box-shadow: none; padding-left: 20px; display: none; min-width: 100%;
+                border-left: 2px solid var(--glass-border); margin-top: 10px;
             }
-            .nav-item:hover .dropdown-content { display: block; }
-            .dropdown-submenu:hover .dropdown-sub-content { display: block; transform: none; }
-
+            .nav-item:hover .dropdown-content { display: block; animation: fadeIn 0.3s ease; }
+            .dropdown-submenu:hover .dropdown-sub-content { display: block; }
+            
             .hero-glass-card { width: 90%; padding: 30px 20px; }
             .hero h1 { font-size: 34px; }
-            
             .catalog-grid { grid-template-columns: 1fr; }
-            
-            /* Modal Mobile */
             .compare-body { grid-template-columns: 1fr; gap: 50px; }
             .compare-modal { height: 95vh; width: 95%; }
-            
             .advantages-section { flex-direction: column; padding: 50px 20px; }
             .adv-right-cards { width: 100%; padding-bottom: 20px; }
         }
@@ -384,56 +390,75 @@
             <a href="/" class="logo">
                 <img src="photos/logo/logoaredutech2.png" alt="AR Edutech Logo">
             </a>
-            <div class="hamburger" onclick="toggleMenu()"><div></div><div></div><div></div></div>
-            <ul class="nav-links">
-                <li class="nav-item">Surface
-                    <div class="dropdown-content">
-                        <a href="surface">Surface Pro 8</a>
-                        <a href="surface">Surface Pro 9</a>
-                        <a href="surface">Surface Go 4</a>
-                        <a href="surface">Surface Pro 10</a>
-                        <a href="surface">Surface Pro 11</a>
-                        <a href="surface">Surface Pro 12</a>
-                    </div>
-                </li>
-                <li class="nav-item">Products
-                    <div class="dropdown-content">
-                        <a href="products">Samview Interactive Board</a>
-                        <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.1); margin: 5px 0;">
-                        <div class="dropdown-submenu">
-                            <a href="products">Projector <span class="arrow-right">›</span></a>
-                            <div class="dropdown-sub-content">
-                                <a href="products">Epson CO-FH02</a>
-                                <a href="products">Epson EB-X52</a>
-                                <a href="products">SAMVIEW UFO</a>
-                                <a href="products">Epson EB-E1</a>
-                                <a href="products">(Slim Wireless) Epson EB-1785W</a>
-                            </div>
-                        </div>
-                        <div class="dropdown-submenu">
-                            <a href="products">Printer <span class="arrow-right">›</span></a>
-                            <div class="dropdown-sub-content">
-                                <a href="products">Epson L3250</a>
-                                <a href="products">Pixma Canon E470</a>
-                                <a href="products">Wireless Printer Canon G3010</a>
-                            </div>
-                        </div>
-                        <div class="dropdown-submenu">
-                            <a href="products">Nugens <span class="arrow-right">›</span></a>
-                            <div class="dropdown-sub-content">
-                                <a href="products">Type-C to HDMI Wireless Transmitter (WDA)</a>
-                                <a href="products">HDMI Wireless Transmitter Set</a>
-                                <a href="products">HDMI Wireless Transmitter Receive ADD-ON</a>
-                                <a href="products">V-600 Visualizer Slim</a>
-                                <a href="products">Stylus For iPad</a>
-                            </div>
-                        </div>
-                    </div>
-                </li>
-                <li class="nav-item">Education</li>
-                <li class="nav-item">Contact Us</li>
-            </ul>
         </div>
+        
+        <div class="hamburger" onclick="toggleMenu()">
+            <div></div><div></div><div></div>
+        </div>
+
+        <ul class="nav-links">
+            <li class="nav-item">
+                <a href="/">Main</a>
+                <div class="dropdown-content">
+                    <a href="/#limited">Limited Offers</a>
+                </div>
+            </li>
+            
+            <li class="nav-item">
+                <a href="surface">Surface</a>
+                <div class="dropdown-content">
+                    <a href="surface">Surface Pro 8</a>
+                    <a href="surface">Surface Pro 9</a>
+                    <a href="surface">Surface Go 4</a>
+                    <a href="surface">Surface Pro 10</a>
+                    <a href="surface">Surface Pro 11</a>
+                    <a href="surface">Surface Pro 12</a>
+                </div>
+            </li>
+            <li class="nav-item">Products
+                <div class="dropdown-content">
+                    <a href="products.html#smartboard">Samview Interactive Board</a>
+                    <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.1); margin: 5px 0;">
+                    <a href="products.html#television">Television</a>
+                    <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.1); margin: 5px 0;">
+                    <div class="dropdown-submenu">
+                        <a href="products.html#projector">Projector <span class="arrow-right">›</span></a>
+                        <div class="dropdown-sub-content">
+                            <a href="products.html#projector">Epson CO-FH02</a>
+                            <a href="products.html#projector">Epson EB-X52</a>
+                            <a href="products.html#projector">SAMVIEW UFO</a>
+                            <a href="products.html#projector">Epson EB-E1</a>
+                            <a href="products.html#projector">(Slim Wireless) Epson EB-1785W</a>
+                        </div>
+                    </div>
+                    <div class="dropdown-submenu">
+                        <a href="products.html#printer">Printer <span class="arrow-right">›</span></a>
+                        <div class="dropdown-sub-content">
+                            <a href="products.html#printer">Epson L3250</a>
+                            <a href="products.html#printer">Pixma Canon E470</a>
+                            <a href="products.html#printer">Wireless Printer Canon G3010</a>
+                        </div>
+                    </div>
+                    <div class="dropdown-submenu">
+                        <a href="products.html#accessory">Accessory <span class="arrow-right">›</span></a>
+                        <div class="dropdown-sub-content">
+                            <a href="products.html#accessory">Type-C to HDMI Wireless Transmitter (WDA)</a>
+                            <a href="products.html#accessory">HDMI Wireless Transmitter Set</a>
+                            <a href="products.html#accessory">HDMI Wireless Transmitter Receive ADD-ON</a>
+                            <a href="products.html#accessory">V-600 Visualizer Slim</a>
+                            <a href="products.html#accessory">Stylus For iPad</a>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a href="gallery">Gallery</a>
+                <div class="dropdown-content">
+                    <a href="gallery.html#tiktok-section">Tiktok Video</a>
+                    <a href="gallery.html#gallery-grid">Events</a>
+                </div>
+            </li>
+        </ul>
         
         <div class="nav-right" style="display: flex; align-items: center; gap: 25px;">
             <div style="display: flex; align-items: center; gap: 10px; padding-right: 25px; border-right: 1px solid rgba(255,255,255,0.1);">
@@ -443,7 +468,7 @@
                     <span style="font-size: 11px; font-weight: 700; color: #fff; letter-spacing: 0.5px;">Gold Partner</span>
                 </div>
             </div>
-            <a href="#">About Us</a>
+            <a href="about">About Us</a>
         </div>
     </nav>
 
@@ -460,129 +485,15 @@
         </div>
     </section>
 
-    <section class="catalog-section">
+    <section class="catalog-section" id="surface">
         <div class="section-header">
             <h2>The Surface Pro Lineup</h2>
             <p>The most powerful 2-in-1 devices on the planet. Replace your laptop, replace your tablet.</p>
             <div class="gold-line"></div>
         </div>
 
-        <div class="catalog-grid">
-            
-            <div class="showcase-card">
-                <span class="card-tag tag-gold">COMING SOON</span>
-                <div class="img-wrapper">
-                    <img src="photos/surface/12-pro-.avif" alt="Surface Pro 12">
-                </div>
-                <div class="card-content">
-                    <div class="model-name">Surface Pro 12</div>
-                    <div class="model-desc">Next-gen AI processing with Snapdragon X Elite Gen 2.</div>
-                    <div class="specs-row">
-                        <span class="spec-badge">OLED</span>
-                        <span class="spec-badge">5G</span>
-                        <span class="spec-badge">NPU+</span>
-                    </div>
-                    <div class="card-footer">
-                        <span class="price-tag">TBA</span>
-                        <a href="javascript:void(0)" onclick="openSpecs('pro12')" class="view-btn">View Specs <i class="fas fa-arrow-right"></i></a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="showcase-card">
-                <span class="card-tag tag-gold">NEW ARRIVAL</span>
-                <div class="img-wrapper">
-                    <img src="photos/surface/Surface-Pro-11.png" alt="Surface Pro 11">
-                </div>
-                <div class="card-content">
-                    <div class="model-name">Surface Pro 11</div>
-                    <div class="model-desc">Unmatched performance with all-day battery life.</div>
-                    <div class="specs-row">
-                        <span class="spec-badge">Snapdragon</span>
-                        <span class="spec-badge">OLED</span>
-                    </div>
-                    <div class="card-footer">
-                        <span class="price-tag">RM 5,899</span>
-                        <a href="javascript:void(0)" onclick="openSpecs('pro11')" class="view-btn">View Specs <i class="fas fa-arrow-right"></i></a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="showcase-card">
-                <span class="card-tag">BUSINESS</span>
-                <div class="img-wrapper">
-                    <img src="photos/surface/Surface-Pro-9-Tab-Only-002.png" alt="Surface Pro 10">
-                </div>
-                <div class="card-content">
-                    <div class="model-name">Surface Pro 10</div>
-                    <div class="model-desc">Built for business with Intel Core Ultra.</div>
-                    <div class="specs-row">
-                        <span class="spec-badge">Intel Ultra 5</span>
-                        <span class="spec-badge">NFC</span>
-                    </div>
-                    <div class="card-footer">
-                        <span class="price-tag">RM 5,399</span>
-                        <a href="javascript:void(0)" onclick="openSpecs('pro10')" class="view-btn">View Specs <i class="fas fa-arrow-right"></i></a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="showcase-card">
-                <span class="card-tag" style="background: #0067b8; color: white;">BEST SELLER</span>
-                <div class="img-wrapper">
-                    <img src="photos/surface/Surface_Pro_9_in_Sapphire_colour.png" alt="Surface Pro 9">
-                </div>
-                <div class="card-content">
-                    <div class="model-name">Surface Pro 9</div>
-                    <div class="model-desc">Tablet flexibility and laptop performance.</div>
-                    <div class="specs-row">
-                        <span class="spec-badge">Intel i7</span>
-                        <span class="spec-badge">120Hz</span>
-                    </div>
-                    <div class="card-footer">
-                        <span class="price-tag">RM 4,899</span>
-                        <a href="javascript:void(0)" onclick="openSpecs('pro9')" class="view-btn">View Specs <i class="fas fa-arrow-right"></i></a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="showcase-card">
-                <div class="img-wrapper">
-                    <img src="photos/surface/Microsoft-Surface-Pro-9-tablet.png" alt="Surface Pro 8">
-                </div>
-                <div class="card-content">
-                    <div class="model-name">Surface Pro 8</div>
-                    <div class="model-desc">The classic powerful 2-in-1 device.</div>
-                    <div class="specs-row">
-                        <span class="spec-badge">Intel i5</span>
-                        <span class="spec-badge">Thunderbolt</span>
-                    </div>
-                    <div class="card-footer">
-                        <span class="price-tag">RM 3,599</span>
-                        <a href="javascript:void(0)" onclick="openSpecs('pro8')" class="view-btn">View Specs <i class="fas fa-arrow-right"></i></a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="showcase-card">
-                <span class="card-tag">COMPACT</span>
-                <div class="img-wrapper">
-                    <img src="photos/surface/go_4.png" alt="Surface Go 4">
-                </div>
-                <div class="card-content">
-                    <div class="model-name">Surface Go 4</div>
-                    <div class="model-desc">Portable power for the frontline worker.</div>
-                    <div class="specs-row">
-                        <span class="spec-badge">10.5" Touch</span>
-                        <span class="spec-badge">Lightweight</span>
-                    </div>
-                    <div class="card-footer">
-                        <span class="price-tag">RM 2,899</span>
-                        <a href="javascript:void(0)" onclick="openSpecs('go4')" class="view-btn">View Specs <i class="fas fa-arrow-right"></i></a>
-                    </div>
-                </div>
-            </div>
-
+        <div id="surface-grid" class="catalog-grid">
+            <p style="text-align:center; color:#666; grid-column:1/-1;">Loading Surface collection...</p>
         </div>
     </section>
 
@@ -616,7 +527,7 @@
             </div>
         </div>
 
-        <a href="surface" class="back-to-top">Back to top ↑</a>
+        <a href="#surface" class="back-to-top">Back to top ↑</a>
     </section>
 
     <div class="modal-overlay" id="specModal">
@@ -640,12 +551,6 @@
                     <div class="device-header">
                         <select class="device-select" id="compareSelect" onchange="updateRightCol()">
                             <option value="">Select model to compare...</option>
-                            <option value="pro12">Surface Pro 12</option>
-                            <option value="pro11">Surface Pro 11</option>
-                            <option value="pro10">Surface Pro 10</option>
-                            <option value="pro9">Surface Pro 9</option>
-                            <option value="pro8">Surface Pro 8</option>
-                            <option value="go4">Surface Go 4</option>
                         </select>
                         
                         <div id="rightContent" style="margin-top: 20px; display: none;">
@@ -674,149 +579,227 @@
         <p style="font-size: 13px; color: #555;">&copy; 2024 AR Edutech Sdn Bhd. All rights reserved.</p>
     </footer>
 
-    <script>
-        // --- 1. DATA DATABASE (HARDCODED FOR DEMO) ---
-        const deviceData = {
-            'pro12': {
-                name: 'Surface Pro 12 (Concept)',
-                img: 'photos/surface/12-pro-.avif',
-                processor: 'Snapdragon X Elite Gen 2 (Concept)',
-                ram: 'Up to 64GB LPDDR6x',
-                storage: 'Up to 2TB Gen5 SSD',
-                display: '13” OLED PixelSense™ Flow (144Hz)',
-                battery: 'Up to 22 hours',
-                weight: '850g'
-            },
-            'pro11': {
-                name: 'Surface Pro 11th Edition',
-                img: 'photos/surface/Surface-Pro-11.png',
-                processor: 'Snapdragon® X Elite / X Plus',
-                ram: '16GB or 32GB LPDDR5x',
-                storage: '256GB, 512GB, 1TB SSD',
-                display: '13” OLED or LCD (120Hz)',
-                battery: 'Up to 14 hours video playback',
-                weight: '895g'
-            },
-            'pro10': {
-                name: 'Surface Pro 10 for Business',
-                img: 'photos/surface/Surface-Pro-9-Tab-Only-002.png',
-                processor: 'Intel® Core™ Ultra 5 / Ultra 7',
-                ram: '8GB to 64GB LPDDR5x',
-                storage: '256GB to 1TB Gen4 SSD',
-                display: '13” PixelSense™ Flow (Anti-reflective)',
-                battery: 'Up to 19 hours',
-                weight: '879g'
-            },
-            'pro9': {
-                name: 'Surface Pro 9',
-                img: 'photos/surface/Surface_Pro_9_in_Sapphire_colour.png',
-                processor: '12th Gen Intel® Core™ i5 / i7',
-                ram: '8GB, 16GB, 32GB LPDDR5',
-                storage: '256GB to 1TB SSD',
-                display: '13” PixelSense™ Flow (120Hz)',
-                battery: 'Up to 15.5 hours',
-                weight: '879g'
-            },
-            'pro8': {
-                name: 'Surface Pro 8',
-                img: 'photos/surface/Microsoft-Surface-Pro-9-tablet.png',
-                processor: '11th Gen Intel® Core™ i5 / i7',
-                ram: '8GB, 16GB, 32GB LPDDR4x',
-                storage: '128GB to 1TB SSD',
-                display: '13” PixelSense™ Flow (120Hz)',
-                battery: 'Up to 16 hours',
-                weight: '891g'
-            },
-            'go4': {
-                name: 'Surface Go 4',
-                img: 'photos/surface/go_4.png',
-                processor: 'Intel® N200 Processor',
-                ram: '8GB LPDDR5',
-                storage: '64GB, 128GB, 256GB UFS',
-                display: '10.5” PixelSense™ Display',
-                battery: 'Up to 12.5 hours',
-                weight: '521g'
-            }
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+        // CONFIG FIREBASE
+        const firebaseConfig = {
+            apiKey: "AIzaSyCh9hW_Agf108VvIx3qNJJdVEWvaqX04IU",
+            authDomain: "aredutech2026.firebaseapp.com",
+            projectId: "aredutech2026",
+            storageBucket: "aredutech2026.appspot.com",
+            messagingSenderId: "689281434647",
+            appId: "1:689281434647:web:7ec74211067abaf5b2c852",
+            databaseURL: "https://aredutech2026-default-rtdb.asia-southeast1.firebasedatabase.app/" 
         };
 
-        // --- 2. MODAL FUNCTIONS ---
-        const modal = document.getElementById('specModal');
-        
-        function openSpecs(modelKey) {
-            const data = deviceData[modelKey];
-            if(!data) return;
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
 
-            // Populate Left Column (Main Device)
-            document.getElementById('img-L').src = data.img;
-            document.getElementById('name-L').innerText = data.name;
-            document.getElementById('specs-L').innerHTML = renderSpecs(data);
+        const surfaceGrid = document.getElementById('surface-grid');
+        const promoRef = ref(db, 'promotions');
+        const CACHE_KEY = 'surface_deals_cache'; 
 
-            // Reset Right Column
-            document.getElementById('compareSelect').value = "";
-            document.getElementById('rightContent').style.display = 'none';
-            document.getElementById('emptyState').style.display = 'block';
+        // Simpan data global untuk modal
+        window.allProductsData = {}; 
 
-            // Show Modal
-            modal.classList.add('modal-active');
-        }
+        // --- 1. RENDER FUNCTION ---
+        function renderSurface(data) {
+            surfaceGrid.innerHTML = "";
 
-        function closeSpecs() {
-            modal.classList.remove('modal-active');
-        }
+            if (data) {
+                // Simpan data ke variable global supaya modal boleh access
+                window.allProductsData = data;
 
-        function updateRightCol() {
-            const selectedKey = document.getElementById('compareSelect').value;
-            
-            if (selectedKey && deviceData[selectedKey]) {
-                const data = deviceData[selectedKey];
-                document.getElementById('img-R').src = data.img;
-                document.getElementById('name-R').innerText = data.name;
-                document.getElementById('specs-R').innerHTML = renderSpecs(data);
+                let items = Object.keys(data).map(key => ({ id: key, ...data[key] }));
                 
-                document.getElementById('emptyState').style.display = 'none';
-                document.getElementById('rightContent').style.display = 'block';
+                // FILTER: Only Surface Items + Not Hidden
+                items = items.filter(item => item.category === 'Surface' && !item.is_hidden);
+                items.sort((a, b) => (a.order || 0) - (b.order || 0));
+
+                if (items.length === 0) {
+                    surfaceGrid.innerHTML = "<p style='color:#888; grid-column:1/-1; text-align:center;'>No Surface devices found.</p>";
+                    return;
+                }
+
+                items.forEach(item => {
+                    let badgeClass = 'tag-gold';
+                    if(item.badge.includes('NEW')) badgeClass = 'tag-gold';
+                    else if(item.badge.includes('BUSINESS')) badgeClass = 'tag-blue';
+                    else if(item.badge.includes('COMPACT')) badgeClass = 'tag-red';
+
+                    // --- GENERATE CUSTOM TAGS DARI SPECS INPUT ---
+                    let tagsHTML = '';
+                    if (item.specs) {
+                        const tags = item.specs.split('|');
+                        tags.forEach(tag => {
+                            if(tag.trim()) {
+                                tagsHTML += `<span class="spec-badge">${tag.trim()}</span>`;
+                            }
+                        });
+                    }
+
+                    const cardHTML = `
+                        <div class="showcase-card">
+                            ${item.badge ? `<span class="card-tag ${badgeClass}">${item.badge}</span>` : ''}
+                            <div class="img-wrapper">
+                                <img src="${item.image_url}" alt="${item.title}" loading="lazy">
+                            </div>
+                            <div class="card-content">
+                                <div class="model-name">${item.title}</div>
+                                
+                                <div class="specs-row">
+                                    ${tagsHTML}
+                                </div>
+
+                                <div class="card-footer">
+                                    <span class="price-tag">${item.new_price}</span>
+                                    <a href="javascript:void(0)" onclick="window.openSpecs('${item.id}')" class="view-btn">View Specs <i class="fas fa-arrow-right"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    surfaceGrid.innerHTML += cardHTML;
+                });
+                
+                // CHECK HASH URL (Scroll automatik)
+                scrollToHash();
+
             } else {
-                document.getElementById('rightContent').style.display = 'none';
-                document.getElementById('emptyState').style.display = 'block';
+                surfaceGrid.innerHTML = "<p style='color:#888; grid-column:1/-1; text-align:center;'>No Surface devices found.</p>";
+            }
+        }
+        
+        // --- SCROLL TO HASH FUNCTION ---
+        function scrollToHash() {
+            if (window.location.hash) {
+                const targetId = window.location.hash.substring(1); 
+                const targetElement = document.getElementById(targetId);
+                
+                if (targetElement) {
+                    setTimeout(() => {
+                        targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }, 300);
+                }
             }
         }
 
-        function renderSpecs(data) {
-            return `
-                <div class="spec-row">
-                    <span class="spec-label">Processor</span>
-                    <span class="spec-value">${data.processor}</span>
-                </div>
-                <div class="spec-row">
-                    <span class="spec-label">Memory (RAM)</span>
-                    <span class="spec-value">${data.ram}</span>
-                </div>
-                <div class="spec-row">
-                    <span class="spec-label">Storage</span>
-                    <span class="spec-value">${data.storage}</span>
-                </div>
-                <div class="spec-row">
-                    <span class="spec-label">Display</span>
-                    <span class="spec-value">${data.display}</span>
-                </div>
-                <div class="spec-row">
-                    <span class="spec-label">Battery Life</span>
-                    <span class="spec-value">${data.battery}</span>
-                </div>
-                <div class="spec-row">
-                    <span class="spec-label">Weight</span>
-                    <span class="spec-value">${data.weight}</span>
-                </div>
-            `;
+        // --- 2. LOAD CACHE (INSTANT) ---
+        const cachedData = localStorage.getItem(CACHE_KEY);
+        if (cachedData) {
+            renderSurface(JSON.parse(cachedData));
         }
 
-        // --- 3. MENU TOGGLE ---
-        function toggleMenu() {
-            const navLinks = document.querySelector('.nav-links');
-            navLinks.classList.toggle('active');
+        // --- 3. LOAD FIREBASE (LIVE) ---
+        onValue(promoRef, (snapshot) => {
+            const data = snapshot.val();
+            renderSurface(data);
+            if(data) localStorage.setItem(CACHE_KEY, JSON.stringify(data));
+        });
+
+        // --- MODAL LOGIC (DINAMIK DARI DB) ---
+        const modal = document.getElementById('specModal');
+        
+        window.openSpecs = function(id) {
+            const data = window.allProductsData[id];
+            if(!data) return;
+
+            document.getElementById('img-L').src = data.image_url;
+            document.getElementById('name-L').innerText = data.title;
+            
+            let html = '';
+            
+            // 1. FULL SPECS (Priority)
+            if (data.full_specs) {
+                const lines = data.full_specs.split('\n');
+                lines.forEach(line => {
+                    if(line.includes(':')) {
+                        const [label, val] = line.split(':');
+                        html += `<div class="spec-row"><span class="spec-label">${label.trim()}</span><span class="spec-value">${val.trim()}</span></div>`;
+                    } else if(line.trim()) {
+                        html += `<div class="spec-row"><span class="spec-label" style="width:100%">${line.trim()}</span></div>`;
+                    }
+                });
+            }
+            // 2. TECH SPECS (Legacy)
+            else if(data.tech_specs) {
+                for (const [label, value] of Object.entries(data.tech_specs)) {
+                     html += `<div class="spec-row"><span class="spec-label">${label}</span><span class="spec-value">${value}</span></div>`;
+                }
+            } 
+            // 3. FALLBACK
+            else {
+                html = `<div class="spec-row"><span class="spec-label">Key Specs</span><span class="spec-value">${data.specs}</span></div>`;
+            }
+
+            document.getElementById('specs-L').innerHTML = html;
+
+            // Populate Dropdown
+            const select = document.getElementById('compareSelect');
+            select.innerHTML = '<option value="">Select model to compare...</option>';
+            
+            Object.keys(window.allProductsData).forEach(key => {
+                const p = window.allProductsData[key];
+                if(p.category === 'Surface' && key !== id && !p.is_hidden) {
+                    const option = document.createElement('option');
+                    option.value = key;
+                    option.text = p.title;
+                    select.appendChild(option);
+                }
+            });
+
+            document.getElementById('rightContent').style.display = 'none';
+            document.getElementById('emptyState').style.display = 'block';
+            modal.classList.add('modal-active');
+            document.body.style.overflow = 'hidden'; // Stop background scroll
         }
 
-        // Close modal if clicked outside
+        window.closeSpecs = function() {
+            modal.classList.remove('modal-active');
+            document.body.style.overflow = 'auto'; // Restore background scroll
+        }
+
+        window.updateRightCol = function() {
+            const selectedKey = document.getElementById('compareSelect').value;
+            const data = window.allProductsData[selectedKey];
+            
+            if (data) {
+                document.getElementById('img-R').src = data.image_url;
+                document.getElementById('name-R').innerText = data.title;
+                
+                let html = '';
+                if (data.full_specs) {
+                    const lines = data.full_specs.split('\n');
+                    lines.forEach(line => {
+                        if(line.includes(':')) {
+                            const [label, val] = line.split(':');
+                            html += `<div class="spec-row"><span class="spec-label">${label.trim()}</span><span class="spec-value">${val.trim()}</span></div>`;
+                        } else if(line.trim()) {
+                            html += `<div class="spec-row"><span class="spec-label" style="width:100%">${line.trim()}</span></div>`;
+                        }
+                    });
+                }
+                else if(data.tech_specs) {
+                     for (const [label, value] of Object.entries(data.tech_specs)) {
+                         html += `<div class="spec-row"><span class="spec-label">${label}</span><span class="spec-value">${value}</span></div>`;
+                    }
+                } else {
+                    html = "<p>No specs.</p>";
+                }
+                document.getElementById('specs-R').innerHTML = html;
+
+                document.getElementById('emptyState').style.display = 'none';
+                document.getElementById('rightContent').style.display = 'block';
+            }
+        }
+
+        // --- UI FUNCTIONS ---
+        window.toggleMenu = function() {
+            document.querySelector('.nav-links').classList.toggle('active');
+        }
+        
+        // Close modal if click outside
         window.onclick = function(event) {
             if (event.target == modal) {
                 closeSpecs();

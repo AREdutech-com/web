@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us | AR Edutech</title>
+    <link rel="icon" href="photos/logo/favicon.ico" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* --- 1. CORE VARIABLES (LIQUID THEME) --- */
+        :root {
+            --ar-gold: #C8A45E;
+            --ar-gold-glow: rgba(200, 164, 94, 0.6);
+            --bg-deep: #050505;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --text-white: #ffffff;
+            --text-gray: #b3b3b3;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; -webkit-tap-highlight-color: transparent; }
+        
+        body {
+            background-color: var(--bg-deep);
+            color: var(--text-white);
+            overflow-x: hidden;
+            background-image:
+                radial-gradient(circle at 10% 10%, rgba(200, 164, 94, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 90% 90%, rgba(0, 103, 184, 0.08) 0%, transparent 40%);
+            background-attachment: fixed;
+            perspective: 1000px; 
+        }
+
+        a { text-decoration: none; color: inherit; transition: 0.3s; }
+        ul { list-style: none; }
+
+        /* --- 2. NAVBAR (Sama macam semua page) --- */
+        nav {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0 5%; height: 75px;
+            background: rgba(5, 5, 5, 0.85);
+            backdrop-filter: blur(20px); border-bottom: 1px solid var(--glass-border);
+            position: sticky; top: 0; z-index: 1000;
+        }
+        .nav-left { display: flex; align-items: center; gap: 40px; }
+        .logo img { height: 45px; width: auto; filter: brightness(1.2); }
+        .nav-links { display: flex; gap: 30px; position: absolute; left: 50%; transform: translateX(-50%); }
+
+        .nav-item {
+            position: relative; font-size: 14px; font-weight: 500;
+            cursor: pointer; color: var(--text-gray); padding: 25px 0; letter-spacing: 0.5px;
+        }
+        .nav-item:hover { color: var(--text-white); text-shadow: 0 0 15px var(--ar-gold-glow); }
+
+        /* Dropdown Styles */
+        .dropdown-content {
+            visibility: hidden; opacity: 0; position: absolute;
+            top: 100%; left: -20px;
+            background: rgba(15, 15, 15, 0.95); backdrop-filter: blur(25px);
+            border: 1px solid var(--glass-border); border-radius: 16px;
+            min-width: 240px; padding: 10px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            z-index: 10; transform: translateY(20px); transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+        .nav-item:hover .dropdown-content { visibility: visible; opacity: 1; transform: translateY(0); }
+        .dropdown-content a { color: var(--text-gray); padding: 12px 16px; display: block; border-radius: 8px; font-size: 13px; }
+        .dropdown-content a:hover { background: rgba(255, 255, 255, 0.05); color: var(--ar-gold); padding-left: 20px; }
+
+        /* Nested Dropdown */
+        .dropdown-submenu { position: relative; width: 100%; }
+        .arrow-right { float: right; font-size: 10px; margin-top: 4px; opacity: 0.5; }
+        .dropdown-sub-content {
+            visibility: hidden; opacity: 0; position: absolute;
+            top: -5px; left: 100%; margin-left: 15px;
+            background: rgba(15, 15, 15, 0.95); backdrop-filter: blur(25px);
+            border: 1px solid var(--glass-border); border-radius: 16px;
+            min-width: 260px; padding: 10px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            transform: translateX(-10px); transition: all 0.3s ease;
+        }
+        .dropdown-submenu:hover .dropdown-sub-content { visibility: visible; opacity: 1; transform: translateX(0); }
+        .dropdown-sub-content a { font-size: 12px !important; white-space: normal; line-height: 1.4; }
+
+        .nav-right a {
+            font-size: 13px; color: var(--text-white); border: 1px solid var(--glass-border);
+            padding: 10px 20px; border-radius: 30px; background: rgba(255, 255, 255, 0.05);
+        }
+        .nav-right a:hover { background: var(--text-white); color: #000; box-shadow: 0 0 15px rgba(255, 255, 255, 0.3); }
+        
+        .hamburger { display: none; cursor: pointer; flex-direction: column; gap: 5px; z-index: 1001; }
+        .hamburger div { width: 25px; height: 3px; background-color: var(--ar-gold); transition: 0.3s; border-radius: 2px; }
+
+        /* --- 3. SCROLL REVEAL ANIMATION CLASS --- */
+        .reveal { opacity: 0; transform: translateY(40px); transition: 0.8s cubic-bezier(0.19, 1, 0.22, 1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+        .reveal-delay-1 { transition-delay: 0.2s; }
+        .reveal-delay-2 { transition-delay: 0.4s; }
+
+        /* --- 4. HERO SECTION --- */
+        .about-hero {
+            position: relative;
+            min-height: 70vh;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            text-align: center; padding: 0 5%;
+            overflow: hidden;
+        }
+        .about-hero::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: url('https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?q=80&w=2000&auto=format&fit=crop') no-repeat center center/cover;
+            filter: brightness(0.3) grayscale(50%);
+            z-index: -1;
+            background-attachment: fixed;
+        }
+        .about-hero-badge {
+            color: var(--ar-gold); font-size: 13px; font-weight: 700; letter-spacing: 3px;
+            text-transform: uppercase; margin-bottom: 20px;
+        }
+        .about-hero h1 {
+            font-size: 64px; font-weight: 800; line-height: 1.1; margin-bottom: 20px;
+            background: linear-gradient(to right, #fff, #bbb); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            text-shadow: 0 20px 40px rgba(0,0,0,0.8);
+        }
+        .about-hero p {
+            font-size: 18px; color: #ccc; max-width: 700px;
+        }
+
+        /* --- 5. MISSION & VISION SPLIT SECTION --- */
+        .mission-section {
+            padding: 100px 5%; display: flex; gap: 60px; align-items: center;
+            max-width: 1400px; margin: 0 auto;
+        }
+        .mission-content { flex: 1; }
+        .mission-content h2 { font-size: 42px; margin-bottom: 30px; font-weight: 700; }
+        .mission-content h2 span { color: var(--ar-gold); }
+        .glass-box {
+            background: linear-gradient(135deg, rgba(255,255,255,0.05), transparent);
+            border: 1px solid var(--glass-border); border-radius: 24px;
+            padding: 40px; margin-bottom: 30px;
+            backdrop-filter: blur(20px); transition: 0.3s;
+        }
+        .glass-box:hover { border-color: var(--ar-gold); box-shadow: 0 20px 40px rgba(200, 164, 94, 0.1); transform: translateY(-5px); }
+        .glass-box h3 { font-size: 22px; color: #fff; margin-bottom: 15px; display: flex; align-items: center; gap: 15px; }
+        .glass-box h3 i { color: var(--ar-gold); font-size: 28px; }
+        .glass-box p { color: #aaa; line-height: 1.7; font-size: 15px; }
+        
+        .mission-image { flex: 1; position: relative; }
+        .mission-image img { width: 100%; border-radius: 30px; filter: drop-shadow(0 30px 50px rgba(0,0,0,0.5)); }
+        .mission-image::after {
+            content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 80%; height: 80%; background: var(--ar-gold); filter: blur(100px); opacity: 0.1; z-index: -1;
+        }
+
+        /* --- 6. MICROSOFT PARTNER FLEX --- */
+        .partner-section {
+            padding: 80px 5%; text-align: center;
+            background: linear-gradient(to right, rgba(0,0,0,0), rgba(200, 164, 94, 0.05), rgba(0,0,0,0));
+            border-top: 1px solid var(--glass-border);
+            border-bottom: 1px solid var(--glass-border);
+        }
+        .partner-logo { max-width: 250px; margin-bottom: 30px; filter: drop-shadow(0 0 20px rgba(255,255,255,0.2)); }
+        .partner-text { max-width: 800px; margin: 0 auto; color: #bbb; font-size: 18px; line-height: 1.8; }
+
+        /* --- 7. STATISTICS COUNTER --- */
+        .stats-section { padding: 100px 5%; }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; max-width: 1200px; margin: 0 auto; text-align: center; }
+        .stat-item h3 { font-size: 64px; font-weight: 800; color: var(--ar-gold); margin-bottom: 10px; line-height: 1; }
+        .stat-item p { color: #fff; font-size: 16px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; }
+
+        /* --- 8. TIMELINE JOURNEY --- */
+        .timeline-section { padding: 100px 5%; max-width: 1000px; margin: 0 auto; }
+        .timeline-header { text-align: center; margin-bottom: 80px; }
+        .timeline-header h2 { font-size: 42px; font-weight: 700; margin-bottom: 15px; }
+        
+        .timeline { position: relative; padding: 20px 0; }
+        .timeline::before {
+            content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+            width: 2px; height: 100%; background: linear-gradient(to bottom, transparent, var(--ar-gold), transparent);
+        }
+
+        .timeline-item { display: flex; justify-content: flex-end; padding-right: 50%; position: relative; margin-bottom: 50px; }
+        .timeline-item:nth-child(even) { justify-content: flex-start; padding-right: 0; padding-left: 50%; }
+        
+        .timeline-item::after {
+            content: ''; position: absolute; top: 20px; left: 50%; transform: translate(-50%, -50%);
+            width: 16px; height: 16px; border-radius: 50%; background: var(--bg-deep); border: 3px solid var(--ar-gold);
+            box-shadow: 0 0 15px var(--ar-gold); z-index: 2;
+        }
+
+        .timeline-content {
+            width: 80%; background: var(--glass-bg); border: 1px solid var(--glass-border);
+            padding: 30px; border-radius: 20px; backdrop-filter: blur(10px);
+            transition: 0.3s;
+        }
+        .timeline-content:hover { border-color: var(--ar-gold); transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .timeline-year { font-size: 24px; font-weight: 800; color: var(--ar-gold); margin-bottom: 10px; }
+        .timeline-content h4 { font-size: 20px; color: #fff; margin-bottom: 10px; }
+        .timeline-content p { color: #aaa; font-size: 14px; line-height: 1.6; }
+
+        /* --- 9. THE TEAM --- */
+        .team-section { padding: 100px 5%; background: radial-gradient(circle at top center, rgba(255,255,255,0.02) 0%, transparent 70%); }
+        .team-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; max-width: 1200px; margin: 0 auto; }
+        .team-card { text-align: center; }
+        .team-img-wrap {
+            width: 200px; height: 200px; margin: 0 auto 20px; border-radius: 50%;
+            overflow: hidden; border: 3px solid var(--glass-border); transition: 0.4s;
+        }
+        .team-img-wrap img {
+            width: 100%; height: 100%; object-fit: cover;
+            filter: grayscale(100%); transition: 0.5s ease;
+        }
+        .team-card:hover .team-img-wrap { border-color: var(--ar-gold); box-shadow: 0 10px 30px rgba(200, 164, 94, 0.3); }
+        .team-card:hover .team-img-wrap img { filter: grayscale(0%); transform: scale(1.1); }
+        .team-card h4 { font-size: 22px; color: #fff; margin-bottom: 5px; }
+        .team-card p { color: var(--ar-gold); font-size: 13px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
+
+        /* --- 10. CONTACT & LOCATE US SECTION --- */
+        .contact-section {
+            padding: 100px 5%;
+            max-width: 1400px; margin: 0 auto;
+            border-top: 1px solid var(--glass-border);
+        }
+        .contact-header { text-align: center; margin-bottom: 60px; }
+        .contact-header h2 { font-size: 42px; font-weight: 700; margin-bottom: 15px; }
+        .contact-header p { color: #aaa; font-size: 16px; }
+
+        .contact-container {
+            display: flex; gap: 40px; align-items: stretch;
+        }
+        
+        .contact-info {
+            flex: 1;
+            background: var(--glass-bg); backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border); border-radius: 24px;
+            padding: 40px;
+        }
+        .info-block { margin-bottom: 30px; display: flex; gap: 20px; align-items: flex-start; }
+        .info-icon {
+            width: 50px; height: 50px; border-radius: 12px;
+            background: rgba(200, 164, 94, 0.1); color: var(--ar-gold);
+            display: flex; justify-content: center; align-items: center;
+            font-size: 20px; flex-shrink: 0;
+        }
+        .info-text h4 { font-size: 18px; color: #fff; margin-bottom: 10px; }
+        .info-text p { color: #aaa; font-size: 15px; line-height: 1.6; margin-bottom: 5px; }
+        
+        /* Table format for operation hours */
+        .hours-table { width: 100%; color: #aaa; font-size: 14px; border-collapse: collapse; }
+        .hours-table td { padding: 5px 0; border-bottom: 1px dashed rgba(255,255,255,0.05); }
+        .hours-table tr:last-child td { border-bottom: none; }
+        .day-col { font-weight: 600; color: #ccc; }
+
+        .contact-map {
+            flex: 1.5;
+            border-radius: 24px; overflow: hidden;
+            border: 1px solid var(--glass-border);
+            min-height: 400px;
+        }
+        .contact-map iframe { width: 100%; height: 100%; border: none; filter: invert(90%) hue-rotate(180deg) brightness(80%) contrast(120%); } /* Dark mode map effect */
+
+        /* --- FOOTER --- */
+        footer { padding: 60px 5%; text-align: center; border-top: 1px solid var(--glass-border); background: #000; color: #555; font-size: 14px; }
+
+        /* --- MOBILE RESPONSIVE --- */
+        @media(max-width: 900px) {
+            .nav-links, .nav-right { display: none; }
+            .hamburger { display: flex; }
+            nav { padding: 0 20px; justify-content: space-between; }
+            .nav-left { gap: 0; }
+            .logo img { height: 35px; }
+            
+            .nav-links {
+                position: fixed; right: 0; top: 0; left: auto; 
+                background: rgba(5, 5, 5, 0.95); backdrop-filter: blur(20px);
+                width: 70%; height: 100vh; flex-direction: column; justify-content: flex-start;
+                padding-top: 80px; border-left: 1px solid var(--glass-border);
+                box-shadow: -10px 0 30px rgba(0,0,0,0.5);
+                transform: translateX(100%); transition: transform 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+                gap: 0; z-index: 999;
+            }
+            .nav-links.active { transform: translateX(0); display: flex; }
+            .nav-item { width: 100%; padding: 20px 30px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 18px; }
+            
+            .dropdown-content, .dropdown-sub-content {
+                position: static; visibility: visible; opacity: 1; transform: none;
+                background: transparent; border: none; box-shadow: none; padding-left: 20px; display: none; min-width: 100%;
+                border-left: 2px solid var(--glass-border); margin-top: 10px;
+            }
+            .nav-item:hover .dropdown-content { display: block; animation: fadeIn 0.3s ease; }
+            .dropdown-submenu:hover .dropdown-sub-content { display: block; }
+
+            .about-hero h1 { font-size: 42px; }
+            .mission-section { flex-direction: column-reverse; padding: 60px 5%; }
+            .mission-image img { width: 80%; margin: 0 auto; display: block; }
+
+            .timeline::before { left: 20px; }
+            .timeline-item, .timeline-item:nth-child(even) { justify-content: flex-start; padding-left: 60px; padding-right: 0; }
+            .timeline-item::after { left: 20px; }
+            .timeline-content { width: 100%; }
+
+            /* Contact section mobile */
+            .contact-container { flex-direction: column; }
+            .contact-map { min-height: 350px; }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav id="top">
+        <div class="nav-left">
+            <a href="/" class="logo">
+                <img src="photos/logo/logoaredutech2.png" alt="AR Edutech Logo">
+            </a>
+        </div>
+        
+        <div class="hamburger" onclick="toggleMenu()">
+            <div></div><div></div><div></div>
+        </div>
+
+        <ul class="nav-links">
+            <li class="nav-item">
+                <a href="/">Main</a>
+                <div class="dropdown-content">
+                    <a href="/#limited">Limited Offers</a>
+                </div>
+            </li>
+            
+            <li class="nav-item">
+                <a href="surface">Surface</a>
+                <div class="dropdown-content">
+                    <a href="surface">Surface Pro 8</a>
+                    <a href="surface">Surface Pro 9</a>
+                    <a href="surface">Surface Go 4</a>
+                    <a href="surface">Surface Pro 10</a>
+                    <a href="surface">Surface Pro 11</a>
+                    <a href="surface">Surface Pro 12</a>
+                </div>
+            </li>
+            <li class="nav-item">Products
+                <div class="dropdown-content">
+                    <a href="products.html#smartboard">Samview Interactive Board</a>
+                    <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.1); margin: 5px 0;">
+                    <a href="products.html#television">Television</a>
+                    <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.1); margin: 5px 0;">
+                    <div class="dropdown-submenu">
+                        <a href="products.html#projector">Projector <span class="arrow-right">›</span></a>
+                        <div class="dropdown-sub-content">
+                            <a href="products.html#projector">Epson CO-FH02</a>
+                            <a href="products.html#projector">Epson EB-X52</a>
+                            <a href="products.html#projector">SAMVIEW UFO</a>
+                            <a href="products.html#projector">Epson EB-E1</a>
+                            <a href="products.html#projector">(Slim Wireless) Epson EB-1785W</a>
+                        </div>
+                    </div>
+                    <div class="dropdown-submenu">
+                        <a href="products.html#printer">Printer <span class="arrow-right">›</span></a>
+                        <div class="dropdown-sub-content">
+                            <a href="products.html#printer">Epson L3250</a>
+                            <a href="products.html#printer">Pixma Canon E470</a>
+                            <a href="products.html#printer">Wireless Printer Canon G3010</a>
+                        </div>
+                    </div>
+                    <div class="dropdown-submenu">
+                        <a href="products.html#accessory">Accessory <span class="arrow-right">›</span></a>
+                        <div class="dropdown-sub-content">
+                            <a href="products.html#accessory">Type-C to HDMI Wireless Transmitter (WDA)</a>
+                            <a href="products.html#accessory">HDMI Wireless Transmitter Set</a>
+                            <a href="products.html#accessory">HDMI Wireless Transmitter Receive ADD-ON</a>
+                            <a href="products.html#accessory">V-600 Visualizer Slim</a>
+                            <a href="products.html#accessory">Stylus For iPad</a>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a href="gallery">Gallery</a>
+                <div class="dropdown-content">
+                    <a href="gallery.html#tiktok-section">Tiktok Video</a>
+                </div>
+            </li>
+        </ul>
+        
+        <div class="nav-right" style="display: flex; align-items: center; gap: 25px;">
+            <div style="display: flex; align-items: center; gap: 10px; padding-right: 25px; border-right: 1px solid rgba(255,255,255,0.1);">
+                <img src="https://img.icons8.com/color/48/microsoft.png" alt="Microsoft" style="height: 28px; filter: drop-shadow(0 0 10px rgba(255,255,255,0.1));">
+                <div style="display: flex; flex-direction: column; justify-content: center;">
+                    <span style="font-size: 10px; color: #aaa; letter-spacing: 1px; line-height: 1;">MICROSOFT</span>
+                    <span style="font-size: 11px; font-weight: 700; color: #fff; letter-spacing: 0.5px;">Gold Partner</span>
+                </div>
+            </div>
+            <a href="about">About Us</a>
+        </div>
+    </nav>
+
+    <header class="about-hero reveal">
+        <div class="about-hero-badge">Pioneering Education Tech</div>
+        <h1>Empowering Classrooms <br> of Tomorrow</h1>
+        <p>Since our inception, AR Edutech has been at the forefront of digital transformation, bridging the gap between traditional teaching and IR 4.0 innovations.</p>
+    </header>
+
+    <section class="mission-section">
+        <div class="mission-content reveal">
+            <h2>Our <span>Mission & Vision</span></h2>
+            
+            <div class="glass-box reveal reveal-delay-1">
+                <h3><i class="fas fa-bullseye"></i> The Mission</h3>
+                <p>To prepare learners and educators in facing IR 4.0 by promoting the ultimate tools and comprehensive training needed to move with the latest trends in global educational technology.</p>
+            </div>
+
+            <div class="glass-box reveal reveal-delay-2">
+                <h3><i class="fas fa-eye"></i> The Vision</h3>
+                <p>To be the leading technology solutions provider in Malaysia, creating seamless digital ecosystems that make teaching smarter, collaborative, and universally accessible.</p>
+            </div>
+        </div>
+        <div class="mission-image reveal reveal-delay-1">
+            <img src="photos/extra/training3.jpg" alt="Digital Classroom Vision">
+        </div>
+    </section>
+
+    <section class="partner-section reveal">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/9/96/Microsoft_logo_%282012%29.svg" alt="Microsoft Logo" class="partner-logo">
+        <h2 style="font-size: 32px; font-weight: 800; color: var(--ar-gold); margin-bottom: 20px;">Official Gold Partner</h2>
+        <p class="partner-text">Being an Authorized Microsoft Gold Partner signifies our supreme expertise and commitment to delivering authentic, high-performance devices. From enterprise deployments to educational institutions, we guarantee 100% genuine products, dedicated technical support, and premium warranty services directly back by Microsoft.</p>
+    </section>
+
+    <section class="stats-section">
+        <div class="stats-grid">
+            <div class="stat-item reveal">
+                <h3 class="stat-number" data-target="5000">0</h3>
+                <p>Schools Empowered</p>
+            </div>
+            <div class="stat-item reveal reveal-delay-1">
+                <h3 class="stat-number" data-target="30000">0</h3>
+                <p>Devices Deployed</p>
+            </div>
+            <div class="stat-item reveal reveal-delay-2">
+                <h3 class="stat-number" data-target="50">0</h3>
+                <p>Certified Trainers</p>
+            </div>
+            <div class="stat-item reveal">
+                <h3>100%</h3>
+                <p>Authentic Guarantee</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="timeline-section">
+        <div class="timeline-header reveal">
+            <h2>The Journey</h2>
+            <p style="color: #aaa;">A timeline of our commitment to excellence.</p>
+        </div>
+
+        <div class="timeline">
+            <div class="timeline-item reveal">
+                <div class="timeline-content">
+                    <div class="timeline-year">2018</div>
+                    <h4>The Inception</h4>
+                    <p>Founded with a bold vision to revolutionize the Malaysian education sector through smart classroom integrations.</p>
+                </div>
+            </div>
+            <div class="timeline-item reveal">
+                <div class="timeline-content">
+                    <div class="timeline-year">2020</div>
+                    <h4>Microsoft Partnership</h4>
+                    <p>Officially recognized as a Microsoft Partner, enabling us to distribute enterprise-grade Surface devices to institutions nationwide.</p>
+                </div>
+            </div>
+            <div class="timeline-item reveal">
+                <div class="timeline-content">
+                    <div class="timeline-year">2022</div>
+                    <h4>Nationwide Expansion</h4>
+                    <p>Expanded our operations across Malaysia, supplying and training over 300 schools in utilizing Samview Interactive Smartboards.</p>
+                </div>
+            </div>
+            <div class="timeline-item reveal">
+                <div class="timeline-content">
+                    <div class="timeline-year">2024 & Beyond</div>
+                    <h4>Pioneering AI in Education</h4>
+                    <p>Introducing next-gen AI-powered devices like Surface Pro 11 and Copilot integrations to elevate the modern working and teaching experience.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="team-section">
+        <div class="timeline-header reveal">
+            <h2>Meet The Experts</h2>
+            <p style="color: #aaa;">The dedicated professionals driving our success.</p>
+        </div>
+
+        <div class="team-grid">
+            <div class="team-card reveal">
+                <div class="team-img-wrap">
+                    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="CEO">
+                </div>
+                <h4>Ahmad Zaki</h4>
+                <p>Chief Executive Officer</p>
+            </div>
+            <div class="team-card reveal reveal-delay-1">
+                <div class="team-img-wrap">
+                    <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Sales Director">
+                </div>
+                <h4>Sarah Azman</h4>
+                <p>Head of Education Solutions</p>
+            </div>
+            <div class="team-card reveal reveal-delay-2">
+                <div class="team-img-wrap">
+                    <img src="https://randomuser.me/api/portraits/men/85.jpg" alt="Tech Lead">
+                </div>
+                <h4>David Lee</h4>
+                <p>Technical Lead</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="contact-section">
+        <div class="contact-header reveal">
+            <h2>Contact & Locate Us</h2>
+            <p>Visit our headquarters or drop us a line. We're here to assist you.</p>
+        </div>
+
+        <div class="contact-container">
+            <div class="contact-info reveal">
+                
+                <div class="info-block">
+                    <div class="info-icon"><i class="fas fa-building"></i></div>
+                    <div class="info-text">
+                        <h4>Headquarters</h4>
+                        <p>AR Edutech (M) Sdn Bhd<br>
+                        17-1, First Floor, KSL Avenue,<br>
+                        Jalan Bestari 9/KS09, Bandar Bestari,<br>
+                        41200 Klang, Selangor.</p>
+                    </div>
+                </div>
+
+                <div class="info-block">
+                    <div class="info-icon"><i class="fas fa-phone-alt"></i></div>
+                    <div class="info-text">
+                        <h4>Direct Line</h4>
+                        <p><a href="tel:0331237425" style="color: #fff; text-decoration: none;">03-3123 7425</a></p>
+                        <p><a href="tel:01131321024" style="color: #fff; text-decoration: none;">011-3132 1024</a></p>
+                    </div>
+                </div>
+
+                <div class="info-block" style="margin-bottom: 0;">
+                    <div class="info-icon"><i class="fas fa-clock"></i></div>
+                    <div class="info-text" style="width: 100%;">
+                        <h4>Operation Hours</h4>
+                        <table class="hours-table">
+                            <tr><td class="day-col">Monday</td><td>9:00 am – 6:00 pm</td></tr>
+                            <tr><td class="day-col">Tuesday</td><td>9:00 am – 6:00 pm</td></tr>
+                            <tr><td class="day-col">Wednesday</td><td>9:00 am – 6:00 pm</td></tr>
+                            <tr><td class="day-col">Thursday</td><td>9:00 am – 6:00 pm</td></tr>
+                            <tr><td class="day-col">Friday</td><td>9:00 am – 6:00 pm</td></tr>
+                            <tr><td class="day-col">Saturday</td><td>10:00 am – 6:00 pm</td></tr>
+                            <tr><td class="day-col">Sunday</td><td>10:00 am – 6:00 pm</td></tr>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="contact-map reveal reveal-delay-1">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3984.496393208048!2d101.46572839999999!3d2.9596736!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31cdad8efa715529%3A0xaf2cbc7d82b80b73!2sAR%20Edutech%20(M)%20Sdn%20Bhd!5e0!3m2!1sen!2smy!4v1770801543358!5m2!1sen!2smy" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+        </div>
+    </section>
+
+    <footer style="display: flex; flex-direction: column; align-items: center; gap: 15px; padding: 40px 5%; background: #000; border-top: 1px solid rgba(255,255,255,0.1); margin-top: auto;">
+        <div style="opacity: 0.8; filter: grayscale(100%) brightness(200%); transition: 0.3s;" onmouseover="this.style.filter='none'; this.style.opacity='1'" onmouseout="this.style.filter='grayscale(100%) brightness(200%)'; this.style.opacity='0.8'">
+            <span style="display: block; font-size: 10px; color: #666; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 5px;">Authorized Partner</span>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/9/96/Microsoft_logo_%282012%29.svg" alt="Microsoft" style="height: 30px; width: auto;">
+        </div>
+        <p style="font-size: 13px; color: #555;">&copy; 2026 AR Edutech Sdn Bhd. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // --- MOBILE MENU TOGGLE ---
+        function toggleMenu() {
+            const nav = document.querySelector('.nav-links');
+            nav.classList.toggle('active');
+        }
+
+        // --- SCROLL REVEAL ANIMATION & COUNTER ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const reveals = document.querySelectorAll('.reveal');
+            
+            // Function to animate numbers
+            const runCounter = (el) => {
+                const target = +el.getAttribute('data-target');
+                let count = 0;
+                // Kelajuan counter bergantung pada saiz nombor
+                const increment = target / 100; 
+                
+                const updateCount = () => {
+                    count += increment;
+                    if(count < target) {
+                        el.innerText = Math.ceil(count).toLocaleString() + "+"; // Tambah format koma dan +
+                        requestAnimationFrame(updateCount);
+                    } else {
+                        el.innerText = target.toLocaleString() + "+";
+                    }
+                };
+                updateCount();
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        
+                        // Cek kalau elemen tu ada nombor untuk dikaunter
+                        const counters = entry.target.querySelectorAll('.stat-number');
+                        counters.forEach(counter => {
+                            if(!counter.classList.contains('counted')) {
+                                runCounter(counter);
+                                counter.classList.add('counted'); // Supaya dia kira sekali je
+                            }
+                        });
+                    }
+                });
+            }, { threshold: 0.15 });
+
+            reveals.forEach(reveal => {
+                observer.observe(reveal);
+            });
+        });
+    </script>
+</body>
+</html>

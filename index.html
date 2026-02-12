@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home | AR Edutech</title>
-    <link rel="icon" href="photos/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="photos/logo/favicon.ico" type="image/x-icon">
     <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -20,7 +20,6 @@
             --text-white: #ffffff;
             --text-gray: #b3b3b3;
             --sale-red: #ff4d4d;
-            --sale-glow: rgba(255, 77, 77, 0.6);
             --inst-blue: #0067b8;
             --whatsapp-green: #25D366;
         }
@@ -42,7 +41,7 @@
         a { text-decoration: none; color: inherit; transition: 0.3s; }
         ul { list-style: none; }
 
-        /* --- 2. NAVBAR --- */
+        /* --- 2. NAVBAR (DESKTOP) --- */
         nav {
             display: flex; justify-content: space-between; align-items: center;
             padding: 0 5%; height: 75px;
@@ -52,7 +51,7 @@
         }
         .nav-left { display: flex; align-items: center; gap: 40px; }
         .logo img { height: 45px; width: auto; filter: brightness(1.2); }
-        .nav-links { display: flex; gap: 30px; }
+        .nav-links { display: flex; gap: 30px; position: absolute; left: 50%; transform: translateX(-50%); }
         
         .nav-item {
             position: relative; font-size: 14px; font-weight: 500;
@@ -93,6 +92,7 @@
             padding: 10px 20px; border-radius: 30px; background: rgba(255,255,255,0.05);
         }
         .nav-right a:hover { background: var(--text-white); color: #000; box-shadow: 0 0 15px rgba(255,255,255,0.3); }
+        
         .hamburger { display: none; cursor: pointer; flex-direction: column; gap: 5px; }
         .hamburger div { width: 25px; height: 3px; background-color: var(--ar-gold); transition: 0.3s; }
 
@@ -183,11 +183,38 @@
         
         .deal-info { position: relative; z-index: 2; flex-grow: 1; display: flex; flex-direction: column; }
         .deal-title { font-size: 20px; font-weight: 700; margin-bottom: 8px; color: #fff; line-height: 1.3; height: 52px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
-        .deal-specs { font-size: 13px; color: #888; margin-bottom: 25px; display: block; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 20px; }
         
-        .price-box { margin-top: auto; display: flex; align-items: flex-end; gap: 12px; }
-        .old-price { text-decoration: line-through; color: #666; font-size: 14px; margin-bottom: 4px; }
-        .new-price { color: var(--ar-gold); font-size: 26px; font-weight: 700; line-height: 1; text-shadow: 0 0 20px rgba(200,164,94,0.3); }
+        /* Specs Tags */
+        .specs-row { display: flex; gap: 6px; margin-bottom: 25px; flex-wrap: wrap; }
+        .spec-badge {
+            font-size: 10px; color: #ddd; background: rgba(255,255,255,0.08); 
+            padding: 4px 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1);
+            text-transform: uppercase; letter-spacing: 0.5px;
+        }
+
+        /* Variant Buttons */
+        .variant-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+        .variant-btn {
+            font-size: 11px; background: rgba(0,0,0,0.5); border: 1px solid var(--glass-border);
+            color: #aaa; padding: 6px 12px; border-radius: 4px; cursor: pointer; transition: 0.3s;
+        }
+        .variant-btn:hover, .variant-btn.active { 
+            border-color: var(--ar-gold); color: var(--ar-gold); background: rgba(200,164,94,0.15); 
+        }
+
+        /* Price & Action Row */
+        .price-box { margin-top: auto; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid var(--glass-border); padding-top: 15px; }
+        .price-group { display: flex; flex-direction: column; }
+        .old-price { text-decoration: line-through; color: #666; font-size: 12px; margin-bottom: 2px; }
+        .new-price { color: var(--ar-gold); font-size: 24px; font-weight: 700; line-height: 1; transition: 0.3s; white-space:nowrap; }
+        
+        /* View Specs Button */
+        .view-btn {
+            font-size: 12px; color: #fff; font-weight: 600; text-decoration: none; cursor: pointer;
+            display: flex; align-items: center; gap: 5px; transition: 0.3s;
+        }
+        .view-btn:hover { gap: 8px; color: var(--ar-gold); }
+
         .price-installment { font-size: 20px; color: #4dabf7; font-weight: 700; }
         .duration-label { font-size: 11px; color: #aaa; margin-bottom: 3px; text-transform: uppercase; letter-spacing: 1px; }
 
@@ -203,6 +230,46 @@
         .lightbox.active .lightbox-img { transform: scale(1); }
         .lightbox-close { position: absolute; top: 40px; right: 40px; color: white; font-size: 50px; cursor: pointer; transition: 0.3s; }
         .lightbox-close:hover { color: var(--ar-gold); transform: rotate(90deg); }
+
+        /* --- SPEC MODAL --- */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(10px);
+            z-index: 2000; display: none; justify-content: center; align-items: center;
+            opacity: 0; transition: opacity 0.3s ease;
+        }
+        .modal-active { display: flex; opacity: 1; }
+
+        .spec-modal {
+            width: 90%; max-width: 600px; 
+            background: rgba(20, 20, 20, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 24px;
+            box-shadow: 0 50px 100px rgba(0, 0, 0, 0.8);
+            display: flex; flex-direction: column; overflow: hidden;
+            transform: scale(0.9); transition: transform 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+        .modal-active .spec-modal { transform: scale(1); }
+
+        .modal-header {
+            padding: 20px 30px; border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex; justify-content: space-between; align-items: center; background: rgba(30, 30, 30, 0.8);
+        }
+        .modal-title { font-size: 18px; font-weight: 700; color: var(--ar-gold); letter-spacing: 1px; }
+        .close-modal {
+            background: transparent; border: none; color: #aaa; font-size: 24px; cursor: pointer; transition: 0.3s;
+        }
+        .close-modal:hover { color: var(--ar-gold); transform: rotate(90deg); }
+
+        .modal-body { padding: 30px; overflow-y: auto; max-height: 70vh; }
+        .modal-img {
+            width: 100%; height: 200px; object-fit: contain; margin-bottom: 20px; filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.5));
+            cursor: pointer;
+        }
+        .spec-row {
+            display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .spec-label { font-size: 13px; color: #aaa; font-weight: 600; text-transform:uppercase; letter-spacing:0.5px; }
+        .spec-value { font-size: 13px; color: #fff; text-align: right; max-width: 60%; font-weight:500; }
 
         /* --- 6. SUPPORT --- */
         .support-section { padding: 100px 5%; position: relative; background: linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%); }
@@ -222,37 +289,65 @@
         .agent-role { font-size: 11px; color: var(--ar-gold); text-transform: uppercase; letter-spacing: 2px; display: block; margin-bottom: 20px; }
         .contact-btn { padding: 10px 20px; border-radius: 30px; font-size: 13px; font-weight: 600; text-decoration: none; display: flex; align-items: center; gap: 8px; transition: 0.3s; }
 
+        .back-to-top { position: fixed; bottom: 30px; right: 30px; background: rgba(255,255,255,0.1); color: #fff; padding: 12px 25px; border-radius: 30px; font-size: 14px; font-weight: 600; border: 1px solid var(--glass-border); backdrop-filter: blur(10px); box-shadow: 0 5px 15px rgba(0,0,0,0.3); z-index: 1000; opacity: 0.8; transition: 0.3s; }
+        .back-to-top:hover { opacity: 1; transform: translateY(-5px); background: var(--ar-gold); color: #000; }
+
         footer { padding: 60px 5%; text-align: center; border-top: 1px solid var(--glass-border); background: #000; color: #555; font-size: 14px; }
 
-        /* --- MOBILE RESPONSIVE --- */
+        /* --- MOBILE RESPONSIVE (FIXED NAVBAR) --- */
         @media screen and (max-width: 768px) {
-            nav { padding: 0 20px; height: 70px; }
-            .hamburger { display: flex; }
-            .nav-right { display: none; }
+            
+            /* Navbar Mobile (Kemas & Space Between) */
+            nav { padding: 0 20px; height: 70px; justify-content: space-between; }
+            
+            .nav-left { gap: 0; }
+            .logo img { height: 35px; } /* Kecilkan sikit logo */
+            
+            /* Sembunyikan Nav Kanan (Microsoft Logo) */
+            .nav-right { display: none !important; } 
+
+            .hamburger { display: flex; z-index: 1001; }
+
             .nav-links {
-                position: absolute; right: 0; top: 70px; background: rgba(10, 10, 10, 0.98); backdrop-filter: blur(25px);
-                flex-direction: column; align-items: flex-start; width: 100%; gap: 0; border-bottom: 1px solid var(--glass-border);
-                transform: translateY(-150%); transition: transform 0.4s ease; padding: 0; z-index: 999;
+                position: fixed; /* Guna fixed supaya full screen */
+                right: 0; top: 0; left: auto; 
+                background: rgba(5, 5, 5, 0.98); backdrop-filter: blur(25px);
+                flex-direction: column; align-items: flex-start;
+                width: 70%; height: 100vh; /* Drawer dari tepi */
+                gap: 0; border-left: 1px solid var(--glass-border);
+                transform: translateX(100%); transition: transform 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+                padding-top: 80px; z-index: 999;
+                box-shadow: -10px 0 30px rgba(0,0,0,0.5);
             }
-            .nav-links.active { transform: translateY(0); }
+            .nav-links.active { transform: translateX(0); }
+
             .nav-item { width: 100%; padding: 20px 30px; border-bottom: 1px solid rgba(255,255,255,0.05); }
             
+            /* Dropdown Mobile */
             .dropdown-content, .dropdown-sub-content {
-                position: static; visibility: visible; opacity: 1; transform: none; background: transparent; border: none; box-shadow: none; padding-left: 20px; display: none; min-width: 100%;
+                position: static; visibility: visible; opacity: 1; transform: none;
+                background: transparent; border: none; box-shadow: none; 
+                padding-left: 20px; display: none; min-width: 100%;
+                border-left: 2px solid var(--glass-border); margin-top: 10px;
             }
-            .nav-item:hover .dropdown-content { display: block; }
-            .dropdown-submenu:hover .dropdown-sub-content { display: block; transform: none; }
+            .nav-item:hover .dropdown-content { display: block; animation: fadeIn 0.3s ease; }
+            .dropdown-submenu:hover .dropdown-sub-content { display: block; }
             
-            .main-hero { padding: 0 5%; min-height: 500px; height: auto; padding-top: 100px; padding-bottom: 60px; }
+            /* Layout Adjustments */
+            .main-hero { padding: 0 20px; min-height: 500px; height: auto; padding-top: 100px; padding-bottom: 60px; }
             .hero-text-container { padding: 30px 20px; border-radius: 25px; }
-            .hero-text-container h1 { font-size: 36px; }
-            .hero-text-container p { font-size: 16px; }
-            .about-section { flex-direction: column; padding: 60px 5%; gap: 40px; }
+            .hero-text-container h1 { font-size: 32px; }
+            .hero-text-container p { font-size: 15px; }
+
+            .about-section { flex-direction: column; padding: 60px 20px; gap: 40px; }
             .glass-panel-large { flex-direction: column; padding: 30px; text-align: center; gap: 30px; }
-            .section-title { font-size: 32px; }
+            .about-image img { max-width: 180px; }
+            .section-title { font-size: 28px; }
+            
             .deals-section { padding: 60px 5%; }
             .deals-header h2 { font-size: 32px; }
             .deal-card { width: 100%; max-width: 350px; }
+            
             .support-section { padding: 50px 5%; }
             .agent-card { width: 100%; max-width: 350px; flex-direction: column; text-align: center; }
             .contact-actions { justify-content: center; }
@@ -267,56 +362,75 @@
             <a href="/" class="logo">
                 <img src="photos/logo/logoaredutech2.png" alt="AR Edutech Logo">
             </a>
-            <div class="hamburger" onclick="toggleMenu()"><div></div><div></div><div></div></div>
-            <ul class="nav-links">
-                <li class="nav-item">Surface
-                    <div class="dropdown-content">
-                        <a href="surface">Surface Pro 8</a>
-                        <a href="surface">Surface Pro 9</a>
-                        <a href="surface">Surface Go 4</a>
-                        <a href="surface">Surface Pro 10</a>
-                        <a href="surface">Surface Pro 11</a>
-                        <a href="surface">Surface Pro 12</a>
-                    </div>
-                </li>
-                <li class="nav-item">Products
-                    <div class="dropdown-content">
-                        <a href="products">Samview Interactive Board</a>
-                        <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.1); margin: 5px 0;">
-                        <div class="dropdown-submenu">
-                            <a href="products">Projector <span class="arrow-right">›</span></a>
-                            <div class="dropdown-sub-content">
-                                <a href="products">Epson CO-FH02</a>
-                                <a href="products">Epson EB-X52</a>
-                                <a href="products">SAMVIEW UFO</a>
-                                <a href="products">Epson EB-E1</a>
-                                <a href="products">(Slim Wireless) Epson EB-1785W</a>
-                            </div>
-                        </div>
-                        <div class="dropdown-submenu">
-                            <a href="products">Printer <span class="arrow-right">›</span></a>
-                            <div class="dropdown-sub-content">
-                                <a href="products">Epson L3250</a>
-                                <a href="products">Pixma Canon E470</a>
-                                <a href="products">Wireless Printer Canon G3010</a>
-                            </div>
-                        </div>
-                        <div class="dropdown-submenu">
-                            <a href="products">Nugens <span class="arrow-right">›</span></a>
-                            <div class="dropdown-sub-content">
-                                <a href="products">Type-C to HDMI Wireless Transmitter (WDA)</a>
-                                <a href="products">HDMI Wireless Transmitter Set</a>
-                                <a href="products">HDMI Wireless Transmitter Receive ADD-ON</a>
-                                <a href="products">V-600 Visualizer Slim</a>
-                                <a href="products">Stylus For iPad</a>
-                            </div>
-                        </div>
-                    </div>
-                </li>
-                <li class="nav-item">Education</li>
-                <li class="nav-item">Contact Us</li>
-            </ul>
         </div>
+        
+        <div class="hamburger" onclick="toggleMenu()">
+            <div></div><div></div><div></div>
+        </div>
+
+        <ul class="nav-links">
+            <li class="nav-item">
+                <a href="/">Main</a>
+                <div class="dropdown-content">
+                    <a href="/#limited">Limited Offers</a>
+                </div>
+            </li>
+            
+            <li class="nav-item">
+                <a href="surface">Surface</a>
+                <div class="dropdown-content">
+                    <a href="surface">Surface Pro 8</a>
+                    <a href="surface">Surface Pro 9</a>
+                    <a href="surface">Surface Go 4</a>
+                    <a href="surface">Surface Pro 10</a>
+                    <a href="surface">Surface Pro 11</a>
+                    <a href="surface">Surface Pro 12</a>
+                </div>
+            </li>
+            <li class="nav-item">Products
+                <div class="dropdown-content">
+                    <a href="products.html#smartboard">Samview Interactive Board</a>
+                    <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.1); margin: 5px 0;">
+                    <a href="products.html#television">Television</a>
+                    <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.1); margin: 5px 0;">
+                    <div class="dropdown-submenu">
+                        <a href="products.html#projector">Projector <span class="arrow-right">›</span></a>
+                        <div class="dropdown-sub-content">
+                            <a href="products.html#projector">Epson CO-FH02</a>
+                            <a href="products.html#projector">Epson EB-X52</a>
+                            <a href="products.html#projector">SAMVIEW UFO</a>
+                            <a href="products.html#projector">Epson EB-E1</a>
+                            <a href="products.html#projector">(Slim Wireless) Epson EB-1785W</a>
+                        </div>
+                    </div>
+                    <div class="dropdown-submenu">
+                        <a href="products.html#printer">Printer <span class="arrow-right">›</span></a>
+                        <div class="dropdown-sub-content">
+                            <a href="products.html#printer">Epson L3250</a>
+                            <a href="products.html#printer">Pixma Canon E470</a>
+                            <a href="products.html#printer">Wireless Printer Canon G3010</a>
+                        </div>
+                    </div>
+                    <div class="dropdown-submenu">
+                        <a href="products.html#accessory">Accessory <span class="arrow-right">›</span></a>
+                        <div class="dropdown-sub-content">
+                            <a href="products.html#accessory">Type-C to HDMI Wireless Transmitter (WDA)</a>
+                            <a href="products.html#accessory">HDMI Wireless Transmitter Set</a>
+                            <a href="products.html#accessory">HDMI Wireless Transmitter Receive ADD-ON</a>
+                            <a href="products.html#accessory">V-600 Visualizer Slim</a>
+                            <a href="products.html#accessory">Stylus For iPad</a>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a href="gallery">Gallery</a>
+                <div class="dropdown-content">
+                    <a href="gallery.html#tiktok-section">Tiktok Video</a>
+                    <a href="gallery.html#gallery-grid">Events</a>
+                </div>
+            </li>
+        </ul>
         
         <div class="nav-right" style="display: flex; align-items: center; gap: 25px;">
             <div style="display: flex; align-items: center; gap: 10px; padding-right: 25px; border-right: 1px solid rgba(255,255,255,0.1);">
@@ -326,7 +440,7 @@
                     <span style="font-size: 11px; font-weight: 700; color: #fff; letter-spacing: 0.5px;">Gold Partner</span>
                 </div>
             </div>
-            <a href="#">About Us</a>
+            <a href="about">About Us</a>
         </div>
     </nav>
 
@@ -353,7 +467,7 @@
         </div>
     </section>
 
-    <section class="deals-section">
+    <section class="deals-section" id="limited">
         <div class="deals-header">
             <h2>Limited Time Offers</h2>
             <p style="color: #888;">Exclusive deals on our best-selling devices. Grab them before they're gone.</p>
@@ -364,48 +478,165 @@
         </div>
     </section>
 
-    <section class="support-section">
-        <div class="support-header">
+    <section class="support-section premium-support-section">
+        <style>
+            /* Premium gradient background + animated shimmer */
+            .premium-support-section {
+                position: relative;
+                padding: 80px 5%;
+                overflow: visible;
+                background: linear-gradient(120deg, rgba(10,10,10,0.8), rgba(0,0,0,0.95));
+            }
+            .premium-support-section::before {
+                content: '';
+                position: absolute;
+                inset: 0;
+                background: linear-gradient(60deg, rgba(200,164,94,0.06), rgba(4,115,185,0.04) 50%, rgba(200,164,94,0.03));
+                mix-blend-mode: screen;
+                pointer-events: none;
+            }
+            .premium-support-header { text-align: center; margin-bottom: 40px; z-index: 2; position: relative; }
+            .premium-support-header h2 { font-size: 38px; letter-spacing: -0.5px; color: #fff; }
+            .premium-support-header p { color: #bdbdbd; margin-top: 8px; }
+
+            /* Grid */
+            .premium-support-grid { display: flex; flex-wrap: wrap; gap: 28px; justify-content: center; z-index: 2; position: relative; }
+
+            /* Card - premium */
+            .agent-card.premium {
+                width: 360px; max-width: 92%;
+                background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.18));
+                border: 1px solid rgba(255,255,255,0.06);
+                border-radius: 20px; padding: 24px; display:flex; gap:18px; align-items:center;
+                transition: transform 0.45s cubic-bezier(.2,1,.2,1), box-shadow 0.45s;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.45);
+                overflow: hidden; position: relative;
+            }
+            .agent-card.premium::after {
+                content: '';
+                position: absolute; inset: -40%;
+                background: radial-gradient(600px 200px at 10% 10%, rgba(200,164,94,0.06), transparent 10%),
+                            radial-gradient(500px 150px at 90% 80%, rgba(4,115,185,0.04), transparent 10%);
+                transform: translateX(-30%);
+                transition: transform 0.6s;
+                pointer-events: none;
+            }
+            .agent-card.premium:hover { transform: translateY(-14px); box-shadow: 0 30px 70px rgba(0,0,0,0.6); }
+            .agent-card.premium:hover::after { transform: translateX(0); }
+
+            .agent-avatar.premium { width: 84px; height:84px; border-radius: 50%; padding:4px; border: 2px solid rgba(200,164,94,0.85); background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(0,0,0,0.2)); flex-shrink:0; position: relative; }
+            .agent-avatar.premium img { width:100%; height:100%; object-fit:cover; border-radius:50%; display:block; }
+
+            .agent-info { flex:1; min-width:0; }
+            .agent-info h3 { margin:0; font-size:18px; color:#fff; font-weight:700; }
+            .agent-role { display:block; margin-top:6px; font-size:11px; color:var(--ar-gold); letter-spacing:1.5px; text-transform:uppercase; font-weight:800; }
+
+            .contact-actions { margin-top:14px; display:flex; gap:10px; flex-wrap:wrap; }
+            .contact-btn {
+                display:inline-flex; align-items:center; gap:8px; padding:9px 14px; border-radius: 999px; font-weight:700; font-size:13px;
+                text-decoration:none; color:#000; border: none; cursor:pointer;
+            }
+            .btn-whatsapp { background: linear-gradient(90deg, #25D366, #00bfa5); color:#000; box-shadow: 0 8px 30px rgba(37,211,102,0.12); }
+            .btn-call { background: linear-gradient(90deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02)); color: #fff; border: 1px solid rgba(255,255,255,0.06); }
+
+            .status-dot { width:14px; height:14px; border-radius:50%; position:absolute; right:6px; bottom:6px; border:2px solid #000; box-shadow: 0 0 14px var(--whatsapp-green); background: var(--whatsapp-green); animation: pulse 2s infinite; }
+            @keyframes pulse { 0% { transform: scale(0.9); opacity: 0.8 } 50% { transform: scale(1.12); opacity: 1 } 100% { transform: scale(0.95); opacity: 0.9 } }
+
+            /* small screens */
+            @media (max-width: 768px) {
+                .agent-card.premium { width: 100%; padding:18px; gap:12px; }
+                .premium-support-header h2 { font-size:28px; }
+            }
+        </style>
+
+        <div class="support-header premium-support-header">
             <h2>Need Expert Advice?</h2>
-            <p>Our Microsoft-certified consultants are ready to assist you in finding the perfect solution.</p>
+            <p>Our Microsoft-certified consultants are ready to assist — chat or place an order instantly via WhatsApp.</p>
         </div>
 
-        <div class="support-grid">
-            <div class="agent-card">
-                <div class="agent-avatar">
-                    <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Agent Sarah">
-                    <div class="status-dot"></div>
-                </div>
-                <div class="agent-info">
-                    <h3>Sarah Azman</h3>
-                    <span class="agent-role">Education Specialist</span>
-                    <div class="contact-actions">
-                        <a href="#" class="contact-btn btn-whatsapp"><i class="fab fa-whatsapp"></i> WhatsApp</a>
-                        <a href="#" class="contact-btn btn-call"><i class="fas fa-phone"></i> Call</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="agent-card">
-                <div class="agent-avatar">
-                    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Agent David">
-                    <div class="status-dot"></div>
-                </div>
-                <div class="agent-info">
-                    <h3>David Lee</h3>
-                    <span class="agent-role">Corporate Solutions</span>
-                    <div class="contact-actions">
-                        <a href="#" class="contact-btn btn-whatsapp"><i class="fab fa-whatsapp"></i> WhatsApp</a>
-                        <a href="#" class="contact-btn btn-call"><i class="fas fa-phone"></i> Call</a>
-                    </div>
-                </div>
-            </div>
+        <div class="support-grid premium-support-grid" id="premiumSupportGrid" aria-live="polite">
+            <!-- cards render here -->
         </div>
+
+        <script>
+            (function(){
+                const agents = [
+                    { id: 'AREdutech', name: 'AR Edutech', role: 'AR Edutech', phone: '601131321024', img: 'photos/bg/ARHQ.jpeg' },
+                    { id: 'ARCS', name: 'AR Customer Service', role: 'AR Customer Service', phone: '60189692740', img: 'photos/bg/ARHQ.jpeg' }
+                ];
+
+                const grid = document.getElementById('premiumSupportGrid');
+                function render(){
+                    grid.innerHTML = agents.map(a => `
+                        <article class="agent-card premium" role="group" aria-labelledby="agent-${a.id}-name">
+                            <div class="agent-avatar premium" title="${a.name}">
+                                <img src="${a.img}" alt="${a.name}">
+                                <span class="status-dot" aria-hidden="true"></span>
+                            </div>
+                            <div class="agent-info">
+                                <h3 id="agent-${a.id}-name">${a.name}</h3>
+                                <span class="agent-role">${a.role}</span>
+                                <div class="contact-actions">
+                                    <button class="contact-btn btn-whatsapp" onclick="openWhatsapp('${a.phone}','${encodeURIComponent(a.name)}')" aria-label="Chat ${a.name} on WhatsApp">
+                                        <i class="fab fa-whatsapp"></i> WhatsApp
+                                    </button>
+                                    <button class="contact-btn btn-call" onclick="callAgent('${a.phone}')" aria-label="Call ${a.name}">
+                                        <i class="fas fa-phone"></i> Call
+                                    </button>
+                                    <button class="contact-btn btn-whatsapp" style="background:transparent; color:#fff; border:1px solid rgba(255,255,255,0.06);" onclick="openWhatsapp('${a.phone}','${encodeURIComponent(a.name + ' - I want to order')}')">
+                                        <i class="fas fa-shopping-cart"></i> Order
+                                    </button>
+                                </div>
+                            </div>
+                        </article>
+                    `).join('');
+                }
+
+                // Expose functions globally for onclick handlers
+                window.openWhatsapp = function(phone, encodedName){
+                    const name = decodeURIComponent(encodedName || '');
+                    const text = encodeURIComponent(`Hi ${name || 'there'}, I'm interested in ordering. Please assist me with the order.`);
+                    // Ensure phone is digits only (wa.me requires no plus signs)
+                    const p = (phone || '').replace(/\D/g,'');
+                    const url = `https://wa.me/${p}?text=${text}`;
+                    window.open(url, '_blank');
+                };
+
+                window.callAgent = function(phone){
+                    const p = (phone || '').replace(/[^+\d]/g,'');
+                    window.location.href = 'tel:' + p;
+                };
+
+                render();
+            })();
+        </script>
+
+        <a href="/" class="back-to-top">Back to top ↑</a>
+
     </section>
 
-    <footer>
-        <p>&copy; 2024 AR Edutech Sdn Bhd. All rights reserved. | Microsoft Gold Partner</p>
+    <footer style="display: flex; flex-direction: column; align-items: center; gap: 15px; padding: 40px 5%; background: #000; border-top: 1px solid rgba(255,255,255,0.1);">
+        
+        <div style="opacity: 0.8; filter: grayscale(100%) brightness(200%); transition: 0.3s;" onmouseover="this.style.filter='none'; this.style.opacity='1'" onmouseout="this.style.filter='grayscale(100%) brightness(200%)'; this.style.opacity='0.8'">
+            <span style="display: block; font-size: 10px; color: #666; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 5px;">Authorized Partner</span>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/9/96/Microsoft_logo_%282012%29.svg" alt="Microsoft" style="height: 30px; width: auto;">
+        </div>
+
+        <p style="font-size: 13px; color: #555;">&copy; 2026 AR Edutech Sdn Bhd. All rights reserved.</p>
     </footer>
+
+    <div class="modal-overlay" id="productModal">
+        <div class="spec-modal">
+            <div class="modal-header">
+                <span class="modal-title" id="modalTitle">Product Specs</span>
+                <button class="close-modal" onclick="closeSpecs()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <img src="" id="modalImg" class="modal-img" onclick="openLightbox(this.src)" title="Click to Zoom">
+                <div id="modalSpecs"></div>
+            </div>
+        </div>
+    </div>
 
     <div class="lightbox" id="lightbox" onclick="closeLightbox()">
         <span class="lightbox-close">&times;</span>
@@ -432,52 +663,122 @@
 
         const dealsContainer = document.getElementById('deals-container');
         const promoRef = ref(db, 'promotions');
+        const CACHE_KEY = 'home_deals_cache'; 
 
-        onValue(promoRef, (snapshot) => {
-            const data = snapshot.val();
+        // Simpan data global untuk modal
+        window.allProductsData = {};
+
+        // --- UPDATE PRICE (VARIANT) ---
+        window.updatePrice = function(cardId, content, btn) {
+            const card = document.getElementById('card-' + cardId);
+            const priceEl = card.querySelector('.new-price'); // Home use new-price class
+            const originalPrice = priceEl.getAttribute('data-original-price');
+
+            // Toggle Revert
+            if (btn.classList.contains('active')) {
+                btn.classList.remove('active');
+                priceEl.innerText = originalPrice;
+                priceEl.classList.remove('long-text');
+                return;
+            }
+
+            // Set Active
+            card.querySelectorAll('.variant-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            // Text Sizing
+            if (content.length > 10) priceEl.classList.add('long-text');
+            else priceEl.classList.remove('long-text');
+
+            // Animate
+            priceEl.style.opacity = 0;
+            setTimeout(() => {
+                priceEl.innerText = content;
+                priceEl.style.opacity = 1;
+            }, 150);
+        }
+
+        // --- 1. FUNGSI RENDER ---
+        function renderDeals(data) {
             dealsContainer.innerHTML = "";
 
             if (data) {
+                window.allProductsData = data;
                 let items = Object.keys(data).map(key => ({ id: key, ...data[key] }));
                 
-                // Filter hidden & sort by order
-                items = items.filter(item => !item.is_hidden);
+                // FILTER: Only show items that are MARKED as 'isOnHome'
+                items = items.filter(item => item.isOnHome === true && !item.is_hidden);
                 items.sort((a, b) => (a.order || 0) - (b.order || 0));
 
+                if (items.length === 0) {
+                    dealsContainer.innerHTML = "<p style='color:#888; width:100%;'>No active promotions currently.</p>";
+                    return;
+                }
+
                 items.forEach(item => {
-                    // Logic Badge
                     const isInstallment = item.type === 'installment';
                     let badgeClass = 'badge-red';
                     if (isInstallment) badgeClass = 'badge-blue';
                     else if (item.badge.toLowerCase().includes('hot') || item.badge.toLowerCase().includes('deal')) badgeClass = 'badge-gold';
 
-                    // Logic Price
+                    const defaultPrice = isInstallment ? item.monthlyPrice : item.new_price;
+
+                    // PRICE HTML
                     let priceHtml = '';
                     if (isInstallment) {
                         priceHtml = `
-                            <div style="text-align:right;">
+                            <div class="price-group">
                                 <div class="duration-label">${item.duration}</div>
                                 <span class="price-installment">${item.monthlyPrice}</span>
                             </div>
                         `;
                     } else {
                         priceHtml = `
-                            <span class="old-price">${item.old_price}</span>
-                            <span class="new-price">${item.new_price}</span>
+                            <div class="price-group">
+                                <span class="old-price">${item.old_price}</span>
+                                <span class="new-price" data-original-price="${defaultPrice}">${defaultPrice}</span>
+                            </div>
                         `;
                     }
 
+                    // GENERATE TAGS
+                    let tagsHTML = '';
+                    if (item.specs) {
+                        item.specs.split('|').forEach(tag => {
+                            if(tag.trim()) tagsHTML += `<span class="spec-badge">${tag.trim()}</span>`;
+                        });
+                    }
+
+                    // GENERATE VARIANTS
+                    let variantHTML = '';
+                    if (item.variant_pricing) {
+                        variantHTML = '<div class="variant-row">';
+                        item.variant_pricing.split('|').forEach((v) => {
+                            const parts = v.split(':');
+                            if(parts.length >= 2) {
+                                const label = parts[0].trim();
+                                const price = parts.slice(1).join(':').trim();
+                                variantHTML += `<button class="variant-btn" onclick="updatePrice('${item.id}', '${price}', this)">${label}</button>`;
+                            }
+                        });
+                        variantHTML += '</div>';
+                    }
+
                     const cardHTML = `
-                        <div class="deal-card">
+                        <div class="deal-card" id="card-${item.id}">
                             <div class="sale-badge ${badgeClass}">${item.badge}</div>
-                            <div class="deal-img-container" onclick="openLightbox('${item.image_url}')">
-                                <img src="${item.image_url}" alt="${item.title}">
+                            <div class="deal-img-container" onclick="window.openSpecs('${item.id}')">
+                                <img src="${item.image_url}" alt="${item.title}" loading="lazy">
                             </div>
                             <div class="deal-info">
                                 <div class="deal-title">${item.title}</div>
-                                <span class="deal-specs">${item.specs}</span>
-                                <div class="price-box" style="${isInstallment ? 'justify-content: flex-end;' : ''}">
+                                
+                                <div class="specs-row">${tagsHTML}</div>
+                                ${variantHTML}
+
+                                <div class="price-box">
                                     ${priceHtml}
+                                    <a href="javascript:void(0)" onclick="window.openSpecs('${item.id}')" class="view-btn">View Specs <i class="fas fa-arrow-right"></i></a>
                                 </div>
                             </div>
                         </div>
@@ -487,8 +788,63 @@
             } else {
                 dealsContainer.innerHTML = "<p style='color:#888; width:100%;'>No active promotions currently.</p>";
             }
+        }
+
+        // --- 2. LOAD CACHE (INSTANT) ---
+        const cachedData = localStorage.getItem(CACHE_KEY);
+        if (cachedData) {
+            console.log("Loading from cache...");
+            renderDeals(JSON.parse(cachedData));
+        }
+
+        // --- 3. LOAD FIREBASE (LIVE) ---
+        onValue(promoRef, (snapshot) => {
+            const data = snapshot.val();
+            renderDeals(data);
+            if(data) localStorage.setItem(CACHE_KEY, JSON.stringify(data));
         });
 
+        // --- MODAL SPECS ---
+        const modal = document.getElementById('productModal');
+
+        window.openSpecs = function(id) {
+            const data = window.allProductsData[id];
+            if (!data) return;
+
+            document.getElementById('modalTitle').innerText = data.title;
+            document.getElementById('modalImg').src = data.image_url;
+
+            let html = '';
+            // Priority 1: Full Specs
+            if (data.full_specs) {
+                const lines = data.full_specs.split('\n');
+                lines.forEach(line => {
+                    if(line.includes(':')) {
+                        const [label, val] = line.split(':');
+                        html += `<div class="spec-row"><span class="spec-label">${label.trim()}</span><span class="spec-value">${val.trim()}</span></div>`;
+                    } else if(line.trim()) {
+                        html += `<div class="spec-row"><span class="spec-label" style="width:100%">${line.trim()}</span></div>`;
+                    }
+                });
+            }
+            // Priority 2: Fallback
+            else {
+                html = `<div class="spec-row"><span class="spec-label">Key Specs</span><span class="spec-value">${data.specs}</span></div>`;
+            }
+            
+            document.getElementById('modalSpecs').innerHTML = html;
+            modal.classList.add('modal-active');
+        }
+
+        window.closeSpecs = function() {
+            modal.classList.remove('modal-active');
+        }
+
+        window.onclick = function (event) {
+            if (event.target == modal) closeSpecs();
+        }
+
+        // --- UI FUNCTIONS ---
         window.toggleMenu = function() {
             const navLinks = document.querySelector('.nav-links');
             navLinks.classList.toggle('active');

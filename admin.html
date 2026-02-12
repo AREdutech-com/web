@@ -17,25 +17,92 @@
             --input-bg: rgba(255, 255, 255, 0.03);
             --text-white: #ffffff;
             --text-muted: #888;
-            --status-hidden: rgba(255, 255, 255, 0.1);
+            /* TikTok Colors */
+            --tk-cyan: #00f2fe;
+            --tk-magenta: #ff0050;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        * { box-sizing: border-box; margin: 0; padding: 0; outline: none; }
 
         body {
             background-color: #050505; color: var(--text-white); font-family: 'Segoe UI', sans-serif;
-            min-height: 100vh; padding: 40px;
+            min-height: 100vh; padding: 40px 5%;
             background-image: 
                 radial-gradient(circle at 0% 0%, rgba(200, 164, 94, 0.08) 0%, transparent 50%),
                 radial-gradient(circle at 100% 100%, rgba(0, 103, 184, 0.08) 0%, transparent 50%);
             background-attachment: fixed;
         }
 
-        .admin-layout {
+        /* --- LOGIN OVERLAY --- */
+        #login-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #000; z-index: 9999;
+            display: flex; justify-content: center; align-items: center;
+        }
+
+        .login-box {
+            background: rgba(20, 20, 20, 0.9);
+            border: 1px solid var(--ar-gold);
+            padding: 40px; border-radius: 20px; text-align: center;
+            box-shadow: 0 0 50px rgba(200, 164, 94, 0.3);
+            width: 350px;
+            max-width: 90%;
+        }
+
+        .login-box h2 { color: var(--ar-gold); margin-bottom: 20px; font-weight: 700; letter-spacing: 2px; }
+        .login-input {
+            width: 100%; padding: 12px; margin-bottom: 15px;
+            background: var(--input-bg); border: 1px solid var(--glass-border);
+            color: #fff; border-radius: 8px; outline: none;
+        }
+        .login-input:focus { border-color: var(--ar-gold); }
+        .login-btn {
+            width: 100%; padding: 12px; background: var(--ar-gold); color: #000;
+            border: none; border-radius: 8px; font-weight: 700; cursor: pointer;
+            transition: 0.3s;
+        }
+        .login-btn:hover { background: #fff; }
+        .password-wrapper { position: relative; width: 100%; margin-bottom: 15px; }
+        .password-toggle { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: #888; cursor: pointer; }
+
+        /* --- TOP NAVIGATION TABS --- */
+        .admin-top-nav {
+            display: flex; justify-content: space-between; align-items: center;
+            background: var(--glass-bg); backdrop-filter: blur(30px);
+            border: 1px solid var(--glass-border); border-radius: 20px;
+            padding: 15px 30px; margin-bottom: 30px;
+            max-width: 1600px; margin-left: auto; margin-right: auto;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        .brand-title { display: flex; align-items: center; gap: 10px; }
+        .brand-title h2 { font-size: 20px; font-weight: 700; letter-spacing: 1px; color: var(--text-white); margin: 0; }
+        
+        .admin-tabs { display: flex; gap: 15px; }
+        .admin-tab-btn {
+            background: rgba(255,255,255,0.05); border: 1px solid transparent;
+            color: #aaa; padding: 10px 20px; border-radius: 12px; cursor: pointer;
+            font-weight: 600; transition: 0.3s; display: flex; align-items: center; gap: 8px;
+        }
+        .admin-tab-btn:hover { background: rgba(255,255,255,0.1); color: #fff; }
+        .admin-tab-btn.active { background: rgba(200, 164, 94, 0.15); border-color: var(--ar-gold); color: var(--ar-gold); }
+        
+        #btn-tiktok.active { background: rgba(0, 242, 254, 0.1); border-color: var(--tk-cyan); color: var(--tk-cyan); }
+
+        .logout-btn {
+            background: rgba(255, 77, 77, 0.15); color: #ff4d4d; border: 1px solid rgba(255, 77, 77, 0.3);
+            padding: 10px 20px; border-radius: 12px; font-size: 13px; font-weight: 700; cursor: pointer; transition: 0.3s;
+            display: flex; align-items: center; gap: 6px;
+        }
+        .logout-btn:hover { background: #ff4d4d; color: white; box-shadow: 0 0 15px rgba(255, 77, 77, 0.4); }
+
+        /* --- MAIN LAYOUT --- */
+        .admin-wrapper {
+            display: none; 
             max-width: 1600px; margin: 0 auto;
-            display: grid; grid-template-columns: 400px 1fr; 
+            grid-template-columns: 400px 1fr; 
             gap: 40px; align-items: start;
         }
+        .admin-wrapper.active { display: grid; }
 
         /* --- SIDEBAR FORM --- */
         .form-sidebar {
@@ -43,29 +110,42 @@
             border: 1px solid var(--glass-border); border-radius: 24px;
             padding: 30px; position: sticky; top: 40px;
             box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-            max-height: 90vh; overflow-y: auto; /* Scroll if form too long */
+            max-height: 85vh; overflow-y: auto;
         }
         .form-sidebar::-webkit-scrollbar { width: 5px; }
         .form-sidebar::-webkit-scrollbar-thumb { background: var(--ar-gold); border-radius: 10px; }
-
-        .brand-header {
-            display: flex; align-items: center; gap: 15px; margin-bottom: 25px;
-            padding-bottom: 20px; border-bottom: 1px solid var(--glass-border);
-        }
-        .brand-header h2 { font-size: 18px; font-weight: 700; letter-spacing: 1px; color: var(--text-white); }
+        #tab-tiktok .form-sidebar::-webkit-scrollbar-thumb { background: var(--tk-cyan); }
 
         .form-group { margin-bottom: 15px; }
         label { display: block; margin-bottom: 8px; font-size: 11px; font-weight: 700; color: var(--ar-gold); text-transform: uppercase; letter-spacing: 1px; }
         
-        input, select {
+        input, select, textarea {
             width: 100%; padding: 12px 15px; 
             background: var(--input-bg); border: 1px solid var(--glass-border);
             border-radius: 12px; color: white; font-size: 14px; outline: none; transition: 0.3s;
         }
-        input:focus, select:focus { border-color: var(--ar-gold); background: rgba(200, 164, 94, 0.05); }
+        input:focus, select:focus, textarea:focus { border-color: var(--ar-gold); background: rgba(200, 164, 94, 0.05); }
         select option { background: #111; color: white; }
+        textarea { resize: vertical; min-height: 80px; }
 
-        /* Conditional Section (Installment) */
+        .location-group {
+            background: rgba(255, 255, 255, 0.05); padding: 15px; border-radius: 12px;
+            border: 1px solid var(--glass-border); margin-bottom: 20px;
+        }
+
+        /* --- CATEGORY CONTROLS --- */
+        .cat-row { display: flex; gap: 8px; align-items: center; }
+        .cat-btn {
+            width: 40px; height: 42px; display: flex; align-items: center; justify-content: center;
+            border-radius: 10px; border: 1px solid var(--glass-border); cursor: pointer; transition: 0.3s;
+        }
+        .btn-add-cat { background: rgba(39, 174, 96, 0.1); color: #2ecc71; border-color: rgba(39, 174, 96, 0.3); }
+        .btn-add-cat:hover { background: #2ecc71; color: #000; }
+        .btn-edit-cat { background: rgba(52, 152, 219, 0.1); color: #3498db; border-color: rgba(52, 152, 219, 0.3); }
+        .btn-edit-cat:hover { background: #3498db; color: #fff; }
+        .btn-del-cat { background: rgba(231, 76, 60, 0.1); color: #e74c3c; border-color: rgba(231, 76, 60, 0.3); }
+        .btn-del-cat:hover { background: #e74c3c; color: #fff; }
+
         .installment-options {
             display: none; padding: 15px; background: rgba(0, 103, 184, 0.1);
             border-radius: 12px; border: 1px dashed rgba(0, 103, 184, 0.3); margin-bottom: 15px;
@@ -75,165 +155,360 @@
 
         #preview { 
             width: 100%; height: 180px; object-fit: contain; margin-bottom: 20px; 
-            background: rgba(0,0,0,0.3); border-radius: 12px; border: 1px dashed var(--glass-border); display: none; 
+            background: rgba(0,0,0,0.3); border-radius: 12px; border: 1px dashed var(--glass-border); display: none; cursor: zoom-in;
         }
+
+        .img-modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9); z-index: 10000;
+            display: none; justify-content: center; align-items: center;
+            opacity: 0; transition: opacity 0.3s;
+        }
+        .img-modal.active { display: flex; opacity: 1; }
+        .img-modal img { max-width: 90%; max-height: 90%; border-radius: 10px; box-shadow: 0 0 50px rgba(255,255,255,0.1); }
+        .img-modal-close { position: absolute; top: 30px; right: 30px; font-size: 30px; color: white; cursor: pointer; }
 
         .btn-action {
             width: 100%; padding: 14px; background: var(--ar-gold); color: #000;
             border: none; border-radius: 12px; font-weight: 700; cursor: pointer;
             margin-top: 10px; transition: 0.3s; text-transform: uppercase; letter-spacing: 1px;
         }
-        .btn-action:hover { background: #fff; transform: translateY(-2px); }
+        .btn-action:hover { background: #fff; transform: translateY(-2px); box-shadow: 0 5px 15px var(--ar-gold-glow); }
         .btn-cancel { background: rgba(255, 77, 77, 0.1); color: #ff4d4d; margin-top: 10px; display: none; }
         .btn-cancel:hover { background: rgba(255, 77, 77, 0.2); color: #fff; }
 
-        /* --- GALLERY GRID --- */
-        .gallery-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+        /* --- GALLERY GRID (PRODUCTS) --- */
+        .gallery-header { display: flex; flex-direction: column; gap: 20px; margin-bottom: 25px; }
+        .header-top { display: flex; justify-content: space-between; align-items: center; width: 100%; }
         .item-count { font-size: 14px; color: var(--text-muted); background: var(--input-bg); padding: 5px 12px; border-radius: 20px; }
 
-        .promo-grid {
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 25px;
+        .filter-tabs { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 5px; }
+        .filter-btn {
+            background: rgba(255,255,255,0.05); color: #aaa; border: 1px solid var(--glass-border);
+            padding: 8px 16px; border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer; transition: 0.3s; white-space: nowrap;
         }
+        .filter-btn:hover { background: rgba(255,255,255,0.1); color: white; }
+        .filter-btn.active { background: var(--ar-gold); color: #000; border-color: var(--ar-gold); }
+
+        /* --- GRID CARDS --- */
+        .promo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 25px; }
 
         .promo-card {
             background: var(--glass-bg); backdrop-filter: blur(10px);
             border: 1px solid var(--glass-border); border-radius: 16px;
             overflow: hidden; transition: 0.3s; position: relative;
-            display: flex; flex-direction: column;
-            cursor: grab; /* Cursor tunjuk boleh drag */
+            display: flex; flex-direction: column; cursor: grab;
+            border-top: 3px solid transparent; 
         }
         .promo-card:active { cursor: grabbing; transform: scale(1.02); z-index: 10; border-color: var(--ar-gold); }
-
-        /* Hidden State Styling */
-        .promo-card.hidden-item {
-            opacity: 0.5; filter: grayscale(100%); border: 1px dashed #555;
-        }
+        .promo-card.hidden-item { opacity: 0.5; filter: grayscale(100%); border: 1px dashed #555; }
         .promo-card.hidden-item:hover { opacity: 1; filter: grayscale(0%); }
 
-        /* Drag Handle Icon */
         .drag-handle {
             position: absolute; top: 10px; right: 10px; z-index: 5;
             background: rgba(0,0,0,0.5); padding: 5px 8px; border-radius: 6px; cursor: grab;
         }
 
-        .card-img-wrap {
-            height: 160px; width: 100%; background: #fff; display: flex; align-items: center; justify-content: center; padding: 15px; position: relative;
-        }
+        /* LOCATION TAGS */
+        .card-location-tags { padding: 10px 15px 5px 15px; display: flex; flex-wrap: wrap; gap: 5px; }
+        .loc-badge { font-size: 9px; font-weight: 700; padding: 4px 8px; border-radius: 4px; text-transform: uppercase; display: flex; align-items: center; gap: 4px; }
+        .loc-home { background: rgba(200, 164, 94, 0.2); color: var(--ar-gold); border: 1px solid var(--ar-gold); }
+        .loc-surface { background: rgba(0, 103, 184, 0.2); color: #4dabf7; border: 1px solid #0067b8; }
+        .loc-products { background: rgba(39, 174, 96, 0.2); color: #2ecc71; border: 1px solid #27ae60; }
+        .loc-custom { background: rgba(142, 68, 173, 0.2); color: #9b59b6; border: 1px solid #8e44ad; }
+
+        .card-img-wrap { height: 160px; width: 100%; background: #fff; display: flex; align-items: center; justify-content: center; padding: 15px; position: relative; }
         .card-img { max-width: 100%; max-height: 100%; object-fit: contain; }
         
-        .card-badge-overlay {
-            position: absolute; top: 10px; left: 10px;
-            font-size: 9px; font-weight: bold; padding: 4px 8px; border-radius: 4px; text-transform: uppercase;
-        }
+        .card-badge-overlay { position: absolute; top: 10px; left: 10px; font-size: 9px; font-weight: bold; padding: 4px 8px; border-radius: 4px; text-transform: uppercase; }
         .badge-promo { background: #000; color: var(--ar-gold); }
-        .badge-installment { background: #0067b8; color: #fff; }
 
         .card-body { padding: 15px; flex-grow: 1; display: flex; flex-direction: column; }
-        .card-title { font-size: 15px; font-weight: 700; margin-bottom: 5px; color: #fff; }
-        .card-type { font-size: 10px; text-transform: uppercase; color: #aaa; margin-bottom: 5px; letter-spacing: 1px; }
+        .card-title { font-size: 15px; font-weight: 700; margin-bottom: 5px; color: #fff; line-height: 1.3;}
+        .card-category { font-size: 10px; text-transform: uppercase; color: #666; margin-bottom: 5px; }
+        .card-specs-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 10px; }
+        .mini-tag { font-size: 9px; background: rgba(255,255,255,0.1); color: #ccc; padding: 2px 5px; border-radius: 3px; }
+        .card-variants { font-size: 10px; color: #4dabf7; margin-top: 5px; border-top: 1px dashed #333; padding-top: 5px; display:flex; gap:5px; align-items:center; }
         
         .price-row { display: flex; align-items: center; gap: 8px; margin-top: auto; padding-top: 10px; border-top: 1px solid var(--glass-border); }
         .new-price { font-size: 14px; font-weight: 700; color: var(--ar-gold); }
 
-        .card-actions { display: grid; grid-template-columns: 1fr 1fr 1fr; }
+        .card-actions { display: grid; grid-template-columns: 1fr 1fr 1fr; background: rgba(0,0,0,0.3); }
         .action-btn {
             border: none; padding: 12px; cursor: pointer; font-size: 14px; transition: 0.2s;
-            background: rgba(255,255,255,0.02); border-top: 1px solid var(--glass-border); border-right: 1px solid var(--glass-border); color: #aaa;
+            background: transparent; border-right: 1px solid var(--glass-border); color: #aaa;
         }
         .action-btn:last-child { border-right: none; }
         .action-btn:hover { background: rgba(255,255,255,0.1); color: white; }
-        
-        /* Specific Button Colors on Hover */
-        .btn-hide:hover { color: #f1c40f; } /* Yellow for Hide */
-        .btn-edit:hover { color: #3498db; } /* Blue for Edit */
-        .btn-delete:hover { color: #e74c3c; background: rgba(231, 76, 60, 0.1); } /* Red for Delete */
+        .btn-hide:hover { color: #f1c40f; }
+        .btn-edit:hover { color: #3498db; }
+        .btn-delete:hover { color: #e74c3c; background: rgba(231, 76, 60, 0.1); }
 
-        @media(max-width: 900px) { .admin-layout { grid-template-columns: 1fr; } }
+
+        /* ======================================================== */
+        /* --- TIKTOK SPECIFIC STYLES ---  */
+        /* ======================================================== */
+        
+        /* Submit Button Styling */
+        .btn-tiktok-submit {
+            background: linear-gradient(45deg, var(--tk-cyan), var(--tk-magenta));
+            color: #fff; text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+            box-shadow: 0 5px 15px rgba(0, 242, 254, 0.2);
+        }
+        .btn-tiktok-submit:hover {
+            background: #fff; color: #000; text-shadow: none;
+            box-shadow: 0 5px 20px rgba(0, 242, 254, 0.5);
+        }
+        #tab-tiktok input:focus, #tab-tiktok textarea:focus { border-color: var(--tk-cyan); background: rgba(0, 242, 254, 0.05); }
+
+        /* TikTok Card Styling */
+        .tk-card {
+            background: linear-gradient(145deg, rgba(30, 30, 30, 0.6) 0%, rgba(20, 20, 20, 0.4) 100%);
+            backdrop-filter: blur(10px); border: 1px solid var(--glass-border);
+            border-radius: 20px; overflow: hidden; transition: 0.3s;
+            display: flex; flex-direction: column;
+            height: 100%; position: relative; cursor: grab;
+        }
+        .tk-card:active { cursor: grabbing; transform: scale(1.02); z-index: 10; border-color: var(--tk-cyan); }
+        .tk-card.hidden-item { opacity: 0.5; filter: grayscale(100%); border: 1px dashed #555; }
+        .tk-card:hover { border-color: var(--tk-cyan); box-shadow: 0 10px 30px rgba(0, 242, 254, 0.15); transform: translateY(-5px); }
+        
+        .tk-drag-handle {
+            position: absolute; top: 10px; right: 10px; z-index: 5;
+            background: rgba(0, 242, 254, 0.1); padding: 5px 8px; border-radius: 6px; cursor: grab;
+        }
+        .tk-drag-handle i { color: var(--tk-cyan); }
+
+        /* Card Body containing Title and URL */
+        .tk-card-body {
+            padding: 20px; padding-top: 35px; /* space for drag handle */
+            display: flex; flex-direction: column; flex-grow: 1;
+        }
+
+        /* Title with Ellipsis */
+        .tk-card-title {
+            font-size: 15px; color: #fff; font-weight: 500; line-height: 1.5;
+            margin-bottom: 15px;
+            display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis;
+        }
+
+        /* URL Box */
+        .tk-url-box {
+            background: rgba(0,0,0,0.5); padding: 10px 15px; font-size: 11px; color: #888;
+            word-break: break-all; border-radius: 8px; margin-top: auto; border: 1px solid var(--glass-border);
+        }
+        .tk-url-box a { color: var(--tk-cyan); text-decoration: none; }
+        .tk-url-box a:hover { text-decoration: underline; }
+
+        /* Action Buttons */
+        .tk-card .card-actions { margin-top: auto; border-top: 1px solid var(--glass-border); }
+
+        /* --- MOBILE RESPONSIVE --- */
+        @media(max-width: 900px) { 
+            .admin-wrapper { grid-template-columns: 1fr; } 
+            body { padding: 20px 5%; }
+            .admin-top-nav { flex-direction: column; gap: 15px; padding: 20px; text-align: center; }
+            .brand-title { justify-content: center; }
+            .admin-tabs { width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+            .admin-tab-btn { justify-content: center; padding: 12px; }
+            .form-sidebar { position: relative; top: 0; max-height: none; padding: 25px 20px; overflow: visible; }
+            .gallery-header { margin-top: 20px; }
+            .promo-grid { grid-template-columns: repeat(auto-fill, minmax(100%, 1fr)); }
+        }
     </style>
 </head>
 <body>
 
-    <div class="admin-layout">
+    <div id="login-overlay">
+        <div class="login-box">
+            <i class="fas fa-shield-alt" style="font-size: 40px; color: #C8A45E; margin-bottom: 20px;"></i>
+            <h2>ADMIN ACCESS</h2>
+            <input type="text" id="adminId" class="login-input" placeholder="Admin ID">
+            <div class="password-wrapper">
+                <input type="password" id="adminPass" class="login-input" placeholder="Password" style="margin-bottom:0;">
+                <i class="fas fa-eye password-toggle" onclick="togglePass()"></i>
+            </div>
+            <button class="login-btn" onclick="checkLogin()">LOGIN</button>
+            <p id="login-msg" style="color: red; font-size: 12px; margin-top: 10px;"></p>
+        </div>
+    </div>
+
+    <div id="img-modal" class="img-modal" onclick="closeImageModal()">
+        <span class="img-modal-close">&times;</span>
+        <img id="modal-img-src" src="">
+    </div>
+
+    <div id="admin-main-panel" style="display: none;">
         
-        <aside class="form-sidebar">
-            <div class="brand-header">
-                <i class="fas fa-sliders-h"></i>
-                <h2>Control Center</h2>
+        <div class="admin-top-nav">
+            <div class="brand-title">
+                <i class="fas fa-sliders-h" style="color: var(--ar-gold); font-size: 24px;"></i>
+                <h2>Command Center</h2>
             </div>
+            <div class="admin-tabs">
+                <button id="btn-products" class="admin-tab-btn active" onclick="switchTab('products')"><i class="fas fa-box"></i> Products</button>
+                <button id="btn-tiktok" class="admin-tab-btn" onclick="switchTab('tiktok')"><i class="fab fa-tiktok"></i> TikTok</button>
+            </div>
+            <button onclick="logout()" class="logout-btn">LOGOUT <i class="fas fa-power-off"></i></button>
+        </div>
 
-            <input type="hidden" id="editDocId">
-            <input type="hidden" id="existingImageUrl">
+        <div id="tab-products" class="admin-wrapper active">
             
-            <div class="form-group">
-                <label>Post Type</label>
-                <select id="postType" onchange="toggleFormFields()">
-                    <option value="promo">Promo / Discount</option>
-                    <option value="installment">Installment Plan</option>
-                </select>
-            </div>
+            <aside class="form-sidebar">
+                <input type="hidden" id="editDocId">
+                <input type="hidden" id="existingImageUrl">
 
-            <img id="preview" src="" alt="Preview">
+                <div class="location-group">
+                    <label style="color:#C8A45E; margin-bottom:10px; border-bottom:1px solid #444; padding-bottom:5px;">Where to show?</label>
+                    
+                    <div class="form-group">
+                        <label>Main Category (Defines Page)</label>
+                        <div class="cat-row">
+                            <select id="category">
+                                <option value="Surface">Surface Devices</option>
+                                <option value="Projector">Projector</option>
+                                <option value="Printer">Printer</option>
+                                <option value="Smartboard">Smartboard</option>
+                                <option value="Accessory">Accessory/Nugens</option>
+                            </select>
+                            <button class="cat-btn btn-add-cat" onclick="addNewCategory()" title="Add Category"><i class="fas fa-plus"></i></button>
+                            <button class="cat-btn btn-edit-cat" onclick="editCategory()" title="Edit Category"><i class="fas fa-pen"></i></button>
+                            <button class="cat-btn btn-del-cat" onclick="deleteCategory()" title="Delete Category"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </div>
 
-            <div class="form-group">
-                <label>Product Image (Max 10MB)</label>
-                <input type="file" id="fileButton" accept="image/*" onchange="previewImage(event)">
-            </div>
-
-            <div class="form-group">
-                <label>Badge Label</label>
-                <input type="text" id="badge" placeholder="e.g. HOT DEAL">
-            </div>
-
-            <div class="form-group">
-                <label>Product Title</label>
-                <input type="text" id="title" placeholder="e.g. Surface Pro 9">
-            </div>
-
-            <div id="installmentSection" class="installment-options">
-                <div class="form-group">
-                    <label>Installment Duration</label>
-                    <input type="text" id="duration" placeholder="e.g. 12 Months / 24 Months">
+                    <div class="form-group" style="margin-bottom:0; background: rgba(0,0,0,0.3); padding:10px; border-radius:8px;">
+                        <label style="display:flex; align-items:center; gap:10px; cursor:pointer; margin:0;">
+                            <input type="checkbox" id="isOnHome" style="width:18px; height:18px; accent-color: var(--ar-gold);">
+                            <div>
+                                <span style="font-size:12px; color:white; display:block; font-weight:700;">Show on Home Page (Offer)</span>
+                            </div>
+                        </label>
+                    </div>
                 </div>
+
+                <label style="color:#C8A45E; margin-bottom:10px; border-bottom:1px solid #444; padding-bottom:5px;">Product Details</label>
+                
                 <div class="form-group">
-                    <label>Monthly Price (RM)</label>
-                    <input type="text" id="monthlyPrice" placeholder="e.g. RM 250/month">
+                    <label>Post Type</label>
+                    <select id="postType" onchange="toggleFormFields()">
+                        <option value="promo">Standard Promo</option>
+                        <option value="installment">Installment Plan</option>
+                    </select>
                 </div>
-            </div>
 
-            <div class="form-group">
-                <label>Specs / Details</label>
-                <input type="text" id="specs" placeholder="e.g. i7 | 16GB RAM">
-            </div>
+                <img id="preview" src="" alt="Click to Zoom" title="Click to Zoom" onclick="openImageModal()">
 
-            <div class="form-group">
-                <label>Old Price (Full)</label>
-                <input type="text" id="old_price" placeholder="e.g. RM 6,299">
-            </div>
+                <div class="form-group">
+                    <label>Product Image (Max 10MB)</label>
+                    <input type="file" id="fileButton" accept="image/*" onchange="previewImage(event)">
+                </div>
 
-            <div class="form-group">
-                <label>New Price (Full)</label>
-                <input type="text" id="new_price" placeholder="e.g. RM 5,888">
-            </div>
+                <div class="form-group">
+                    <label>Badge Label (Optional)</label>
+                    <input type="text" id="badge" placeholder="e.g. HOT DEAL">
+                </div>
 
-            <button onclick="handleFormSubmit()" id="submitBtn" class="btn-action">Publish Item</button>
-            <button onclick="resetForm()" id="cancelBtn" class="btn-action btn-cancel">Cancel</button>
-            <p id="status" style="text-align: center; margin-top: 15px; font-size: 12px; color: #00ff88;"></p>
-        </aside>
+                <div class="form-group">
+                    <label>Product Title</label>
+                    <input type="text" id="title" placeholder="e.g. Surface Pro 9">
+                </div>
 
-        <main class="gallery-content">
-            <div class="gallery-header">
-                <h3>Inventory Management</h3>
-                <span id="itemCount" class="item-count">0 Items</span>
-            </div>
+                <div id="installmentSection" class="installment-options">
+                    <div class="form-group">
+                        <label>Installment Duration</label>
+                        <input type="text" id="duration" placeholder="e.g. 24 Months">
+                    </div>
+                    <div class="form-group">
+                        <label>Monthly Price (RM)</label>
+                        <input type="text" id="monthlyPrice" placeholder="e.g. RM 150">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Short Specs / Tags (Use '|' separator)</label>
+                    <input type="text" id="specs" placeholder="Snapdragon | 16GB RAM | 5G">
+                </div>
+
+                <div class="form-group">
+                    <label>Full Specifications (For Modal View)</label>
+                    <textarea id="full_specs" placeholder="Processor: Intel Core i7&#10;RAM: 16GB&#10;Storage: 512GB SSD&#10;Display: 13 Inch PixelSense"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Old Price (Full)</label>
+                    <input type="text" id="old_price" placeholder="e.g. RM 6,299">
+                </div>
+
+                <div class="form-group">
+                    <label>New Price (Full)</label>
+                    <input type="text" id="new_price" placeholder="e.g. RM 5,888">
+                </div>
+
+                <div class="form-group">
+                    <label>Variant Pricing (Optional)</label>
+                    <input type="text" id="variant_pricing" placeholder="e.g. 256GB: RM4000 | 512GB: RM5000">
+                    <small style="color:#666; font-size:10px;">Format: Label: Price | Label: Price</small>
+                </div>
+
+                <button onclick="handleFormSubmit()" id="submitBtn" class="btn-action">Publish Item</button>
+                <button onclick="resetForm()" id="cancelBtn" class="btn-action btn-cancel">Cancel</button>
+                <p id="status" style="text-align: center; margin-top: 15px; font-size: 12px; color: #00ff88;"></p>
+            </aside>
+
+            <main class="gallery-content">
+                <div class="gallery-header">
+                    <div class="header-top">
+                        <h3>Inventory Management</h3>
+                        <span id="itemCount" class="item-count">0 Items</span>
+                    </div>
+                    <div class="filter-tabs" id="filter-tabs">
+                        <button class="filter-btn active" onclick="filterView('all')">ALL</button>
+                        <button class="filter-btn" onclick="filterView('home')">HOME OFFERS</button>
+                        <button class="filter-btn" onclick="filterView('surface')">SURFACE PAGE</button>
+                    </div>
+                </div>
+                <div id="promo-list" class="promo-grid"></div>
+            </main>
+
+        </div>
+
+        <div id="tab-tiktok" class="admin-wrapper">
             
-            <p style="font-size: 12px; color: #666; margin-bottom: 20px;">
-                <i class="fas fa-info-circle"></i> Drag cards to reorder. Eye icon hides item from public view.
-            </p>
-
-            <div id="promo-list" class="promo-grid">
+            <aside class="form-sidebar">
+                <input type="hidden" id="tkEditId">
+                <label style="color:var(--tk-cyan); margin-bottom:15px; border-bottom:1px solid #444; padding-bottom:5px; display:flex; align-items:center; gap:8px; font-size: 13px;">
+                    <i class="fab fa-tiktok" style="color: var(--tk-magenta); text-shadow: 1px 1px 0 var(--tk-cyan);"></i> Add TikTok Video
+                </label>
+                
+                <div class="form-group">
+                    <label>Title / Description</label>
+                    <input type="text" id="tkTitle" placeholder="e.g. Our new smartboard review!">
                 </div>
-        </main>
 
+                <div class="form-group">
+                    <label>TikTok URL</label>
+                    <textarea id="tkUrl" placeholder="Paste full TikTok URL here..." style="min-height: 100px;"></textarea>
+                    <small style="color:#666; font-size:10px;">E.g: https://www.tiktok.com/@username/video/123456789</small>
+                </div>
+
+                <button onclick="handleTiktokSubmit()" id="tkSubmitBtn" class="btn-action btn-tiktok-submit">Publish Video</button>
+                <button onclick="resetTkForm()" id="tkCancelBtn" class="btn-action btn-cancel">Cancel</button>
+                <p id="tkStatus" style="text-align: center; margin-top: 15px; font-size: 12px; color: var(--tk-cyan);"></p>
+            </aside>
+
+            <main class="gallery-content">
+                <div class="gallery-header">
+                    <div class="header-top">
+                        <h3>TikTok Highlights</h3>
+                        <span id="tkItemCount" class="item-count">0 Videos</span>
+                    </div>
+                    <p style="font-size:12px; color:#888;">These videos will appear in the Gallery section for users to watch. Drag the icon to reorder.</p>
+                </div>
+                <div id="tk-list" class="promo-grid"></div>
+            </main>
+
+        </div>
     </div>
 
     <script type="module">
@@ -254,120 +529,295 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
-        // --- 1. TOGGLE FORM FIELDS ---
-        window.toggleFormFields = () => {
-            const type = document.getElementById('postType').value;
-            const instSection = document.getElementById('installmentSection');
-            if(type === 'installment') {
-                instSection.style.display = 'block';
+        // --- TAB NAVIGATION SYSTEM ---
+        window.switchTab = function(tabName) {
+            document.querySelectorAll('.admin-tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('btn-' + tabName).classList.add('active');
+            
+            document.querySelectorAll('.admin-wrapper').forEach(w => w.classList.remove('active'));
+            document.getElementById('tab-' + tabName).classList.add('active');
+        }
+
+        // --- SECURITY ---
+        window.checkLogin = function() {
+            const u = document.getElementById('adminId').value;
+            const p = document.getElementById('adminPass').value;
+            if (u === 'aredutech' && p === 'aredutech2026') {
+                sessionStorage.setItem('adminAuth', 'true');
+                unlockAdmin();
             } else {
-                instSection.style.display = 'none';
+                document.getElementById('login-msg').innerText = "Invalid ID or Password!";
             }
         }
 
-        // --- 2. READ & RENDER (WITH SORTING) ---
+        window.togglePass = function() {
+            const passInput = document.getElementById('adminPass');
+            const icon = document.querySelector('.password-toggle');
+            if (passInput.type === "password") {
+                passInput.type = "text";
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                passInput.type = "password";
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+
+        window.logout = function() {
+            sessionStorage.removeItem('adminAuth');
+            location.reload();
+        }
+
+        function unlockAdmin() {
+            document.getElementById('login-overlay').style.display = 'none';
+            document.getElementById('admin-main-panel').style.display = 'block'; 
+        }
+
+        if(sessionStorage.getItem('adminAuth') === 'true') unlockAdmin();
+
+        // --- IMAGE MODAL ---
+        window.openImageModal = function() {
+            const src = document.getElementById('preview').src;
+            if(src && src !== window.location.href) {
+                document.getElementById('modal-img-src').src = src;
+                document.getElementById('img-modal').classList.add('active');
+            }
+        }
+        window.closeImageModal = function() {
+            document.getElementById('img-modal').classList.remove('active');
+        }
+
+        // =========================================================
+        // ORIGINAL PRODUCT LOGIC (DO NOT TOUCH)
+        // =========================================================
+        let allData = [];
+        let currentFilter = 'all';
+
+        let activeCategories = JSON.parse(localStorage.getItem('myCategories')) || 
+                               ['Surface', 'Projector', 'Printer', 'Smartboard', 'Accessory'];
+
+        function saveCategories() {
+            localStorage.setItem('myCategories', JSON.stringify(activeCategories));
+            refreshCategoryDropdown();
+        }
+
+        window.addNewCategory = function() {
+            const newCat = prompt("Enter new Category Name:");
+            if(newCat && newCat.trim() !== "") {
+                const clean = newCat.trim();
+                if(!activeCategories.includes(clean)) {
+                    activeCategories.push(clean);
+                    saveCategories();
+                } else {
+                    alert("Category already exists!");
+                }
+            }
+        }
+
+        window.editCategory = function() {
+            const select = document.getElementById('category');
+            const oldCat = select.value;
+            if(['Surface','Projector','Printer','Smartboard','Accessory'].includes(oldCat)) {
+                alert("Cannot edit default system categories!"); return;
+            }
+
+            const newCat = prompt("Rename Category:", oldCat);
+            if(newCat && newCat.trim() !== "") {
+                const clean = newCat.trim();
+                const index = activeCategories.indexOf(oldCat);
+                if(index > -1) {
+                    activeCategories[index] = clean;
+                    saveCategories();
+                    select.value = clean;
+                }
+            }
+        }
+
+        window.deleteCategory = function() {
+            const select = document.getElementById('category');
+            const catToDelete = select.value;
+
+            if(['Surface','Projector','Printer','Smartboard','Accessory'].includes(catToDelete)) {
+                alert("Cannot delete default system categories!"); return;
+            }
+
+            if(confirm(`Delete category "${catToDelete}"? (Products in this category won't be deleted, just uncategorized)`)) {
+                const index = activeCategories.indexOf(catToDelete);
+                if(index > -1) {
+                    activeCategories.splice(index, 1);
+                    saveCategories();
+                }
+            }
+        }
+
+        function refreshCategoryDropdown() {
+            const select = document.getElementById('category');
+            const currentVal = select.value;
+            select.innerHTML = ''; 
+
+            activeCategories.forEach(cat => {
+                const opt = document.createElement('option');
+                opt.value = cat;
+                opt.text = cat;
+                select.appendChild(opt);
+            });
+
+            if(activeCategories.includes(currentVal)) select.value = currentVal;
+            else select.value = activeCategories[0];
+
+            const tabsContainer = document.getElementById('filter-tabs');
+            tabsContainer.innerHTML = `
+                <button class="filter-btn ${currentFilter === 'all' ? 'active' : ''}" onclick="filterView('all')">ALL</button>
+                <button class="filter-btn ${currentFilter === 'home' ? 'active' : ''}" onclick="filterView('home')">HOME OFFERS</button>
+                <button class="filter-btn ${currentFilter === 'surface' ? 'active' : ''}" onclick="filterView('surface')">SURFACE PAGE</button>
+            `;
+
+            activeCategories.forEach(cat => {
+                if(cat !== 'Surface') { 
+                    const isActive = currentFilter === cat ? 'active' : '';
+                    tabsContainer.innerHTML += `<button class="filter-btn ${isActive}" onclick="filterView('${cat}')">${cat.toUpperCase()}</button>`;
+                }
+            });
+        }
+        
+        refreshCategoryDropdown();
+
+        window.toggleFormFields = () => {
+            const type = document.getElementById('postType').value;
+            document.getElementById('installmentSection').style.display = (type === 'installment') ? 'block' : 'none';
+        }
+
         const promoList = document.getElementById('promo-list');
         const itemCount = document.getElementById('itemCount');
-        let currentData = []; // Store local data for drag sorting
 
         onValue(ref(db, 'promotions'), (snapshot) => {
             const data = snapshot.val();
-            promoList.innerHTML = ""; 
-            
             if (data) {
-                // Convert Object to Array for Sorting
-                currentData = Object.keys(data).map(key => ({ id: key, ...data[key] }));
+                allData = Object.keys(data).map(key => ({ id: key, ...data[key] }));
+                allData.sort((a, b) => (a.order || 0) - (b.order || 0));
                 
-                // Sort by 'order' index (if exists), else by timestamp
-                currentData.sort((a, b) => (a.order || 0) - (b.order || 0));
-
-                itemCount.innerText = currentData.length + " Items";
-
-                currentData.forEach((item, index) => {
-                    // Logic Badge & Hidden Class
-                    const isInstallment = item.type === 'installment';
-                    const badgeClass = isInstallment ? 'badge-installment' : 'badge-promo';
-                    const hiddenClass = item.is_hidden ? 'hidden-item' : '';
-                    const eyeIcon = item.is_hidden ? 'fa-eye-slash' : 'fa-eye';
-                    
-                    // Card HTML
-                    const cardHTML = `
-                        <div class="promo-card ${hiddenClass}" draggable="true" data-id="${item.id}" ondragstart="drag(event)" ondrop="drop(event)" ondragover="allowDrop(event)">
-                            <div class="drag-handle"><i class="fas fa-grip-vertical"></i></div>
-                            <div class="card-img-wrap">
-                                <span class="card-badge-overlay ${badgeClass}">${item.badge}</span>
-                                <img src="${item.image_url}" class="card-img" alt="${item.title}">
-                            </div>
-                            <div class="card-body">
-                                <div class="card-type">${isInstallment ? 'Installment Plan' : 'Standard Promo'}</div>
-                                <div class="card-title">${item.title}</div>
-                                <div class="card-specs">${item.specs}</div>
-                                <div class="price-row">
-                                    <span class="new-price">${item.new_price}</span>
-                                    ${isInstallment ? `<span class="old-price" style="font-size:10px; margin-left:auto;">${item.duration}</span>` : `<span class="old-price">${item.old_price}</span>`}
-                                </div>
-                            </div>
-                            <div class="card-actions">
-                                <button class="action-btn btn-hide" title="Hide/Unhide" onclick="window.toggleHide('${item.id}', ${item.is_hidden})">
-                                    <i class="fas ${eyeIcon}"></i>
-                                </button>
-                                <button class="action-btn btn-edit" title="Edit" onclick="window.editPromo('${item.id}')">
-                                    <i class="fas fa-pen"></i>
-                                </button>
-                                <button class="action-btn btn-delete" title="Delete" onclick="window.deletePromo('${item.id}')">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div>
-                        </div>`;
-                    promoList.innerHTML += cardHTML;
+                allData.forEach(item => {
+                    if(item.category && !activeCategories.includes(item.category)) {
+                        activeCategories.push(item.category);
+                    }
                 });
+                saveCategories(); 
+                
+                renderGrid(); 
             } else {
+                allData = [];
                 promoList.innerHTML = "<p style='color:#666'>No data found.</p>";
             }
         });
 
-        // --- 3. UPLOAD / UPDATE LOGIC ---
+        window.filterView = function(filterType) {
+            currentFilter = filterType;
+            refreshCategoryDropdown(); 
+            renderGrid();
+        }
+
+        function renderGrid() {
+            promoList.innerHTML = "";
+            let filteredData = [];
+
+            if (currentFilter === 'all') filteredData = allData;
+            else if (currentFilter === 'home') filteredData = allData.filter(item => item.isOnHome === true);
+            else if (currentFilter === 'surface') filteredData = allData.filter(item => item.category === 'Surface');
+            else {
+                filteredData = allData.filter(item => item.category === currentFilter);
+            }
+
+            itemCount.innerText = filteredData.length + " Items";
+
+            if (filteredData.length === 0) {
+                promoList.innerHTML = "<p style='color:#666; grid-column: 1/-1; text-align: center;'>No items found in this category.</p>";
+                return;
+            }
+
+            filteredData.forEach((item) => {
+                const hiddenClass = item.is_hidden ? 'hidden-item' : '';
+                const eyeIcon = item.is_hidden ? 'fa-eye-slash' : 'fa-eye';
+                let locationBadges = '';
+                
+                if (item.isOnHome) locationBadges += `<span class="loc-badge loc-home">HOME</span>`;
+                
+                let catBadgeClass = 'loc-products';
+                if(item.category === 'Surface') catBadgeClass = 'loc-surface';
+                else if(!['Projector','Printer','Smartboard','Accessory'].includes(item.category)) catBadgeClass = 'loc-custom';
+
+                locationBadges += `<span class="loc-badge ${catBadgeClass}">${item.category.toUpperCase()}</span>`;
+                
+                let tagsHtml = '';
+                if(item.specs) {
+                    item.specs.split('|').forEach(tag => {
+                        if(tag.trim()) tagsHtml += `<span class="mini-tag">${tag.trim()}</span>`;
+                    });
+                }
+
+                const variantText = item.variant_pricing 
+                    ? `<div class="card-variants"><i class="fas fa-layer-group"></i> ${item.variant_pricing.substring(0,25)}${item.variant_pricing.length>25?'...':''}</div>` 
+                    : '';
+
+                const cardHTML = `
+                    <div class="promo-card ${hiddenClass}" draggable="true" data-id="${item.id}" ondragstart="drag(event)" ondrop="drop(event)" ondragover="allowDrop(event)">
+                        <div class="drag-handle"><i class="fas fa-grip-vertical"></i></div>
+                        <div class="card-location-tags">${locationBadges}</div>
+                        <div class="card-img-wrap">
+                            <span class="card-badge-overlay badge-promo">${item.badge}</span>
+                            <img src="${item.image_url}" class="card-img" alt="${item.title}">
+                        </div>
+                        <div class="card-body">
+                            <div class="card-category">${item.category}</div>
+                            <div class="card-title">${item.title}</div>
+                            <div class="card-specs-tags">${tagsHtml}</div>
+                            <div class="price-row">
+                                <span class="new-price">${item.new_price}</span>
+                            </div>
+                            ${variantText}
+                        </div>
+                        <div class="card-actions">
+                            <button class="action-btn btn-hide" onclick="window.toggleHide('${item.id}', ${item.is_hidden})"><i class="fas ${eyeIcon}"></i></button>
+                            <button class="action-btn btn-edit" onclick="window.editPromo('${item.id}')"><i class="fas fa-pen"></i></button>
+                            <button class="action-btn btn-delete" onclick="window.deletePromo('${item.id}')"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </div>`;
+                promoList.innerHTML += cardHTML;
+            });
+        }
+
         window.handleFormSubmit = function() {
             const btn = document.getElementById('submitBtn');
             const status = document.getElementById('status');
             const fileInput = document.getElementById('fileButton');
             const editId = document.getElementById('editDocId').value;
             
-            // Gather Basic Inputs
+            const category = document.getElementById('category').value;
             const type = document.getElementById('postType').value;
+            const isOnHome = document.getElementById('isOnHome').checked;
             const title = document.getElementById('title').value;
             const badge = document.getElementById('badge').value;
             const specs = document.getElementById('specs').value;
+            const full_specs = document.getElementById('full_specs').value; 
             const old_price = document.getElementById('old_price').value;
             const new_price = document.getElementById('new_price').value;
-            
-            // Gather Installment Inputs
             const duration = document.getElementById('duration').value;
             const monthlyPrice = document.getElementById('monthlyPrice').value;
+            const variant_pricing = document.getElementById('variant_pricing').value;
 
-            if (!title) { alert("Title is required!"); return; }
-
-            // Check Size
-            if (fileInput.files.length > 0) {
-                const fileSize = fileInput.files[0].size / 1024 / 1024; 
-                if (fileSize > 10) { alert("File > 10MB! Please reduce."); return; }
-            }
-
+            if (!title) { alert("Title required!"); return; }
             btn.disabled = true;
             status.innerText = "Processing...";
 
             const saveToDB = async (imageUrl) => {
                 const promoData = { 
-                    type, title, badge, specs, old_price, new_price, image_url: imageUrl,
-                    duration: type === 'installment' ? duration : "",
-                    monthlyPrice: type === 'installment' ? monthlyPrice : "",
-                    order: Date.now(), // Default order timestamp
-                    is_hidden: false   // Default visible
+                    category, type, title, badge, specs, full_specs, old_price, new_price, image_url: imageUrl,
+                    duration, monthlyPrice, isOnHome, variant_pricing,
+                    order: Date.now(), is_hidden: false 
                 };
 
-                // Keep existing fields if editing (like is_hidden, order)
                 if(editId) {
-                    const existingItem = currentData.find(i => i.id === editId);
+                    const existingItem = allData.find(i => i.id === editId);
                     if(existingItem) {
                         promoData.order = existingItem.order;
                         promoData.is_hidden = existingItem.is_hidden;
@@ -377,20 +827,16 @@
                 try {
                     if (editId) {
                         await update(ref(db, 'promotions/' + editId), promoData);
-                        status.innerText = "Updated Successfully!";
+                        status.innerText = "Updated!";
                     } else {
                         await set(push(ref(db, 'promotions')), promoData);
-                        status.innerText = "Uploaded Successfully!";
+                        status.innerText = "Uploaded!";
                     }
                     resetForm();
-                } catch (e) {
-                    alert("Error: " + e.message);
-                } finally {
-                    btn.disabled = false;
-                }
+                } catch (e) { alert("Error: " + e.message); } 
+                finally { btn.disabled = false; }
             };
 
-            // Image Logic
             if (fileInput.files.length > 0) {
                 const reader = new FileReader();
                 reader.onload = function(e) { saveToDB(e.target.result); };
@@ -398,55 +844,62 @@
             } else {
                 const oldUrl = document.getElementById('existingImageUrl').value;
                 if (oldUrl) { saveToDB(oldUrl); } 
-                else { alert("Select Image!"); btn.disabled = false; status.innerText=""; }
+                else { alert("Image required!"); btn.disabled = false; }
             }
         };
 
-        // --- 4. TOGGLE HIDE / ARCHIVE ---
-        window.toggleHide = async (id, currentStatus) => {
-            try {
-                await update(ref(db, 'promotions/' + id), { is_hidden: !currentStatus });
-            } catch(e) { alert("Error: " + e.message); }
-        };
-
-        // --- 5. EDIT & DELETE ---
-        window.deletePromo = async (id) => {
-            if(confirm("Permanently delete this item?")) {
-                await remove(ref(db, 'promotions/' + id));
-            }
-        };
+        window.toggleHide = async (id, status) => await update(ref(db, 'promotions/' + id), { is_hidden: !status });
+        window.deletePromo = async (id) => { if(confirm("Delete?")) await remove(ref(db, 'promotions/' + id)); };
 
         window.editPromo = (id) => {
-            const item = currentData.find(i => i.id === id);
+            const item = allData.find(i => i.id === id);
             if(!item) return;
 
             window.scrollTo({ top: 0, behavior: 'smooth' });
-            
-            // Fill Form
             document.getElementById('editDocId').value = id;
+            
+            if(!activeCategories.includes(item.category)) {
+                activeCategories.push(item.category);
+                saveCategories();
+            }
+            document.getElementById('category').value = item.category;
+
             document.getElementById('postType').value = item.type || 'promo';
-            toggleFormFields(); // Update UI based on type
+            document.getElementById('isOnHome').checked = item.isOnHome || false;
+            toggleFormFields();
 
             document.getElementById('title').value = item.title;
             document.getElementById('badge').value = item.badge;
             document.getElementById('specs').value = item.specs;
+            document.getElementById('full_specs').value = item.full_specs || ""; 
             document.getElementById('old_price').value = item.old_price;
             document.getElementById('new_price').value = item.new_price;
             document.getElementById('existingImageUrl').value = item.image_url;
-            
-            // Installment Data
             document.getElementById('duration').value = item.duration || "";
             document.getElementById('monthlyPrice').value = item.monthlyPrice || "";
-
+            document.getElementById('variant_pricing').value = item.variant_pricing || "";
+            
             document.getElementById('preview').src = item.image_url;
             document.getElementById('preview').style.display = 'block';
-            
             document.getElementById('submitBtn').innerText = "Update Item";
             document.getElementById('cancelBtn').style.display = 'inline-block';
         };
 
         window.resetForm = () => {
-            document.querySelectorAll('input').forEach(i => i.value = '');
+            document.getElementById('editDocId').value = '';
+            document.getElementById('existingImageUrl').value = '';
+            document.getElementById('title').value = '';
+            document.getElementById('badge').value = '';
+            document.getElementById('specs').value = '';
+            document.getElementById('full_specs').value = '';
+            document.getElementById('old_price').value = '';
+            document.getElementById('new_price').value = '';
+            document.getElementById('duration').value = '';
+            document.getElementById('monthlyPrice').value = '';
+            document.getElementById('variant_pricing').value = '';
+            document.getElementById('fileButton').value = '';
+            
+            document.getElementById('isOnHome').checked = false;
             document.getElementById('preview').style.display = 'none';
             document.getElementById('submitBtn').innerText = "Publish Item";
             document.getElementById('cancelBtn').style.display = 'none';
@@ -463,39 +916,166 @@
             reader.readAsDataURL(event.target.files[0]);
         };
 
-        // --- 6. DRAG AND DROP LOGIC (Native HTML5) ---
+        // --- PRODUCT DRAG & DROP ---
         let draggedId = null;
-
-        window.allowDrop = (ev) => { ev.preventDefault(); }
-
-        window.drag = (ev) => {
-            draggedId = ev.target.getAttribute('data-id');
-            ev.dataTransfer.effectAllowed = "move";
-        }
-
+        window.allowDrop = (ev) => ev.preventDefault();
+        window.drag = (ev) => { draggedId = ev.target.getAttribute('data-id'); }
         window.drop = async (ev) => {
             ev.preventDefault();
-            // Get target card (handle nested elements)
             const targetCard = ev.target.closest('.promo-card');
             if(!targetCard) return;
-            
             const targetId = targetCard.getAttribute('data-id');
             if (draggedId === targetId) return;
-
-            // Reorder Local Array
-            const fromIndex = currentData.findIndex(i => i.id === draggedId);
-            const toIndex = currentData.findIndex(i => i.id === targetId);
-            
-            // Move item in array
-            const item = currentData.splice(fromIndex, 1)[0];
-            currentData.splice(toIndex, 0, item);
-
-            // Update All Orders in DB (Batch Update for smoothness)
+            const fromIndex = allData.findIndex(i => i.id === draggedId);
+            const toIndex = allData.findIndex(i => i.id === targetId);
+            const item = allData.splice(fromIndex, 1)[0];
+            allData.splice(toIndex, 0, item);
             const updates = {};
-            currentData.forEach((item, index) => {
-                updates['promotions/' + item.id + '/order'] = index;
-            });
+            allData.forEach((item, index) => { updates['promotions/' + item.id + '/order'] = index; });
+            await update(ref(db), updates);
+        }
 
+        // =========================================================
+        // NEW TIKTOK LOGIC (WITH DRAG & DROP)
+        // =========================================================
+        let globalTkData = [];
+        
+        onValue(ref(db, 'tiktok_videos'), (snapshot) => {
+            const data = snapshot.val();
+            const tkList = document.getElementById('tk-list');
+            const tkCount = document.getElementById('tkItemCount');
+            tkList.innerHTML = '';
+
+            if (data) {
+                globalTkData = Object.keys(data).map(k => ({id: k, ...data[k]}));
+                
+                // Sort by order descending (Highest order = top position)
+                globalTkData.sort((a, b) => (b.order || 0) - (a.order || 0)); 
+                tkCount.innerText = globalTkData.length + " Videos";
+
+                globalTkData.forEach(item => {
+                    const hiddenClass = item.is_hidden ? 'hidden-item' : '';
+                    const eyeIcon = item.is_hidden ? 'fa-eye-slash' : 'fa-eye';
+                    
+                    // Added Draggable logic specifically for TikTok cards
+                    const cardHTML = `
+                        <div class="tk-card ${hiddenClass}" draggable="true" data-id="${item.id}" ondragstart="tkDrag(event)" ondrop="tkDrop(event)" ondragover="allowDrop(event)">
+                            <div class="tk-drag-handle"><i class="fas fa-grip-vertical"></i></div>
+                            <div class="tk-card-body">
+                                <div class="tk-card-title" title="${item.title}">${item.title}</div>
+                                <div class="tk-url-box">
+                                    <a href="${item.url}" target="_blank">${item.url.substring(0, 35)}...</a>
+                                </div>
+                            </div>
+                            <div class="card-actions">
+                                <button class="action-btn btn-hide" onclick="window.toggleTkHide('${item.id}', ${item.is_hidden})"><i class="fas ${eyeIcon}"></i></button>
+                                <button class="action-btn btn-edit" onclick="window.editTk('${item.id}')"><i class="fas fa-pen"></i></button>
+                                <button class="action-btn btn-delete" onclick="window.deleteTk('${item.id}')"><i class="fas fa-trash"></i></button>
+                            </div>
+                        </div>
+                    `;
+                    tkList.innerHTML += cardHTML;
+                });
+            } else {
+                globalTkData = [];
+                tkCount.innerText = "0 Videos";
+                tkList.innerHTML = "<p style='color:#666'>No TikTok videos found.</p>";
+            }
+        });
+
+        window.handleTiktokSubmit = async function() {
+            const btn = document.getElementById('tkSubmitBtn');
+            const status = document.getElementById('tkStatus');
+            const editId = document.getElementById('tkEditId').value;
+            const title = document.getElementById('tkTitle').value;
+            const url = document.getElementById('tkUrl').value;
+
+            if (!title || !url) { alert("Title and URL required!"); return; }
+            
+            btn.disabled = true;
+            status.innerText = "Processing...";
+
+            const tkData = {
+                title, url,
+                order: Date.now(),
+                is_hidden: false
+            };
+
+            if(editId) {
+                const existing = globalTkData.find(i => i.id === editId);
+                if(existing) {
+                    tkData.order = existing.order;
+                    tkData.is_hidden = existing.is_hidden;
+                }
+            }
+
+            try {
+                if(editId) {
+                    await update(ref(db, 'tiktok_videos/' + editId), tkData);
+                    status.innerText = "Updated!";
+                } else {
+                    await set(push(ref(db, 'tiktok_videos')), tkData);
+                    status.innerText = "Added!";
+                }
+                resetTkForm();
+            } catch(e) {
+                alert(e.message);
+            } finally {
+                btn.disabled = false;
+            }
+        }
+
+        window.editTk = function(id) {
+            const item = globalTkData.find(i => i.id === id);
+            if(!item) return;
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            document.getElementById('tkEditId').value = id;
+            document.getElementById('tkTitle').value = item.title;
+            document.getElementById('tkUrl').value = item.url;
+            
+            document.getElementById('tkSubmitBtn').innerText = "Update Video";
+            document.getElementById('tkCancelBtn').style.display = 'inline-block';
+        }
+
+        window.toggleTkHide = async (id, status) => await update(ref(db, 'tiktok_videos/' + id), { is_hidden: !status });
+        window.deleteTk = async (id) => { if(confirm("Delete this TikTok?")) await remove(ref(db, 'tiktok_videos/' + id)); };
+
+        window.resetTkForm = function() {
+            document.getElementById('tkEditId').value = '';
+            document.getElementById('tkTitle').value = '';
+            document.getElementById('tkUrl').value = '';
+            document.getElementById('tkSubmitBtn').innerText = "Publish Video";
+            document.getElementById('tkCancelBtn').style.display = 'none';
+            document.getElementById('tkStatus').innerText = "";
+        }
+
+        // --- TIKTOK DRAG & DROP ---
+        let tkDraggedId = null;
+        window.tkDrag = (ev) => { 
+            const card = ev.target.closest('.tk-card');
+            if(card) tkDraggedId = card.getAttribute('data-id'); 
+        }
+        window.tkDrop = async (ev) => {
+            ev.preventDefault();
+            const targetCard = ev.target.closest('.tk-card');
+            if(!targetCard || !tkDraggedId) return;
+            const targetId = targetCard.getAttribute('data-id');
+            if (tkDraggedId === targetId) return;
+            
+            const fromIndex = globalTkData.findIndex(i => i.id === tkDraggedId);
+            const toIndex = globalTkData.findIndex(i => i.id === targetId);
+            if (fromIndex === -1 || toIndex === -1) return;
+            
+            const item = globalTkData.splice(fromIndex, 1)[0];
+            globalTkData.splice(toIndex, 0, item);
+            
+            const updates = {};
+            const baseOrder = Date.now();
+            // Re-assign descending order based on new array placement
+            globalTkData.forEach((item, index) => { 
+                updates['tiktok_videos/' + item.id + '/order'] = baseOrder - index; 
+            });
             await update(ref(db), updates);
         }
 

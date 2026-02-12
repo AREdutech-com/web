@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Our Products | AR Edutech</title>
-    <link rel="icon" href="photos/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="photos/logo/favicon.ico" type="image/x-icon">
     <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
@@ -48,7 +48,7 @@
         }
         .nav-left { display: flex; align-items: center; gap: 40px; }
         .logo img { height: 45px; width: auto; filter: brightness(1.2); }
-        .nav-links { display: flex; gap: 30px; }
+        .nav-links { display: flex; gap: 30px; position: absolute; left: 50%; transform: translateX(-50%); }
 
         .nav-item {
             position: relative; font-size: 14px; font-weight: 500;
@@ -89,6 +89,7 @@
             padding: 10px 20px; border-radius: 30px; background: rgba(255, 255, 255, 0.05);
         }
         .nav-right a:hover { background: var(--text-white); color: #000; box-shadow: 0 0 15px rgba(255, 255, 255, 0.3); }
+        
         .hamburger { display: none; cursor: pointer; flex-direction: column; gap: 5px; }
         .hamburger div { width: 25px; height: 3px; background-color: var(--ar-gold); transition: 0.3s; }
 
@@ -113,10 +114,14 @@
             font-size: 20px; font-weight: 600; color: var(--ar-gold);
             margin-bottom: 40px; margin-top: 60px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            /* Scroll adjustment for fixed navbar */
+            scroll-margin-top: 100px; 
         }
 
         .product-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
+            gap: 30px;
         }
 
         /* --- PRODUCT CARD (LIQUID GLASS STYLE) --- */
@@ -126,6 +131,7 @@
             overflow: hidden; position: relative;
             transition: 0.4s cubic-bezier(0.19, 1, 0.22, 1);
             display: flex; flex-direction: column;
+            max-width: 400px; 
         }
         .product-card:hover {
             transform: translateY(-10px); border-color: var(--ar-gold); box-shadow: 0 20px 50px rgba(200, 164, 94, 0.1);
@@ -136,6 +142,7 @@
             background: radial-gradient(circle at center, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
             display: flex; align-items: center; justify-content: center;
             padding: 20px; border-bottom: 1px solid var(--glass-border);
+            cursor: zoom-in;
         }
         .img-box img {
             max-width: 80%; max-height: 100%; object-fit: contain;
@@ -144,43 +151,68 @@
         .product-card:hover .img-box img { transform: scale(1.1); }
 
         .content-box { padding: 25px; flex-grow: 1; display: flex; flex-direction: column; }
-        .prod-name { font-size: 18px; font-weight: 700; color: #fff; margin-bottom: 10px; line-height: 1.3; }
-        .prod-desc { font-size: 13px; color: #aaa; margin-bottom: 20px; }
+        .prod-name { font-size: 18px; font-weight: 700; color: #fff; margin-bottom: 15px; line-height: 1.3; }
+        
+        /* SPECS TAGS */
+        .specs-row { display: flex; gap: 6px; margin-bottom: 15px; flex-wrap: wrap; }
+        .spec-badge {
+            font-size: 10px; color: #ddd; background: rgba(255,255,255,0.08); 
+            padding: 4px 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1);
+            text-transform: uppercase; letter-spacing: 0.5px;
+        }
+
+        /* VARIANT BUTTONS */
+        .variant-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+        .variant-btn {
+            font-size: 11px; background: rgba(0,0,0,0.5); border: 1px solid var(--glass-border);
+            color: #aaa; padding: 6px 12px; border-radius: 4px; cursor: pointer; transition: 0.3s;
+        }
+        .variant-btn:hover, .variant-btn.active { 
+            border-color: var(--ar-gold); color: var(--ar-gold); background: rgba(200,164,94,0.1); 
+        }
         
         .action-row {
             margin-top: auto; display: flex; justify-content: space-between; align-items: center;
+            border-top: 1px solid var(--glass-border); padding-top: 15px;
         }
+        
+        .price-text { 
+            color: var(--ar-gold); font-weight: 700; font-size: 18px; transition: 0.3s; 
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 60%;
+        }
+        .price-text.long-text {
+            font-size: 11px; line-height: 1.3; white-space: normal; color: #ccc;
+            max-width: 65%; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+        }
+        
         .learn-btn {
-            font-size: 13px; color: var(--ar-gold); font-weight: 600; text-decoration: none; cursor: pointer;
+            font-size: 13px; color: #fff; font-weight: 600; text-decoration: none; cursor: pointer;
             display: flex; align-items: center; gap: 5px; transition: 0.3s;
         }
-        .learn-btn:hover { gap: 10px; text-shadow: 0 0 10px var(--ar-gold-glow); }
+        .learn-btn:hover { gap: 8px; color: var(--ar-gold); }
 
-        /* --- FEATURED CARD (SAMVIEW) --- */
-        .featured-card {
-            grid-column: 1 / -1; display: flex; align-items: center; min-height: 400px;
-            background: linear-gradient(90deg, rgba(20, 20, 20, 0.8) 0%, rgba(40, 40, 40, 0.4) 100%);
-            border: 1px solid var(--glass-border); border-radius: 24px; overflow: hidden; margin-bottom: 20px;
+        /* --- LIGHTBOX --- */
+        .lightbox {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.95); z-index: 3000;
+            display: none; justify-content: center; align-items: center;
+            opacity: 0; transition: opacity 0.3s ease; backdrop-filter: blur(15px);
         }
-        .feat-img {
-            flex: 1; height: 100%; min-height: 400px; background: #000; position: relative;
-            display: flex; justify-content: center; align-items: center;
+        .lightbox.active { display: flex; opacity: 1; }
+        .lightbox-img { 
+            max-width: 85%; max-height: 85vh; border-radius: 15px; 
+            box-shadow: 0 0 100px rgba(200, 164, 94, 0.2); 
+            transform: scale(0.9); transition: transform 0.4s cubic-bezier(0.19, 1, 0.22, 1);
         }
-        .feat-img img { width: 80%; height: auto; object-fit: contain; }
-        .feat-content { flex: 1; padding: 60px; }
-        .feat-badge {
-            background: var(--ar-gold); color: #000; padding: 5px 10px; border-radius: 4px;
-            font-size: 11px; font-weight: 800; text-transform: uppercase; margin-bottom: 20px; display: inline-block;
+        .lightbox.active .lightbox-img { transform: scale(1); }
+        .lightbox-close { 
+            position: absolute; top: 30px; right: 30px; color: #fff; font-size: 40px; 
+            cursor: pointer; transition: 0.3s; width: 50px; height: 50px; display:flex; 
+            align-items:center; justify-content:center; border-radius:50%; background:rgba(255,255,255,0.1);
         }
-        .feat-title { font-size: 36px; font-weight: 700; color: #fff; margin-bottom: 20px; }
-        .feat-desc { font-size: 16px; color: #ccc; margin-bottom: 30px; }
-        .feat-btn {
-            padding: 12px 30px; background: transparent; border: 1px solid #fff; color: #fff;
-            border-radius: 30px; font-weight: 600; cursor: pointer; transition: 0.3s;
-        }
-        .feat-btn:hover { background: #fff; color: #000; }
+        .lightbox-close:hover { background: var(--ar-gold); color: #000; transform: rotate(90deg); }
 
-        /* --- POPUP SPEC MODAL (BARU) --- */
+        /* --- SPEC MODAL --- */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(10px);
@@ -190,7 +222,8 @@
         .modal-active { display: flex; opacity: 1; }
 
         .spec-modal {
-            width: 90%; max-width: 600px; background: rgba(20, 20, 20, 0.8);
+            width: 90%; max-width: 600px; 
+            background: rgba(20, 20, 20, 0.8);
             border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 24px;
             box-shadow: 0 50px 100px rgba(0, 0, 0, 0.8);
             display: flex; flex-direction: column; overflow: hidden;
@@ -211,40 +244,61 @@
         .modal-body { padding: 30px; overflow-y: auto; max-height: 70vh; }
         .modal-img {
             width: 100%; height: 200px; object-fit: contain; margin-bottom: 20px; filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.5));
+            cursor: pointer;
         }
         .spec-row {
             display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
-        .spec-label { font-size: 13px; color: #aaa; font-weight: 600; }
-        .spec-value { font-size: 13px; color: #fff; text-align: right; max-width: 60%; }
+        .spec-label { font-size: 13px; color: #aaa; font-weight: 600; text-transform:uppercase; letter-spacing:0.5px; }
+        .spec-value { font-size: 13px; color: #fff; text-align: right; max-width: 60%; font-weight:500; }
+
+        .back-to-top {
+            position: fixed; bottom: 30px; right: 30px; background: rgba(255,255,255,0.1); color: #fff;
+            padding: 12px 25px; border-radius: 30px; font-size: 14px; font-weight: 600;
+            border: 1px solid var(--glass-border); backdrop-filter: blur(10px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3); z-index: 1000; opacity: 0.8; transition: 0.3s;
+        }
+        .back-to-top:hover { opacity: 1; transform: translateY(-5px); background: var(--ar-gold); color: #000; }
+
+        footer { 
+            padding: 60px 5%; text-align: center; 
+            border-top: 1px solid var(--glass-border); 
+            background: #000; color: #555; font-size: 14px;
+        }
 
         /* --- MOBILE RESPONSIVE --- */
         @media screen and (max-width: 768px) {
-            nav { padding: 0 20px; }
-            .hamburger { display: flex; }
-            .nav-right { display: none; }
+            nav { padding: 0 20px; height: 70px; justify-content: space-between; }
+            .nav-left { gap: 0; }
+            .logo img { height: 35px; } 
+            .nav-right { display: none !important; } 
+
+            .hamburger { display: flex; z-index: 1001; }
+
             .nav-links {
-                position: absolute; right: 0; top: 75px;
-                background: rgba(10, 10, 10, 0.98); backdrop-filter: blur(25px);
+                position: fixed; 
+                right: 0; top: 0; left: auto; 
+                background: rgba(5, 5, 5, 0.98); backdrop-filter: blur(25px);
                 flex-direction: column; align-items: flex-start;
-                width: 100%; gap: 0; border-bottom: 1px solid var(--glass-border);
-                transform: translateY(-150%); transition: transform 0.4s ease; padding: 0; z-index: 999;
+                width: 70%; height: 100vh;
+                gap: 0; border-left: 1px solid var(--glass-border);
+                transform: translateX(100%); transition: transform 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+                padding-top: 80px; z-index: 999;
+                box-shadow: -10px 0 30px rgba(0,0,0,0.5);
             }
-            .nav-links.active { transform: translateY(0); }
-            .nav-item { width: 100%; padding: 20px 30px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
+            .nav-links.active { transform: translateX(0); }
+            .nav-item { width: 100%; padding: 20px 30px; border-bottom: 1px solid rgba(255,255,255,0.05); }
             
             .dropdown-content, .dropdown-sub-content {
                 position: static; visibility: visible; opacity: 1; transform: none;
                 background: transparent; border: none; box-shadow: none; padding-left: 20px; display: none; min-width: 100%;
+                border-left: 2px solid var(--glass-border); margin-top: 10px;
             }
-            .nav-item:hover .dropdown-content { display: block; }
-            .dropdown-submenu:hover .dropdown-sub-content { display: block; transform: none; }
+            .nav-item:hover .dropdown-content { display: block; animation: fadeIn 0.3s ease; }
+            .dropdown-submenu:hover .dropdown-sub-content { display: block; }
             
-            .featured-card { flex-direction: column; }
-            .feat-img { min-height: 250px; width: 100%; }
-            .feat-content { padding: 30px; }
-            .feat-title { font-size: 28px; }
             .product-grid { grid-template-columns: 1fr; }
+            .product-card { max-width: 100%; } 
         }
     </style>
 </head>
@@ -256,56 +310,75 @@
             <a href="/" class="logo">
                 <img src="photos/logo/logoaredutech2.png" alt="AR Edutech Logo">
             </a>
-            <div class="hamburger" onclick="toggleMenu()"><div></div><div></div><div></div></div>
-            <ul class="nav-links">
-                <li class="nav-item">Surface
-                    <div class="dropdown-content">
-                        <a href="surface">Surface Pro 8</a>
-                        <a href="surface">Surface Pro 9</a>
-                        <a href="surface">Surface Go 4</a>
-                        <a href="surface">Surface Pro 10</a>
-                        <a href="surface">Surface Pro 11</a>
-                        <a href="surface">Surface Pro 12</a>
-                    </div>
-                </li>
-                <li class="nav-item">Products
-                    <div class="dropdown-content">
-                        <a href="products">Samview Interactive Board</a>
-                        <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.1); margin: 5px 0;">
-                        <div class="dropdown-submenu">
-                            <a href="products">Projector <span class="arrow-right">›</span></a>
-                            <div class="dropdown-sub-content">
-                                <a href="products">Epson CO-FH02</a>
-                                <a href="products">Epson EB-X52</a>
-                                <a href="products">SAMVIEW UFO</a>
-                                <a href="products">Epson EB-E1</a>
-                                <a href="products">(Slim Wireless) Epson EB-1785W</a>
-                            </div>
-                        </div>
-                        <div class="dropdown-submenu">
-                            <a href="products">Printer <span class="arrow-right">›</span></a>
-                            <div class="dropdown-sub-content">
-                                <a href="products">Epson L3250</a>
-                                <a href="products">Pixma Canon E470</a>
-                                <a href="products">Wireless Printer Canon G3010</a>
-                            </div>
-                        </div>
-                        <div class="dropdown-submenu">
-                            <a href="products">Nugens <span class="arrow-right">›</span></a>
-                            <div class="dropdown-sub-content">
-                                <a href="products">Type-C to HDMI Wireless Transmitter (WDA)</a>
-                                <a href="products">HDMI Wireless Transmitter Set</a>
-                                <a href="products">HDMI Wireless Transmitter Receive ADD-ON</a>
-                                <a href="products">V-600 Visualizer Slim</a>
-                                <a href="products">Stylus For iPad</a>
-                            </div>
-                        </div>
-                    </div>
-                </li>
-                <li class="nav-item">Education</li>
-                <li class="nav-item">Contact Us</li>
-            </ul>
         </div>
+        
+        <div class="hamburger" onclick="toggleMenu()">
+            <div></div><div></div><div></div>
+        </div>
+
+        <ul class="nav-links">
+            <li class="nav-item">
+                <a href="/">Main</a>
+                <div class="dropdown-content">
+                    <a href="/#limited">Limited Offers</a>
+                </div>
+            </li>
+            
+            <li class="nav-item">
+                <a href="surface">Surface</a>
+                <div class="dropdown-content">
+                    <a href="surface">Surface Pro 8</a>
+                    <a href="surface">Surface Pro 9</a>
+                    <a href="surface">Surface Go 4</a>
+                    <a href="surface">Surface Pro 10</a>
+                    <a href="surface">Surface Pro 11</a>
+                    <a href="surface">Surface Pro 12</a>
+                </div>
+            </li>
+            <li class="nav-item">Products
+                <div class="dropdown-content">
+                    <a href="products.html#smartboard">Samview Interactive Board</a>
+                    <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.1); margin: 5px 0;">
+                    <a href="products.html#television">Television</a>
+                    <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.1); margin: 5px 0;">
+                    <div class="dropdown-submenu">
+                        <a href="products.html#projector">Projector <span class="arrow-right">›</span></a>
+                        <div class="dropdown-sub-content">
+                            <a href="products.html#projector">Epson CO-FH02</a>
+                            <a href="products.html#projector">Epson EB-X52</a>
+                            <a href="products.html#projector">SAMVIEW UFO</a>
+                            <a href="products.html#projector">Epson EB-E1</a>
+                            <a href="products.html#projector">(Slim Wireless) Epson EB-1785W</a>
+                        </div>
+                    </div>
+                    <div class="dropdown-submenu">
+                        <a href="products.html#printer">Printer <span class="arrow-right">›</span></a>
+                        <div class="dropdown-sub-content">
+                            <a href="products.html#printer">Epson L3250</a>
+                            <a href="products.html#printer">Pixma Canon E470</a>
+                            <a href="products.html#printer">Wireless Printer Canon G3010</a>
+                        </div>
+                    </div>
+                    <div class="dropdown-submenu">
+                        <a href="products.html#accessory">Accessory <span class="arrow-right">›</span></a>
+                        <div class="dropdown-sub-content">
+                            <a href="products.html#accessory">Type-C to HDMI Wireless Transmitter (WDA)</a>
+                            <a href="products.html#accessory">HDMI Wireless Transmitter Set</a>
+                            <a href="products.html#accessory">HDMI Wireless Transmitter Receive ADD-ON</a>
+                            <a href="products.html#accessory">V-600 Visualizer Slim</a>
+                            <a href="products.html#accessory">Stylus For iPad</a>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a href="gallery">Gallery</a>
+                <div class="dropdown-content">
+                    <a href="gallery.html#tiktok-section">Tiktok Video</a>
+                    <a href="gallery.html#gallery-grid">Events</a>
+                </div>
+            </li>
+        </ul>
         
         <div class="nav-right" style="display: flex; align-items: center; gap: 25px;">
             <div style="display: flex; align-items: center; gap: 10px; padding-right: 25px; border-right: 1px solid rgba(255,255,255,0.1);">
@@ -315,7 +388,7 @@
                     <span style="font-size: 11px; font-weight: 700; color: #fff; letter-spacing: 0.5px;">Gold Partner</span>
                 </div>
             </div>
-            <a href="#">About Us</a>
+            <a href="about">About Us</a>
         </div>
     </nav>
 
@@ -324,129 +397,8 @@
         <p>Explore high-performance peripherals and visual solutions tailored for modern education and business environments.</p>
     </header>
 
-    <div class="container">
-
-        <h2 class="category-title">Interactive Solutions</h2>
-        <div class="featured-card">
-            <div class="feat-img">
-                <img src="photos/extra/Horion-Smartboard.png" alt="Samview Interactive Board" onerror="this.src='https://placehold.co/800x600/111/444?text=Samview+Board'">
-            </div>
-            <div class="feat-content">
-                <span class="feat-badge">Flagship</span>
-                <h3 class="feat-title">Samview Interactive Board</h3>
-                <p class="feat-desc">Revolutionize your classroom or meeting room with 4K touch technology, seamless collaboration, and intuitive writing experiences.</p>
-                <button class="feat-btn" onclick="openSpecs('samview_board')">View Features</button>
-            </div>
-        </div>
-
-        <h2 class="category-title">Projectors</h2>
-        <div class="product-grid">
-            <div class="product-card">
-                <div class="img-box"><img src="photos/projectors/epson_Co-fh02.png" alt="Epson" onerror="this.src='https://placehold.co/400x300/222/666?text=Epson+Projector'"></div>
-                <div class="content-box">
-                    <div class="prod-name">Epson CO-FH02</div>
-                    <div class="prod-desc">Smart Projector with Android TV, Full HD 1080p brilliance.</div>
-                    <div class="action-row"><a href="javascript:void(0)" onclick="openSpecs('epson_co_fh02')" class="learn-btn">View Specs <i class="fas fa-arrow-right"></i></a></div>
-                </div>
-            </div>
-            <div class="product-card">
-                <div class="img-box"><img src="photos/projectors/Epson Eb-x52.png" alt="Epson" onerror="this.src='https://placehold.co/400x300/222/666?text=Epson+X52'"></div>
-                <div class="content-box">
-                    <div class="prod-name">Epson EB-X52</div>
-                    <div class="prod-desc">High-quality bright images for professional presentations.</div>
-                    <div class="action-row"><a href="javascript:void(0)" onclick="openSpecs('epson_eb_x52')" class="learn-btn">View Specs <i class="fas fa-arrow-right"></i></a></div>
-                </div>
-            </div>
-            <div class="product-card">
-                <div class="img-box"><img src="photos/projectors/samview_ufo.png" alt="Samview UFO" onerror="this.src='https://placehold.co/400x300/222/666?text=Samview+UFO'"></div>
-                <div class="content-box">
-                    <div class="prod-name">SAMVIEW UFO</div>
-                    <div class="prod-desc">Futuristic design with 360-degree projection capability.</div>
-                    <div class="action-row"><a href="javascript:void(0)" onclick="openSpecs('samview_ufo')" class="learn-btn">View Specs <i class="fas fa-arrow-right"></i></a></div>
-                </div>
-            </div>
-            <div class="product-card">
-                <div class="img-box"><img src="photos/projectors/epson Eb-E1.png" alt="Epson" onerror="this.src='https://placehold.co/400x300/222/666?text=Epson+EB-E1'"></div>
-                <div class="content-box">
-                    <div class="prod-name">Epson EB-E1</div>
-                    <div class="prod-desc">Entry-level XGA projector for classrooms.</div>
-                    <div class="action-row"><a href="javascript:void(0)" onclick="openSpecs('epson_eb_e1')" class="learn-btn">View Specs <i class="fas fa-arrow-right"></i></a></div>
-                </div>
-            </div>
-            <div class="product-card">
-                <div class="img-box"><img src="photos/projectors/Epson_EB-1785W.png" alt="Epson" onerror="this.src='https://placehold.co/400x300/222/666?text=Epson+Slim'"></div>
-                <div class="content-box">
-                    <div class="prod-name">Epson EB-1785W</div>
-                    <div class="prod-desc">Ultra-slim wireless projector for mobile professionals.</div>
-                    <div class="action-row"><a href="javascript:void(0)" onclick="openSpecs('epson_eb_1785w')" class="learn-btn">View Specs <i class="fas fa-arrow-right"></i></a></div>
-                </div>
-            </div>
-        </div>
-
-        <h2 class="category-title">Printers</h2>
-        <div class="product-grid">
-            <div class="product-card">
-                <div class="img-box"><img src="photos/printers/Epson_L3250.png" alt="Printer" onerror="this.src='https://placehold.co/400x300/222/666?text=Epson+L3250'"></div>
-                <div class="content-box">
-                    <div class="prod-name">Epson L3250</div>
-                    <div class="prod-desc">EcoTank All-in-One Ink Tank Printer with Wireless.</div>
-                    <div class="action-row"><a href="javascript:void(0)" onclick="openSpecs('epson_l3250')" class="learn-btn">View Specs <i class="fas fa-arrow-right"></i></a></div>
-                </div>
-            </div>
-            <div class="product-card">
-                <div class="img-box"><img src="photos/printers/Pixma_Canon_E470.png" alt="Printer" onerror="this.src='https://placehold.co/400x300/222/666?text=Canon+E470'"></div>
-                <div class="content-box">
-                    <div class="prod-name">Pixma Canon E470</div>
-                    <div class="prod-desc">Compact Wireless All-In-One for Low-Cost Printing.</div>
-                    <div class="action-row"><a href="javascript:void(0)" onclick="openSpecs('canon_e470')" class="learn-btn">View Specs <i class="fas fa-arrow-right"></i></a></div>
-                </div>
-            </div>
-            <div class="product-card">
-                <div class="img-box"><img src="photos/printers/Canon_Pixma_G3010.png" alt="Printer" onerror="this.src='https://placehold.co/400x300/222/666?text=Canon+G3010'"></div>
-                <div class="content-box">
-                    <div class="prod-name">Canon G3010</div>
-                    <div class="prod-desc">High Volume Refillable Ink Tank Wireless Printer.</div>
-                    <div class="action-row"><a href="javascript:void(0)" onclick="openSpecs('canon_g3010')" class="learn-btn">View Specs <i class="fas fa-arrow-right"></i></a></div>
-                </div>
-            </div>
-        </div>
-
-        <h2 class="category-title">Nugens Smart Tools</h2>
-        <div class="product-grid">
-            <div class="product-card">
-                <div class="img-box"><img src="photos/nugens/Type-C_Wireless_Transmitter.png" alt="Nugens" onerror="this.src='https://placehold.co/400x300/222/666?text=Type-C+WDA'"></div>
-                <div class="content-box">
-                    <div class="prod-name">Type-C Wireless Transmitter</div>
-                    <div class="prod-desc">Plug & Play wireless display adapter (WDA).</div>
-                    <div class="action-row"><a href="javascript:void(0)" onclick="openSpecs('nugens_wda')" class="learn-btn">View Specs <i class="fas fa-arrow-right"></i></a></div>
-                </div>
-            </div>
-            <div class="product-card">
-                <div class="img-box"><img src="photos/nugens/HDMI_Wireless_Set.png" alt="Nugens" onerror="this.src='https://placehold.co/400x300/222/666?text=HDMI+Set'"></div>
-                <div class="content-box">
-                    <div class="prod-name">HDMI Wireless Set</div>
-                    <div class="prod-desc">Complete transmitter and receiver kit for HD streaming.</div>
-                    <div class="action-row"><a href="javascript:void(0)" onclick="openSpecs('nugens_hdmi')" class="learn-btn">View Specs <i class="fas fa-arrow-right"></i></a></div>
-                </div>
-            </div>
-            <div class="product-card">
-                <div class="img-box"><img src="photos/nugens/v600_visualizer.png" alt="Nugens" onerror="this.src='https://placehold.co/400x300/222/666?text=V-600+Visualizer'"></div>
-                <div class="content-box">
-                    <div class="prod-name">V-600 Visualizer Slim</div>
-                    <div class="prod-desc">8.0MP Document Camera for interactive teaching.</div>
-                    <div class="action-row"><a href="javascript:void(0)" onclick="openSpecs('nugens_visualizer')" class="learn-btn">View Specs <i class="fas fa-arrow-right"></i></a></div>
-                </div>
-            </div>
-            <div class="product-card">
-                <div class="img-box"><img src="photos/nugens/Stylus_For_iPad.png" alt="Stylus" onerror="this.src='https://placehold.co/400x300/222/666?text=Stylus+iPad'"></div>
-                <div class="content-box">
-                    <div class="prod-name">Stylus For iPad</div>
-                    <div class="prod-desc">Precision pen for digital art and note-taking.</div>
-                    <div class="action-row"><a href="javascript:void(0)" onclick="openSpecs('nugens_stylus')" class="learn-btn">View Specs <i class="fas fa-arrow-right"></i></a></div>
-                </div>
-            </div>
-        </div>
-
+    <div class="container" id="products-container">
+        <p style="text-align:center; color:#888; margin-top:50px;">Loading products...</p>
     </div>
 
     <div class="modal-overlay" id="productModal">
@@ -456,130 +408,280 @@
                 <button class="close-modal" onclick="closeSpecs()">&times;</button>
             </div>
             <div class="modal-body">
-                <img src="" id="modalImg" class="modal-img">
+                <img src="" id="modalImg" class="modal-img" onclick="openLightbox(this.src)" title="Click to Zoom">
                 <div id="modalSpecs"></div>
             </div>
         </div>
     </div>
+
+    <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+        <span class="lightbox-close">&times;</span>
+        <img class="lightbox-img" id="lightbox-img">
+    </div>
+
+    <a href="products" class="back-to-top">Back to top ↑</a>
 
     <footer style="display: flex; flex-direction: column; align-items: center; gap: 15px; padding: 40px 5%; background: #000; border-top: 1px solid rgba(255,255,255,0.1);">
         <div style="opacity: 0.8; filter: grayscale(100%) brightness(200%); transition: 0.3s;" onmouseover="this.style.filter='none'; this.style.opacity='1'" onmouseout="this.style.filter='grayscale(100%) brightness(200%)'; this.style.opacity='0.8'">
             <span style="display: block; font-size: 10px; color: #666; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 5px;">Authorized Partner</span>
             <img src="https://upload.wikimedia.org/wikipedia/commons/9/96/Microsoft_logo_%282012%29.svg" alt="Microsoft" style="height: 30px; width: auto;">
         </div>
-        <p style="font-size: 13px; color: #555;">&copy; 2024 AR Edutech Sdn Bhd. All rights reserved.</p>
+        <p style="font-size: 13px; color: #555;">&copy; 2026 AR Edutech Sdn Bhd. All rights reserved.</p>
     </footer>
 
-    <script>
-        // DATA SPESIFIKASI PRODUK
-        const productsData = {
-            'samview_board': {
-                title: 'Samview Interactive Board',
-                img: 'photos/extra/Horion-Smartboard.png',
-                specs: { 'Size': '65" / 75" / 86"', 'Resolution': '4K UHD (3840x2160)', 'Touch Points': '20 Points Multi-Touch', 'OS': 'Android 11.0 / Windows 10 (Ops)', 'Features': 'Wireless Screen Share, Whiteboard' }
-            },
-            'epson_co_fh02': {
-                title: 'Epson CO-FH02',
-                img: 'photos/projectors/epson_Co-fh02.png',
-                specs: { 'Brightness': '3,000 Lumens', 'Resolution': 'Full HD 1080p', 'Technology': '3LCD Technology', 'Feature': 'Android TV Dongle Built-in', 'Weight': '2.6 kg' }
-            },
-            'epson_eb_x52': {
-                title: 'Epson EB-X52',
-                img: 'photos/projectors/Epson Eb-x52.png',
-                specs: { 'Brightness': '4,000 Lumens', 'Resolution': 'XGA (1024 x 768)', 'Contrast Ratio': '16,000:1', 'Lamp Life': 'Up to 12,000 hours (Eco)', 'Connectivity': 'HDMI, VGA, USB' }
-            },
-            'samview_ufo': {
-                title: 'SAMVIEW UFO Projector',
-                img: 'photos/projectors/samview_ufo.png',
-                specs: { 'Type': 'Portable Smart Projector', 'Resolution': 'Native 1080p Support', 'Design': '360° Rotating Stand', 'OS': 'Android 9.0', 'Wireless': 'Dual Band WiFi' }
-            },
-            'epson_eb_e1': {
-                title: 'Epson EB-E1',
-                img: 'photos/projectors/epson Eb-E1.png',
-                specs: { 'Brightness': '3,300 Lumens', 'Resolution': 'XGA (1024 x 768)', 'Technology': '3LCD', 'Usage': 'Education / Classroom', 'Warranty': '2 Years' }
-            },
-            'epson_eb_1785w': {
-                title: 'Epson EB-1785W',
-                img: 'photos/projectors/Epson_EB-1785W.png',
-                specs: { 'Brightness': '3,200 Lumens', 'Resolution': 'WXGA (1280 x 800)', 'Thickness': '44mm (Ultra Slim)', 'Wireless': 'NFC & Wi-Fi Certified', 'Feature': 'Gesture Presenter' }
-            },
-            'epson_l3250': {
-                title: 'Epson EcoTank L3250',
-                img: 'photos/printers/Epson_L3250.png',
-                specs: { 'Type': 'Print, Scan, Copy', 'Speed': 'Up to 10.0 ipm (Black)', 'Connectivity': 'Wi-Fi & Wi-Fi Direct', 'Yield': '4,500 Pages (Black)', 'App': 'Epson Smart Panel' }
-            },
-            'canon_e470': {
-                title: 'Canon Pixma E470',
-                img: 'photos/printers/Pixma_Canon_E470.png',
-                specs: { 'Type': 'All-In-One (Wireless)', 'Cartridge': 'PG-47, CL-57s', 'Features': 'Auto Power On', 'Print Resolution': '4800 x 600 dpi' }
-            },
-            'canon_g3010': {
-                title: 'Canon Pixma G3010',
-                img: 'photos/printers/Canon_Pixma_G3010.png',
-                specs: { 'System': 'Refillable Ink Tank', 'Volume': 'High Volume Printing', 'Connectivity': 'Wireless / Mobile Printing', 'Display': '1.2" LCD Segment' }
-            },
-            'nugens_wda': {
-                title: 'Nugens Type-C Transmitter',
-                img: 'photos/nugens/Type-C_Wireless_Transmitter.png',
-                specs: { 'Interface': 'USB Type-C', 'Transmission': 'Wireless 5G', 'Resolution': 'Supports 1080p/60Hz', 'Plug & Play': 'Yes, No Driver Needed' }
-            },
-            'nugens_hdmi': {
-                title: 'Nugens HDMI Wireless Set',
-                img: 'photos/nugens/HDMI_Wireless_Set.png',
-                specs: { 'Kit': 'Transmitter (TX) + Receiver (RX)', 'Range': 'Up to 30 Meters', 'Delay': 'Low Latency (<0.2s)', 'Support': 'HDMI Devices' }
-            },
-            'nugens_visualizer': {
-                title: 'Nugens V-600 Visualizer',
-                img: 'photos/nugens/v600_visualizer.png',
-                specs: { 'Sensor': '8.0 MP CMOS', 'Zoom': '100x Digital Zoom', 'Focus': 'Auto Focus', 'Mic': 'Built-in Microphone', 'Portable': 'Foldable Design' }
-            },
-            'nugens_stylus': {
-                title: 'Nugens Stylus for iPad',
-                img: 'photos/nugens/Stylus_For_iPad.png',
-                specs: { 'Compatibility': 'iPad 2018 & Later', 'Feature': 'Palm Rejection', 'Charging': 'Type-C Fast Charge', 'Sensitivity': 'Tilt Sensitivity' }
-            }
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+        // CONFIG FIREBASE
+        const firebaseConfig = {
+            apiKey: "AIzaSyCh9hW_Agf108VvIx3qNJJdVEWvaqX04IU",
+            authDomain: "aredutech2026.firebaseapp.com",
+            projectId: "aredutech2026",
+            storageBucket: "aredutech2026.appspot.com",
+            messagingSenderId: "689281434647",
+            appId: "1:689281434647:web:7ec74211067abaf5b2c852",
+            databaseURL: "https://aredutech2026-default-rtdb.asia-southeast1.firebasedatabase.app/" 
         };
 
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        // DATA HANDLER
+        const mainContainer = document.querySelector('.container');
+        window.allProductsData = {};
+        
+        // --- 1. KEY UNTUK CACHE ---
+        const CACHE_KEY = 'products_page_cache'; 
+
+        // --- 2. FUNGSI UPDATE HARGA (VARIANT - WITH TOGGLE & RESIZE) ---
+        window.updatePrice = function(cardId, content, btn) {
+            const card = document.getElementById('card-' + cardId);
+            const priceEl = card.querySelector('.price-text');
+            const originalPrice = priceEl.getAttribute('data-original-price');
+
+            // LOGIC TOGGLE: Kalau tekan button yang sama, revert ke harga asal
+            if (btn.classList.contains('active')) {
+                btn.classList.remove('active');
+                priceEl.innerText = originalPrice;
+                priceEl.classList.remove('long-text'); // Remove small font class
+                return;
+            }
+
+            // Kalau tekan button lain (baru)
+            card.querySelectorAll('.variant-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            // LOGIC KEMAS: Check panjang text
+            if (content.length > 10) {
+                priceEl.classList.add('long-text'); // Add small font class
+            } else {
+                priceEl.classList.remove('long-text');
+            }
+
+            // Animasi tukar text
+            priceEl.style.opacity = 0;
+            setTimeout(() => {
+                priceEl.innerText = content;
+                priceEl.style.opacity = 1;
+            }, 150);
+        }
+
+        // --- 3. FUNGSI RENDER (DIPISAHKAN) ---
+        function renderProducts(data) {
+            mainContainer.innerHTML = ""; // Clear loader/previous data
+
+            if (data) {
+                window.allProductsData = data;
+                let items = Object.keys(data).map(key => ({ id: key, ...data[key] }));
+                
+                // FILTER PRODUCTS PAGE:
+                items = items.filter(item => 
+                    item.category !== 'Surface' && 
+                    !item.title.toLowerCase().includes('surface') && 
+                    !item.is_hidden &&
+                    item.isOnHome !== true 
+                );
+
+                // SORTING
+                items.sort((a, b) => (a.order || 0) - (b.order || 0));
+
+                if (items.length === 0) {
+                    mainContainer.innerHTML = "<p style='color:#888; text-align:center; margin-top:50px;'>No standard products found. Check Home page for offers.</p>";
+                    return;
+                }
+
+                // GROUPING BY CATEGORY
+                const groupedItems = items.reduce((acc, item) => {
+                    const cat = item.category || 'Others';
+                    if (!acc[cat]) acc[cat] = [];
+                    acc[cat].push(item);
+                    return acc;
+                }, {});
+
+                // RENDER LOOP
+                Object.keys(groupedItems).forEach(category => {
+                    const catTitle = document.createElement('h2');
+                    catTitle.className = 'category-title';
+                    // Tambah ID untuk anchor scrolling (Tukar space jadi underscore & lowercase)
+                    catTitle.id = category.toLowerCase().replace(/\s+/g, '_'); 
+                    catTitle.innerText = category;
+                    mainContainer.appendChild(catTitle);
+
+                    const gridDiv = document.createElement('div');
+                    gridDiv.className = 'product-grid';
+
+                    groupedItems[category].forEach(item => {
+                        const isInstallment = item.type === 'installment';
+                        const defaultPrice = isInstallment ? item.monthlyPrice : item.new_price;
+
+                        let tagsHTML = '';
+                        if (item.specs) {
+                            item.specs.split('|').forEach(tag => {
+                                if(tag.trim()) tagsHTML += `<span class="spec-badge">${tag.trim()}</span>`;
+                            });
+                        }
+
+                        let variantHTML = '';
+                        if (item.variant_pricing) {
+                            variantHTML = '<div class="variant-row">';
+                            item.variant_pricing.split('|').forEach((v) => {
+                                const parts = v.split(':');
+                                if(parts.length >= 2) {
+                                    const label = parts[0].trim();
+                                    const price = parts.slice(1).join(':').trim();
+                                    variantHTML += `<button class="variant-btn" onclick="updatePrice('${item.id}', '${price}', this)">${label}</button>`;
+                                }
+                            });
+                            variantHTML += '</div>';
+                        }
+
+                        const card = `
+                            <div class="product-card" id="card-${item.id}">
+                                <div class="img-box" onclick="openLightbox('${item.image_url}')">
+                                    <img src="${item.image_url}" alt="${item.title}" loading="lazy">
+                                </div>
+                                <div class="content-box">
+                                    <div class="prod-name">${item.title}</div>
+                                    
+                                    <div class="specs-row">${tagsHTML}</div>
+
+                                    ${variantHTML}
+
+                                    <div class="action-row">
+                                        <span class="price-text" data-original-price="${defaultPrice}" style="color:${isInstallment ? '#4dabf7' : '#C8A45E'}">${defaultPrice}</span>
+                                        <a href="javascript:void(0)" onclick="window.openSpecs('${item.id}')" class="learn-btn">Details <i class="fas fa-arrow-right"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        gridDiv.innerHTML += card;
+                    });
+
+                    mainContainer.appendChild(gridDiv);
+                });
+                
+                // PENTING: Scroll ke ID jika ada URL Hash (Contoh: products.html#projector)
+                scrollToHash();
+
+            } else {
+                mainContainer.innerHTML = "<p style='color:#888; text-align:center;'>No products found.</p>";
+            }
+        }
+
+        // --- SCROLL TO HASH FUNCTION ---
+        function scrollToHash() {
+            if (window.location.hash) {
+                // Buang '#' kat depan
+                const targetId = window.location.hash.substring(1); 
+                const targetElement = document.getElementById(targetId);
+                
+                if (targetElement) {
+                    // Beri masa sikit untuk browser render sepenuhnya
+                    setTimeout(() => {
+                        targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }, 300);
+                }
+            }
+        }
+
+        // --- 4. LOAD CACHE (INSTANT) ---
+        const cachedData = localStorage.getItem(CACHE_KEY);
+        if (cachedData) {
+            renderProducts(JSON.parse(cachedData));
+        }
+
+        // --- 5. LOAD FIREBASE (LIVE UPDATE) ---
+        onValue(ref(db, 'promotions'), (snapshot) => {
+            const data = snapshot.val();
+            renderProducts(data);
+            if(data) localStorage.setItem(CACHE_KEY, JSON.stringify(data));
+        });
+
+        // --- MODAL LOGIC ---
         const modal = document.getElementById('productModal');
 
-        function openSpecs(key) {
-            const data = productsData[key];
+        window.openSpecs = function(id) {
+            const data = window.allProductsData[id];
             if (!data) return;
 
             document.getElementById('modalTitle').innerText = data.title;
-            document.getElementById('modalImg').src = data.img;
+            document.getElementById('modalImg').src = data.image_url;
 
-            // Generate Spec Rows
             let html = '';
-            for (const [label, value] of Object.entries(data.specs)) {
-                html += `
-                    <div class="spec-row">
-                        <span class="spec-label">${label}</span>
-                        <span class="spec-value">${value}</span>
-                    </div>
-                `;
+            
+            if (data.full_specs) {
+                const lines = data.full_specs.split('\n');
+                lines.forEach(line => {
+                    if(line.includes(':')) {
+                        const [label, val] = line.split(':');
+                        html += `<div class="spec-row"><span class="spec-label">${label.trim()}</span><span class="spec-value">${val.trim()}</span></div>`;
+                    } else if(line.trim()) {
+                        html += `<div class="spec-row"><span class="spec-label" style="width:100%">${line.trim()}</span></div>`;
+                    }
+                });
             }
+            else if(data.tech_specs) {
+                for (const [label, value] of Object.entries(data.tech_specs)) {
+                     html += `<div class="spec-row"><span class="spec-label">${label}</span><span class="spec-value">${value}</span></div>`;
+                }
+            } 
+            else {
+                html = `<div class="spec-row"><span class="spec-label">Key Specs</span><span class="spec-value">${data.specs}</span></div>`;
+            }
+            
             document.getElementById('modalSpecs').innerHTML = html;
             modal.classList.add('modal-active');
+            document.body.style.overflow = 'hidden'; 
         }
 
-        function closeSpecs() {
+        window.closeSpecs = function() {
             modal.classList.remove('modal-active');
+            document.body.style.overflow = 'auto'; 
         }
 
-        // Close on outside click
         window.onclick = function (event) {
-            if (event.target == modal) {
-                closeSpecs();
-            }
+            if (event.target == modal) closeSpecs();
         }
 
-        function toggleMenu() {
-            const navLinks = document.querySelector('.nav-links');
-            navLinks.classList.toggle('active');
+        window.toggleMenu = function() {
+            document.querySelector('.nav-links').classList.toggle('active');
+        }
+
+        // --- LIGHTBOX ---
+        window.openLightbox = function(src) {
+            const lb = document.getElementById('lightbox');
+            const lbImg = document.getElementById('lightbox-img');
+            lbImg.src = src;
+            lb.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        window.closeLightbox = function() {
+            document.getElementById('lightbox').classList.remove('active');
+            document.body.style.overflow = 'auto';
         }
     </script>
 
 </body>
-
 </html>
