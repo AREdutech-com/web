@@ -1,0 +1,10 @@
+RewriteEngine On
+
+# 1. Kalau orang taip url ada .html, buang .html tu (Redirect)
+RewriteCond %{THE_REQUEST} /([^.]+)\.html [NC]
+RewriteRule ^ /%1 [NC,L,R]
+
+# 2. Kalau orang taip url tanpa .html, server cari file .html secara senyap
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}.html -f
+RewriteRule ^(.*)$ $1.html [L]
